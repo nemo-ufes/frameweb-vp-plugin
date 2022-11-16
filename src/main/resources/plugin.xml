@@ -1,0 +1,35 @@
+<plugin
+  id="br.ufes.inf.nemo.frameweb.vp"
+  description="FrameWeb Plugin for Visual Paradigm v0.1"
+  provider="Ontology and Conceptual Modeling Research Group - NEMO/UFES"
+  class="br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin">
+
+  <actionSets>
+    <actionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.main">
+      <!-- Main toolbar of the plug-in. -->
+      <toolbar
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar"
+        orientation="north"
+        index="last" />
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.main.menu"
+        label="FrameWeb"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/#" />
+
+      <!-- Toolbar Action: Check Model. -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/correct_4436481 -->
+      <!-- Icon author: https://www.flaticon.com/authors/kliwir-art -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actions.CheckModelAction"
+        actionType="generalAction"
+        description="Tests if the model complies to FrameWeb's syntactical constraints."
+        style="normal"
+        tooltip="Tests if the model complies to FrameWeb's syntactical constraints."
+        icon="icons/toolbar/check-model.png"
+        label="Check Model"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ModelVerificationController" />
+      </action>
+    </actionSet>
+  </actionSets>
+</plugin>
