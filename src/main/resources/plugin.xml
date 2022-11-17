@@ -5,6 +5,7 @@
   class="br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin">
 
   <actionSets>
+    <!-- Toolbar Actions. -->
     <actionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.main">
       <!-- Main toolbar of the plug-in. -->
       <toolbar
@@ -25,11 +26,31 @@
         description="Tests if the model complies to FrameWeb's syntactical constraints."
         style="normal"
         tooltip="Tests if the model complies to FrameWeb's syntactical constraints."
-        icon="icons/toolbar/check-model.png"
+        icon="icons/checkmark-green.png"
         label="Check Model"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ModelVerificationController" />
       </action>
     </actionSet>
+    <!-- -->
+
+    <!-- Context-menu (right-click): FrameWeb Stereotypes -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes">
+      <!-- Applies to classes. -->
+      <contextTypes all="false" />
+      <include type="Class" />
+
+      <!-- The menu. -->
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes.menu"
+        label="FrameWeb Stereotypes"
+        mnemonic="F"
+        menuPath="#"
+        icon="icons/frameweb-logo.png" />
+
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes.menu" />
+    </contextSensitiveActionSet>
+    <!-- -->
   </actionSets>
 </plugin>
