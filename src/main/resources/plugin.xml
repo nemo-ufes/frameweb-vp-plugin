@@ -17,7 +17,7 @@
         label="FrameWeb"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/#" />
 
-      <!-- Toolbar Action: Check Model. -->
+      <!-- Toolbar Button: Check Model. -->
       <!-- Icon source: https://www.flaticon.com/free-icon/correct_4436481 -->
       <!-- Icon author: https://www.flaticon.com/authors/kliwir-art -->
       <action
@@ -29,27 +29,98 @@
         icon="icons/checkmark-green.png"
         label="Check Model"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
-        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ModelVerificationController" />
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.CheckModelController" />
       </action>
     </actionSet>
     <!-- -->
 
-    <!-- Context-menu (right-click): FrameWeb Stereotypes -->
-    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes">
+    <!-- Context-menus (right-click) for UML Package elements. -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package">
+      <!-- Applies to packages. -->
+      <contextTypes all="false" />
+      <include type="Package" />
+
+      <!-- Menu: Use as FrameWeb Model. -->
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models"
+        label="Use as FrameWeb Model"
+        mnemonic="F"
+        menuPath="#"
+        icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Use as FrameWeb Model > Persistence Model -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-p_3097071 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models.persistence"
+        label="Persistence Model"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models/#"
+        icon="icons/letter-p-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ApplyModelToPackageContextController" />
+      </action>
+
+      <!-- Menu Item: Use as FrameWeb Model > Navigation Model -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-n_3097059 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models.navigation"
+        label="Navigation Model"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models/#"
+        icon="icons/letter-n-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ApplyModelToPackageContextController" />
+      </action>
+
+      <!-- Menu Item: Use as FrameWeb Model > Entity Model -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models.entity"
+        label="Entity Model"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ApplyModelToPackageContextController" />
+      </action>
+
+      <!-- Menu Item: Use as FrameWeb Model > Application Model -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models.application"
+        label="Application Model"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models/#"
+        icon="icons/letter-a-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ApplyModelToPackageContextController" />
+      </action>
+
+      <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
+      <!-- Should be placed after the last menu in this action set. -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.models" />
+    </contextSensitiveActionSet>
+    <!-- -->
+
+    <!-- Context-menus (right-click) for UML Class elements. -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class">
       <!-- Applies to classes. -->
       <contextTypes all="false" />
       <include type="Class" />
 
-      <!-- The menu. -->
+      <!-- Menu: FrameWeb Stereotypes. -->
       <menu
-        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes.menu"
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes"
         label="FrameWeb Stereotypes"
         mnemonic="F"
         menuPath="#"
         icon="icons/frameweb-logo.png" />
 
-      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes.menu.separator"
-        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.stereotypes.menu" />
+      <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
+      <!-- Should be placed after the last menu in this action set. -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes" />
     </contextSensitiveActionSet>
     <!-- -->
   </actionSets>
