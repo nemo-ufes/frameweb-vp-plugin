@@ -30,14 +30,14 @@ This plug-in is under development, once it becomes ready for production use (or 
 
    ```xml
     <visualparadigm.plugin.dir>
-        ~/Library/Application Support/VisualParadigm/plugins/
+        /Users/vitor/Library/Application Support/VisualParadigm/plugins
     </visualparadigm.plugin.dir>
     ```
 
     This path is typically:
 
-    * On Linux: `~/.config/VisualParadigm/plugins/`
-    * On MacOS: `~/Library/Application Support/VisualParadigm/plugins/`
+    * On Linux: `/home/<YOUR_USER_NAME>/.config/VisualParadigm/plugins/`
+    * On MacOS: `/Users/<YOUR_USER_NAME>/Library/Application Support/VisualParadigm/plugins/`
     * On Windows: `C:\Users\<YOUR_USER_NAME>\AppData\Roaming\VisualParadigm\plugins\`
 
 5. With Visual Paradigm closed, run `mvn install`;

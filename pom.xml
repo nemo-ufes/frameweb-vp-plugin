@@ -18,7 +18,7 @@
       /Applications/Visual Paradigm.app/Contents/Resources/app/
     </visualparadigm.app.dir>
     <visualparadigm.plugin.dir>
-      ~/Library/Application Support/VisualParadigm/plugins/
+      /Users/vitor/Library/Application Support/VisualParadigm/plugins
     </visualparadigm.plugin.dir>
   </properties>
 
