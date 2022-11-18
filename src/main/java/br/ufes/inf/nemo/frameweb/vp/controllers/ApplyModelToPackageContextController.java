@@ -1,21 +1,15 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.event.ActionEvent;
-import java.util.HashSet;
 import java.util.Set;
 import com.vp.plugin.ApplicationManager;
-import com.vp.plugin.DiagramManager;
 import com.vp.plugin.ViewManager;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
-import com.vp.plugin.diagram.IDiagramElement;
-import com.vp.plugin.diagram.IDiagramUIModel;
 import com.vp.plugin.model.IModelElement;
-import com.vp.plugin.model.IStereotype;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
-import br.ufes.inf.nemo.vpzy.utils.DiagramElementUtils;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
