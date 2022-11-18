@@ -15,6 +15,8 @@ import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
+import br.ufes.inf.nemo.vpzy.utils.DiagramElementUtils;
+import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
  * Controller that handles the Apply Model to Package action, activated by a context menu
@@ -40,17 +42,7 @@ public class ApplyModelToPackageContextController implements VPContextActionCont
     FrameWebModel model = FrameWebModel.of(event.getActionCommand());
 
     // Collect the model elements whose diagram elements are currently selected.
-    Set<IModelElement> selectedModelElements = new HashSet<>();
-    DiagramManager diagramManager = ApplicationManager.instance().getDiagramManager();
-    IDiagramUIModel diagram = diagramManager.getActiveDiagram();
-    if (diagram != null) {
-      IDiagramElement[] elementsArray = diagram.getSelectedDiagramElement();
-      for (IDiagramElement diagramElement : elementsArray) {
-        IModelElement modelElement = diagramElement.getModelElement();
-        if (modelElement != null)
-          selectedModelElements.add(modelElement);
-      }
-    }
+    Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
 
     // TODO: for each model element selected, apply a stereotype that refers to the FrameWeb model.
     for (IModelElement modelElement : selectedModelElements)
