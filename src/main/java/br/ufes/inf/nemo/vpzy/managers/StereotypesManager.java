@@ -3,12 +3,11 @@ package br.ufes.inf.nemo.vpzy.managers;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
-import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
-import br.ufes.inf.nemo.frameweb.vp.managers.FrameWebStereotypesManager;
+import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
@@ -60,7 +59,7 @@ public class StereotypesManager {
    * @return A StereotypesManager instance for the currently opened project.
    */
   public static final StereotypesManager getInstance() {
-    return getInstance(ApplicationManager.instance().getProjectManager().getProject());
+    return getInstance(ProjectManagerUtils.getCurrentProject());
   }
 
   /**
@@ -84,7 +83,7 @@ public class StereotypesManager {
    */
   public static final <T extends StereotypesManager> StereotypesManager getInstance(
       Class<T> clazz) {
-    return getInstance(ApplicationManager.instance().getProjectManager().getProject(), clazz);
+    return getInstance(ProjectManagerUtils.getCurrentProject(), clazz);
   }
 
   /**

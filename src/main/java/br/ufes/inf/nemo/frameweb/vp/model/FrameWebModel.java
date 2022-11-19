@@ -23,14 +23,14 @@ public enum FrameWebModel {
   private String name;
 
   /** The name of the stereotype of the package that represents the model. */
-  private String stereotype;
+  private String stereotypeName;
 
   /** The fill color of the package that represents the model. */
   private Color color;
 
-  private FrameWebModel(String name, String stereotype, Color color) {
+  private FrameWebModel(String name, String stereotypeName, Color color) {
     this.name = name;
-    this.stereotype = stereotype;
+    this.stereotypeName = stereotypeName;
     this.color = color;
   }
 
@@ -38,8 +38,8 @@ public enum FrameWebModel {
     return name;
   }
 
-  public String getStereotype() {
-    return stereotype;
+  public String getStereotypeName() {
+    return stereotypeName;
   }
 
   public Color getColor() {
@@ -56,6 +56,20 @@ public enum FrameWebModel {
   public static FrameWebModel of(String name) {
     for (FrameWebModel obj : FrameWebModel.values())
       if (obj.name.equalsIgnoreCase(name))
+        return obj;
+    return NOT_A_FRAMEWEB_MODEL;
+  }
+
+  /**
+   * Provides the enum value that refers to a specific FrameWeb model given its stereotype name.
+   * 
+   * @param stereotypeName The name of the stereotype.
+   * @return An enum value that represents a FrameWeb model or {@code NOT_A_FRAMEWEB_MODEL} if no
+   *         model with the given stereotype name exists.
+   */
+  public static FrameWebModel ofStereotype(String stereotypeName) {
+    for (FrameWebModel obj : FrameWebModel.values())
+      if (obj.stereotypeName.equalsIgnoreCase(stereotypeName))
         return obj;
     return NOT_A_FRAMEWEB_MODEL;
   }

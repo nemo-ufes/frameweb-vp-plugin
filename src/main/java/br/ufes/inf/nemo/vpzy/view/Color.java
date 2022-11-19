@@ -308,6 +308,18 @@ public enum Color {
     awtColor = new java.awt.Color(red, green, blue);
   }
 
+  public int getRed() {
+    return red;
+  }
+
+  public int getGreen() {
+    return green;
+  }
+
+  public int getBlue() {
+    return blue;
+  }
+
   public java.awt.Color getAwtColor() {
     return awtColor;
   }

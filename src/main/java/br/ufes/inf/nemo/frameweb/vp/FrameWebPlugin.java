@@ -2,6 +2,8 @@ package br.ufes.inf.nemo.frameweb.vp;
 
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;
+import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebPackageListener;
+import br.ufes.inf.nemo.vpzy.listeners.ListenersManager;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
@@ -30,7 +32,12 @@ public class FrameWebPlugin implements VPPlugin {
    * @param pluginInfo Plugin information supplied by Visual Paradigm.
    */
   @Override
-  public void loaded(VPPluginInfo pluginInfo) {}
+  public void loaded(VPPluginInfo pluginInfo) {
+    // Creates the plug-in's listeners manager and sets up all the listeners.
+    ListenersManager listenersManager = new ListenersManager();
+    listenersManager.setup();
+    listenersManager.addModelListener(new FrameWebPackageListener());
+  }
 
   /**
    * Called by Visual Paradigm when the plugin is unloaded (i.e., Visual Paradigm will be exited).

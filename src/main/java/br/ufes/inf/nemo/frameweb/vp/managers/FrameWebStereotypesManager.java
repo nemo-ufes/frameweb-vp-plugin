@@ -29,7 +29,7 @@ public class FrameWebStereotypesManager extends StereotypesManager {
     // Checks if the project has FrameWeb Model stereotypes, create the missing ones.
     for (FrameWebModel model : FrameWebModel.values()) {
       if (model != FrameWebModel.NOT_A_FRAMEWEB_MODEL)
-        checkStereotype(model.getStereotype(), IModelElementFactory.MODEL_TYPE_PACKAGE);
+        checkStereotype(model.getStereotypeName(), IModelElementFactory.MODEL_TYPE_PACKAGE);
     }
   }
 }

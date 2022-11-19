@@ -1,7 +1,6 @@
 package br.ufes.inf.nemo.vpzy.utils;
 
 import java.util.Set;
-import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.DiagramManager;
 import com.vp.plugin.diagram.IDiagramElement;
 import com.vp.plugin.diagram.IDiagramUIModel;
@@ -18,7 +17,7 @@ public final class DiagramElementUtils {
    * @return A set with the diagram elements which are currently selected in the active diagram.
    */
   public static final Set<IDiagramElement> getSelectedDiagramElements() {
-    DiagramManager diagramManager = ApplicationManager.instance().getDiagramManager();
+    DiagramManager diagramManager = ApplicationManagerUtils.instance.getDiagramManager();
     IDiagramUIModel diagram = diagramManager.getActiveDiagram();
     IDiagramElement[] elementsArray = diagram.getSelectedDiagramElement();
     return Set.of(elementsArray);

@@ -1,6 +1,5 @@
 package br.ufes.inf.nemo.vpzy.utils;
 
-import com.vp.plugin.ApplicationManager;
 import com.vp.plugin.ViewManager;
 
 /**
@@ -9,6 +8,9 @@ import com.vp.plugin.ViewManager;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public final class ViewManagerUtils {
+  /** The Visual Paradigm view manager. */
+  private static final ViewManager viewManager = ApplicationManagerUtils.instance.getViewManager();
+
   /**
    * Prints a message in Visual Paradigm's message pane.
    * 
@@ -16,7 +18,6 @@ public final class ViewManagerUtils {
    * @param pluginName The name of the plug-in that is printing the message.
    */
   public static final void showMessage(String message) {
-    ViewManager viewManager = ApplicationManager.instance().getViewManager();
     viewManager.showMessage(message);
   }
 
@@ -27,7 +28,6 @@ public final class ViewManagerUtils {
    * @param pluginName The name of the plug-in that is printing the message.
    */
   public static final void showMessage(String message, String pluginName) {
-    ViewManager viewManager = ApplicationManager.instance().getViewManager();
     viewManager.showMessage(message, pluginName);
   }
 }

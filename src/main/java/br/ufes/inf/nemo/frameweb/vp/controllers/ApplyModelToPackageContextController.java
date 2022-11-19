@@ -46,7 +46,7 @@ public class ApplyModelToPackageContextController implements VPContextActionCont
       ViewManagerUtils.showMessage(
           "Applying " + model.getName() + " stereotype to " + modelElement.getName(),
           FrameWebPlugin.PLUGIN_NAME);
-      IStereotype stereotype = stereotypesManager.getStereotype(model.getStereotype());
+      IStereotype stereotype = stereotypesManager.getStereotype(model.getStereotypeName());
       modelElement.addStereotype(stereotype);
     }
   }
