@@ -2,9 +2,10 @@ package br.ufes.inf.nemo.frameweb.vp;
 
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
- * Implementation of VPPlugin responsible for configuring FrameWeb Plugin's behaviour when loading
+ * Implementation of VPPlugin responsible for configuring FrameWeb Plugin's behavior when loading
  * and unloading.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
@@ -17,9 +18,10 @@ public class FrameWebPlugin implements VPPlugin {
   public static final String PLUGIN_REPO_OWNER = "NEMO/UFES";
   public static final String PLUGIN_REPO_NAME = "frameweb-vp-plugin";
 
-  /** Constructor. Declared to make explicit Open API requirements. */
   public FrameWebPlugin() {
-    System.out.println(PLUGIN_NAME + " (v" + PLUGIN_VERSION_RELEASE + ") loaded successfully.");
+    ViewManagerUtils.showMessage(
+        PLUGIN_NAME + " (version " + PLUGIN_VERSION_RELEASE + ") loaded successfully.",
+        PLUGIN_NAME);
   }
 
   /**
