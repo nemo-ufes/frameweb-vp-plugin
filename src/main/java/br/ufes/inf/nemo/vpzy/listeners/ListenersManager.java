@@ -30,7 +30,7 @@ public class ListenersManager {
   protected Set<IDiagramListener> diagramListeners = new HashSet<>();
 
   /** Model (property change) listeners to use with the plug-in. */
-  protected Set<ModelListener> modelListeners = new HashSet<>();
+  protected Set<ManagedModelListener> modelListeners = new HashSet<>();
 
   /**
    * Sets up the listeners for the plug-in.
@@ -53,7 +53,7 @@ public class ListenersManager {
     diagramListeners.add(listener);
   }
 
-  public void addModelListener(ModelListener listener) {
+  public void addModelListener(ManagedModelListener listener) {
     modelListeners.add(listener);
   }
 
@@ -97,7 +97,7 @@ public class ListenersManager {
    * @param project The given project.
    */
   public void attachModelListeners(IModelElement modelElement) {
-    for (ModelListener listener : modelListeners) {
+    for (ManagedModelListener listener : modelListeners) {
       if (listener.hasModelType()) {
         if (listener.getModelType().equals(modelElement.getModelType()))
           modelElement.addPropertyChangeListener(listener);

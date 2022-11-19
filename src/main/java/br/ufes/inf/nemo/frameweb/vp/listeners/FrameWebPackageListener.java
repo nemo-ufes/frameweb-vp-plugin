@@ -7,9 +7,15 @@ import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
-import br.ufes.inf.nemo.vpzy.listeners.ModelListener;
+import br.ufes.inf.nemo.vpzy.listeners.ManagedModelListener;
 
-public class FrameWebPackageListener extends ModelListener {
+/**
+ * Listener that handles changes in packages that have to do with FrameWeb, e.g., when a package
+ * changes its stereotype because it has been set to be used as a FrameWeb model.
+ * 
+ * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ */
+public class FrameWebPackageListener extends ManagedModelListener {
   public FrameWebPackageListener() {
     // This listener applies only to package elements.
     super(IModelElementFactory.MODEL_TYPE_PACKAGE);
