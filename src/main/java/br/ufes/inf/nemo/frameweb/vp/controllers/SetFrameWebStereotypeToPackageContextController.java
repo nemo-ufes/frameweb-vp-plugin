@@ -9,7 +9,7 @@ import com.vp.plugin.action.VPContextActionController;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import br.ufes.inf.nemo.frameweb.vp.managers.FrameWebStereotypesManager;
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
@@ -20,7 +20,7 @@ import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
-public class ApplyModelToPackageContextController implements VPContextActionController {
+public class SetFrameWebStereotypeToPackageContextController implements VPContextActionController {
   /**
    * Called when the menu containing the button is accessed allowing for action manipulation, such
    * as enable/disable or selecting the button. DOES NOT apply to this class.
@@ -38,7 +38,7 @@ public class ApplyModelToPackageContextController implements VPContextActionCont
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
 
     // Determine which FrameWeb Model to apply from the menu item that has been selected.
-    FrameWebModel model = FrameWebModel.of(event.getActionCommand());
+    FrameWebPackage frameWebPackage = FrameWebPackage.of(event.getActionCommand());
 
     // Collect the model elements whose diagram elements are currently selected.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
@@ -46,9 +46,19 @@ public class ApplyModelToPackageContextController implements VPContextActionCont
     // For each model element selected, apply a stereotype that refers to the FrameWeb model.
     for (IModelElement modelElement : selectedModelElements) {
       Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
-          new Object[] {model.getStereotypeName(), modelElement.getName()});
-      IStereotype stereotype = stereotypesManager.getStereotype(model.getStereotypeName());
-      modelElement.addStereotype(stereotype);
+          new Object[] {frameWebPackage.getStereotypeName(), modelElement.getName()});
+
+      // Remove other FrameWeb stereotypes the package may have, as they are disjoint.
+      for (IStereotype existingStereotype : modelElement.toStereotypeModelArray()) {
+        FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
+        if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
+          modelElement.removeStereotype(existingStereotype);
+      }
+
+      // Add the new FrameWeb package stereotype.
+      IStereotype newStereotype =
+          stereotypesManager.getStereotype(frameWebPackage.getStereotypeName());
+      modelElement.addStereotype(newStereotype);
     }
   }
 }

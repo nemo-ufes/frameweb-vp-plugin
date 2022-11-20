@@ -3,7 +3,7 @@ package br.ufes.inf.nemo.frameweb.vp.managers;
 import java.util.logging.Level;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.factory.IModelElementFactory;
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 
@@ -31,8 +31,8 @@ public class FrameWebStereotypesManager extends StereotypesManager {
     super.init();
 
     // Checks if the project has FrameWeb Model stereotypes, create the missing ones.
-    for (FrameWebModel model : FrameWebModel.values()) {
-      if (model != FrameWebModel.NOT_A_FRAMEWEB_MODEL)
+    for (FrameWebPackage model : FrameWebPackage.values()) {
+      if (model != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
         checkStereotype(model.getStereotypeName(), IModelElementFactory.MODEL_TYPE_PACKAGE);
     }
   }

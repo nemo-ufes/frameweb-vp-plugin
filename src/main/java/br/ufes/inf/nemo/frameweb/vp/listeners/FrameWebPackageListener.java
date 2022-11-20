@@ -7,7 +7,7 @@ import com.vp.plugin.diagram.shape.IPackageUIModel;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.listeners.ManagedModelListener;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 
@@ -54,13 +54,13 @@ public class FrameWebPackageListener extends ManagedModelListener {
    */
   private void handlePackageStereotypeChange(IModelElement modelElement) {
     // Look for a FrameWeb model stereotype in the model element.
-    FrameWebModel model = FrameWebModel.NOT_A_FRAMEWEB_MODEL;
+    FrameWebPackage model = FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE;
     for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
-      model = FrameWebModel.ofStereotype(stereotype.getName());
+      model = FrameWebPackage.ofStereotype(stereotype.getName());
     }
 
     // If a FrameWeb model stereotype has been applied, change the package color.
-    if (model != FrameWebModel.NOT_A_FRAMEWEB_MODEL) {
+    if (model != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
       for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
         if (diagramElement instanceof IPackageUIModel) {
           Logger.log(Level.FINE, "Changing color of {0} to {1} ({2})", new Object[] {

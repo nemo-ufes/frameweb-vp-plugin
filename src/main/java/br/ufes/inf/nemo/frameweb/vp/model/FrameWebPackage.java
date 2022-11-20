@@ -3,21 +3,23 @@ package br.ufes.inf.nemo.frameweb.vp.model;
 import br.ufes.inf.nemo.vpzy.view.Color;
 
 /**
- * Enumeration of FrameWeb models and their respective names, stereotypes and colors, which can be
- * applied to packages in the plug-in.
+ * Enumeration of FrameWeb package types and their respective names, stereotypes and colors, which
+ * can be applied to packages in the plug-in.
  * 
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
-public enum FrameWebModel {
-  APPLICATION_MODEL("Application Model", "FrameWeb Application Model", Color.PALE_GOLDEN_ROD),
+public enum FrameWebPackage {
+  APPLICATION_PACKAGE("Application Package", "FrameWeb Application Package", Color.PALE_GOLDEN_ROD),
 
-  ENTITY_MODEL("Entity Model", "FrameWeb Entity Model", Color.PALE_GREEN),
+  CONTROLLER_PACKAGE("Controller Package", "FrameWeb Controller Package", Color.PALE_TURQUOISE),
 
-  NAVIGATION_MODEL("Navigation Model", "FrameWeb Navigation Model", Color.PALE_TURQUOISE),
+  ENTITY_PACKAGE("Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN),
 
-  PERSISTENCE_MODEL("Persistence Model", "FrameWeb Persistence Model", Color.LIGHT_SALMON),
+  PERSISTENCE_PACKAGE("Persistence Package", "FrameWeb Persistence Package", Color.LIGHT_SALMON),
 
-  NOT_A_FRAMEWEB_MODEL("", "", Color.WHITE);
+  VIEW_PACKAGE("View Package", "FrameWeb View Package", Color.LIGHT_BLUE),
+
+  NOT_A_FRAMEWEB_PACKAGE("", "", Color.WHITE);
 
   /** The model's official name, which identifies it in the plug-in UI. */
   private String name;
@@ -28,7 +30,7 @@ public enum FrameWebModel {
   /** The fill color of the package that represents the model. */
   private Color color;
 
-  private FrameWebModel(String name, String stereotypeName, Color color) {
+  private FrameWebPackage(String name, String stereotypeName, Color color) {
     this.name = name;
     this.stereotypeName = stereotypeName;
     this.color = color;
@@ -53,11 +55,11 @@ public enum FrameWebModel {
    * @return An enum value that represents a FrameWeb model or {@code NOT_A_FRAMEWEB_MODEL} if no
    *         model with the given name exists.
    */
-  public static FrameWebModel of(String name) {
-    for (FrameWebModel obj : FrameWebModel.values())
+  public static FrameWebPackage of(String name) {
+    for (FrameWebPackage obj : FrameWebPackage.values())
       if (obj.name.equalsIgnoreCase(name))
         return obj;
-    return NOT_A_FRAMEWEB_MODEL;
+    return NOT_A_FRAMEWEB_PACKAGE;
   }
 
   /**
@@ -67,10 +69,10 @@ public enum FrameWebModel {
    * @return An enum value that represents a FrameWeb model or {@code NOT_A_FRAMEWEB_MODEL} if no
    *         model with the given stereotype name exists.
    */
-  public static FrameWebModel ofStereotype(String stereotypeName) {
-    for (FrameWebModel obj : FrameWebModel.values())
+  public static FrameWebPackage ofStereotype(String stereotypeName) {
+    for (FrameWebPackage obj : FrameWebPackage.values())
       if (obj.stereotypeName.equalsIgnoreCase(stereotypeName))
         return obj;
-    return NOT_A_FRAMEWEB_MODEL;
+    return NOT_A_FRAMEWEB_PACKAGE;
   }
 }
