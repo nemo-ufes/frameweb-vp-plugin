@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
  * Controller that handles the Check Model action, activated by a toolbar button.
@@ -21,6 +22,7 @@ public class CheckModelController implements VPActionController {
   /** Called when the button is pressed. Performs FrameWeb model verification. */
   @Override
   public void performAction(VPAction action) {
-    Logger.log(Level.INFO, "TODO: Implement Check Model action!");
+    ViewManagerUtils.showMessageDialog("Sorry, this feature has not yet been implemented.",
+        "Work in Progress", ViewManagerUtils.INFORMATION_MESSAGE);
   }
 }
