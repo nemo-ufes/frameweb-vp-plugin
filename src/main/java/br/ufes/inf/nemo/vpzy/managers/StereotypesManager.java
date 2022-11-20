@@ -3,12 +3,13 @@ package br.ufes.inf.nemo.vpzy.managers;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
  * Utility class that manages stereotypes in Visual Paradigm projects.
@@ -97,10 +98,16 @@ public class StereotypesManager {
   public static final <T extends StereotypesManager> StereotypesManager getInstance(
       IProject project, Class<T> clazz) {
     String projectId = project.getId();
+    Logger.log(Level.FINER, "Providing {0} to project {1} (ID: {2})",
+        new Object[] {clazz.getName(), project.getName(), projectId});
+
+    // Checks if the stereotypes manager for this project has already been created.
     if (!MANAGERS.containsKey(projectId)) {
       // Tries to instantiate the class that was specified.
       StereotypesManager instance = null;
       try {
+        Logger.log(Level.FINE, "Creating a new {0} to project {1} (ID: {2})",
+            new Object[] {clazz.getName(), project.getName(), projectId});
         Constructor<T> constructor = clazz.getDeclaredConstructor(IProject.class);
         constructor.setAccessible(true);
         instance = constructor.newInstance(project);
@@ -108,9 +115,9 @@ public class StereotypesManager {
 
       // If not possible, instantiate a default stereotypes manager.
       catch (Exception e) {
-        ViewManagerUtils.showMessage(
-            "Plug-in error: cannot instantiate " + clazz.getName() + ". A " + e.getClass().getName()
-                + " is thrown. A default StereotypesManager is provided instead.");
+        Logger.log(Level.WARNING,
+            "Cannot instantiate {0}. A {1} is thrown. Default StereotypesManager provided to project {2} (ID: {3}).",
+            new Object[] {clazz.getName(), e.getClass().getName(), project.getName(), projectId});
         instance = new StereotypesManager(project);
       }
 
@@ -128,6 +135,8 @@ public class StereotypesManager {
     existingStereotypes = new HashMap<>();
     IModelElement[] allStereotypes =
         project.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_STEREOTYPE);
+    Logger.log(Level.INFO, "Initializing default Stereotypes Manager with {0} stereotypes",
+        allStereotypes.length);
     for (IModelElement element : allStereotypes)
       existingStereotypes.put(element.getName(), (IStereotype) element);
   }
@@ -140,6 +149,8 @@ public class StereotypesManager {
    *        {@code IModelElementFactory}.
    */
   protected void createStereotype(String stereotypeName, String baseType) {
+    Logger.log(Level.INFO, "Registering a new stereotype {0} for base type {1}",
+        new Object[] {stereotypeName, baseType});
     IStereotype newStereotype = IModelElementFactory.instance().createStereotype();
     newStereotype.setName(stereotypeName);
     newStereotype.setBaseType(baseType);
@@ -154,6 +165,8 @@ public class StereotypesManager {
    *        {@code IModelElementFactory}.
    */
   protected void checkStereotype(String stereotypeName, String baseType) {
+    Logger.log(Level.FINER, "Checking the existence of stereotype {0} for base type {1}",
+        new Object[] {stereotypeName, baseType});
     if (!existingStereotypes.containsKey(stereotypeName))
       createStereotype(stereotypeName, baseType);
   }

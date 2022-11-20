@@ -1,9 +1,9 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
+import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
-import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Controller that handles the Check Model action, activated by a toolbar button.
@@ -21,6 +21,6 @@ public class CheckModelController implements VPActionController {
   /** Called when the button is pressed. Performs FrameWeb model verification. */
   @Override
   public void performAction(VPAction action) {
-    ViewManagerUtils.showMessage("TODO: Implement Check Model action!", FrameWebPlugin.PLUGIN_NAME);
+    Logger.log(Level.INFO, "TODO: Implement Check Model action!");
   }
 }

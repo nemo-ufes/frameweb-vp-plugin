@@ -2,8 +2,10 @@ package br.ufes.inf.nemo.vpzy.utils;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramElement;
 import com.vp.plugin.model.IModelElement;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Utility class that provides helper methods regarding Model Elements in Visual Paradigm.
@@ -25,6 +27,8 @@ public final class ModelElementUtils {
       if (modelElement != null)
         selectedModelElements.add(modelElement);
     }
+    Logger.log(Level.FINER, "Getting the selected model elements returns {0} objects",
+        selectedModelElements.size());
     return selectedModelElements;
   }
 }

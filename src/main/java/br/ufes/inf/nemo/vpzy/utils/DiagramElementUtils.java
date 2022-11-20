@@ -1,9 +1,11 @@
 package br.ufes.inf.nemo.vpzy.utils;
 
 import java.util.Set;
+import java.util.logging.Level;
 import com.vp.plugin.DiagramManager;
 import com.vp.plugin.diagram.IDiagramElement;
 import com.vp.plugin.diagram.IDiagramUIModel;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Utility class that provides helper methods regarding Diagram Elements in Visual Paradigm.
@@ -20,6 +22,8 @@ public final class DiagramElementUtils {
     DiagramManager diagramManager = ApplicationManagerUtils.instance.getDiagramManager();
     IDiagramUIModel diagram = diagramManager.getActiveDiagram();
     IDiagramElement[] elementsArray = diagram.getSelectedDiagramElement();
+    Logger.log(Level.FINER, "Getting the selected diagram elements returns {0} objects",
+        elementsArray.length);
     return Set.of(elementsArray);
   }
 }

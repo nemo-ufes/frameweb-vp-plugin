@@ -2,6 +2,7 @@ package br.ufes.inf.nemo.vpzy.listeners;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramListener;
 import com.vp.plugin.diagram.IDiagramUIModel;
 import com.vp.plugin.model.IModelElement;
@@ -9,6 +10,7 @@ import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IProjectDiagramListener;
 import com.vp.plugin.model.IProjectListener;
 import com.vp.plugin.model.IProjectModelListener;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 
 /**
@@ -36,6 +38,8 @@ public class ListenersManager {
    * Sets up the listeners for the plug-in.
    */
   public void setup() {
+    Logger.log(Level.FINE, "Setting up the Listeners Manager with default listeners");
+
     // Creates a managed project listener for the plug-in. This listener will eventually ask the
     // manager to attach the others.
     projectListener = new ManagedProjectListener(this);
@@ -50,10 +54,12 @@ public class ListenersManager {
   }
 
   public void addDiagramListener(IDiagramListener listener) {
+    Logger.log(Level.FINE, "Adding {0} to the list of diagram listeners", listener.getClass());
     diagramListeners.add(listener);
   }
 
   public void addModelListener(ManagedModelListener listener) {
+    Logger.log(Level.FINE, "Adding {0} to the list of model listeners", listener.getClass());
     modelListeners.add(listener);
   }
 
@@ -64,6 +70,8 @@ public class ListenersManager {
    * @param project The given project.
    */
   public void attachProjectDiagramListeners(IProject project) {
+    Logger.log(Level.FINE, "Attaching {0} project diagram listeners to project {1}",
+        new Object[] {projectDiagramListeners.size(), project.getName()});
     for (IProjectDiagramListener listener : projectDiagramListeners)
       project.addProjectDiagramListener(listener);
   }
@@ -75,6 +83,8 @@ public class ListenersManager {
    * @param project The given project.
    */
   public void attachProjectModelListeners(IProject project) {
+    Logger.log(Level.FINE, "Attaching {0} project model listeners to project {1}",
+        new Object[] {projectModelListeners.size(), project.getName()});
     for (IProjectModelListener listener : projectModelListeners)
       project.addProjectModelListener(listener);
   }
@@ -86,6 +96,8 @@ public class ListenersManager {
    * @param project The given project.
    */
   public void attachDiagramListeners(IDiagramUIModel diagramUIModel) {
+    Logger.log(Level.FINE, "Attaching {0} diagram listeners to diagram {1}",
+        new Object[] {diagramListeners.size(), diagramUIModel.getName()});
     for (IDiagramListener listener : diagramListeners)
       diagramUIModel.addDiagramListener(listener);
   }
@@ -97,6 +109,8 @@ public class ListenersManager {
    * @param project The given project.
    */
   public void attachModelListeners(IModelElement modelElement) {
+    Logger.log(Level.FINE, "Attaching model listeners to model element {0}",
+        modelElement.getName());
     for (ManagedModelListener listener : modelListeners) {
       if (listener.hasModelType()) {
         if (listener.getModelType().equals(modelElement.getModelType()))

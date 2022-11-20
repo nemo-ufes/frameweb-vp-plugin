@@ -2,17 +2,17 @@ package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.event.ActionEvent;
 import java.util.Set;
+import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
-import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.managers.FrameWebStereotypesManager;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
  * Controller that handles the Apply Model to Package action, activated by a context menu
@@ -31,6 +31,8 @@ public class ApplyModelToPackageContextController implements VPContextActionCont
   /** Called when the button is pressed. Performs FrameWeb model verification. */
   @Override
   public void performAction(VPAction action, VPContext context, ActionEvent event) {
+    Logger.log(Level.FINE, "Performing action: {0}", event.getActionCommand());
+
     // Gets the FrameWeb stereotypes manager associated with the current project.
     StereotypesManager stereotypesManager =
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
@@ -43,9 +45,8 @@ public class ApplyModelToPackageContextController implements VPContextActionCont
 
     // For each model element selected, apply a stereotype that refers to the FrameWeb model.
     for (IModelElement modelElement : selectedModelElements) {
-      ViewManagerUtils.showMessage(
-          "Applying " + model.getName() + " stereotype to " + modelElement.getName(),
-          FrameWebPlugin.PLUGIN_NAME);
+      Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
+          new Object[] {model.getStereotypeName(), modelElement.getName()});
       IStereotype stereotype = stereotypesManager.getStereotype(model.getStereotypeName());
       modelElement.addStereotype(stereotype);
     }

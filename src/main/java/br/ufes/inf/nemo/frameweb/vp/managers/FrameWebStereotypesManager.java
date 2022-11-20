@@ -1,8 +1,10 @@
 package br.ufes.inf.nemo.frameweb.vp.managers;
 
+import java.util.logging.Level;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebModel;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 
 /**
@@ -23,6 +25,8 @@ public class FrameWebStereotypesManager extends StereotypesManager {
    */
   @Override
   protected void init() {
+    Logger.log(Level.FINE, "Initializing the FrameWeb Steteorypes Manager");
+
     // Initializes the stereotypes manager with default stereotypes.
     super.init();
 

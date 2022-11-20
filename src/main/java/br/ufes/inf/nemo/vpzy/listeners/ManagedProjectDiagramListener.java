@@ -1,9 +1,10 @@
 package br.ufes.inf.nemo.vpzy.listeners;
 
+import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramUIModel;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IProjectDiagramListener;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Default project diagram listener managed by the listeners manager. This listener will attach
@@ -21,8 +22,8 @@ public class ManagedProjectDiagramListener implements IProjectDiagramListener {
 
   @Override
   public void diagramAdded(IProject project, IDiagramUIModel diagramUIModel) {
-    ViewManagerUtils.showMessage("Diagram " + diagramUIModel.getType() + " : "
-        + diagramUIModel.getName() + " added. Attaching listeners.");
+    Logger.log(Level.FINER, "Listener acting on: diagram {0} added to project {1}",
+        new Object[] {diagramUIModel.getName(), project.getName()});
     manager.attachDiagramListeners(diagramUIModel);
   }
 

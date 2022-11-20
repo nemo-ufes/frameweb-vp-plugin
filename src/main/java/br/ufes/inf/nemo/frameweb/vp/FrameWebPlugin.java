@@ -1,10 +1,11 @@
 package br.ufes.inf.nemo.frameweb.vp;
 
+import java.util.logging.Level;
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;
 import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebPackageListener;
 import br.ufes.inf.nemo.vpzy.listeners.ListenersManager;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Implementation of VPPlugin responsible for configuring FrameWeb Plugin's behavior when loading
@@ -20,12 +21,6 @@ public class FrameWebPlugin implements VPPlugin {
   public static final String PLUGIN_REPO_OWNER = "NEMO/UFES";
   public static final String PLUGIN_REPO_NAME = "frameweb-vp-plugin";
 
-  public FrameWebPlugin() {
-    ViewManagerUtils.showMessage(
-        PLUGIN_NAME + " (version " + PLUGIN_VERSION_RELEASE + ") loaded successfully.",
-        PLUGIN_NAME);
-  }
-
   /**
    * Called by Visual Paradigm when the plugin is loaded.
    *
@@ -37,6 +32,9 @@ public class FrameWebPlugin implements VPPlugin {
     ListenersManager listenersManager = new ListenersManager();
     listenersManager.setup();
     listenersManager.addModelListener(new FrameWebPackageListener());
+
+    // Sets up a specific logger for this plug-in.
+    Logger.setup(PLUGIN_NAME, Level.INFO);
   }
 
   /**

@@ -1,8 +1,10 @@
 package br.ufes.inf.nemo.vpzy.listeners;
 
+import java.util.logging.Level;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IProjectModelListener;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Default project model listener managed by the listeners manager. This listener will attach model
@@ -20,6 +22,9 @@ public class ManagedProjectModelListener implements IProjectModelListener {
 
   @Override
   public void modelAdded(IProject project, IModelElement modelElement) {
+    Logger.log(Level.FINER, "Listener acting on: model element {0} added to project {1}",
+        new Object[] {modelElement.getName(), project.getName()});
+
     // When new model elements are added, attach the appropriate listeners to them.
     manager.attachModelListeners(modelElement);
   }
