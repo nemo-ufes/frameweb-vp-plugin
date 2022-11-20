@@ -1,9 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
-import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
-import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
