@@ -19,7 +19,7 @@ public final class ModelElementUtils {
    * @return A set with the model elements whose diagram elements are currently selected in the
    *         active diagram.
    */
-  public static final Set<IModelElement> getSelectedModelElements() {
+  public static Set<IModelElement> getSelectedModelElements() {
     Set<IModelElement> selectedModelElements = new HashSet<>();
     Set<IDiagramElement> diagramElements = DiagramElementUtils.getSelectedDiagramElements();
     for (IDiagramElement diagramElement : diagramElements) {

@@ -18,7 +18,7 @@ public final class DiagramElementUtils {
    * 
    * @return A set with the diagram elements which are currently selected in the active diagram.
    */
-  public static final Set<IDiagramElement> getSelectedDiagramElements() {
+  public static Set<IDiagramElement> getSelectedDiagramElements() {
     DiagramManager diagramManager = ApplicationManagerUtils.instance.getDiagramManager();
     IDiagramUIModel diagram = diagramManager.getActiveDiagram();
     IDiagramElement[] elementsArray = diagram.getSelectedDiagramElement();

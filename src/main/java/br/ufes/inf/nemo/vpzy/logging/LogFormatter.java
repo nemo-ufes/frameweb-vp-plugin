@@ -13,11 +13,11 @@ import java.util.logging.LogRecord;
  */
 public class LogFormatter extends Formatter {
   /** Pattern for the formatting of the date/time of the log message. */
-  private static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
+  private static final String DATE_TIME_FORMAT_PATTERN = "dd/MM/yyyy HH:mm:ss.SSS";
 
   /** The formatter for the date/time of the log message. */
-  private static final DateTimeFormatter formatter =
-      DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
+  private static final DateTimeFormatter DATE_TIME_FORMATTER =
+      DateTimeFormatter.ofPattern(DATE_TIME_FORMAT_PATTERN);
 
   @Override
   public String format(LogRecord record) {
@@ -26,7 +26,7 @@ public class LogFormatter extends Formatter {
       formattedMessage = formattedMessage + " (" + record.getThrown().toString() + ")";
     String outputFormat = "[%1$s] %2$s: %3$s";
     return String.format(outputFormat,
-        formatter.format(LocalDateTime.ofInstant(record.getInstant(), ZoneOffset.UTC)),
+        DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(record.getInstant(), ZoneOffset.UTC)),
         record.getLevel().getName(), formattedMessage);
   }
 }

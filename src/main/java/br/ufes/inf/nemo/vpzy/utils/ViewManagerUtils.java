@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import com.vp.plugin.ViewManager;
+import com.vp.plugin.view.IDialogHandler;
 
 /**
  * Utility class that provides helper methods regarding the View Manager in Visual Paradigm.
@@ -38,7 +39,7 @@ public final class ViewManagerUtils {
    * @param pluginName The name of the plug-in that is printing the message.
    * @see br.ufes.inf.nemo.vpzy.logging.Logger
    */
-  public static final void showMessage(String message) {
+  public static void showMessage(String message) {
     viewManager.showMessage(message);
   }
 
@@ -51,7 +52,7 @@ public final class ViewManagerUtils {
    * @param pluginName The name of the plug-in that is printing the message.
    * @see br.ufes.inf.nemo.vpzy.logging.Logger
    */
-  public static final void showMessage(String message, String pluginName) {
+  public static void showMessage(String message, String pluginName) {
     viewManager.showMessage(message, pluginName);
   }
 
@@ -60,7 +61,7 @@ public final class ViewManagerUtils {
    * 
    * @param message The message to be displayed in the dialog.
    */
-  public static final void showMessageDialog(Object message) {
+  public static void showMessageDialog(Object message) {
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message);
   }
@@ -73,7 +74,7 @@ public final class ViewManagerUtils {
    * @param messageType The type of the message, one of the {@code *_MESSAGE} constants in this
    *        class.
    */
-  public static final void showMessageDialog(Object message, String title, int messageType) {
+  public static void showMessageDialog(Object message, String title, int messageType) {
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message, title, messageType);
   }
@@ -88,9 +89,18 @@ public final class ViewManagerUtils {
    *        class.
    * @param icon The customized icon to use in the dialog.
    */
-  public static final void showMessageDialog(Object message, String title, int messageType,
+  public static void showMessageDialog(Object message, String title, int messageType,
       Icon icon) {
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message, title, messageType, icon);
+  }
+
+  /**
+   * Show a dialog based on the given dialog handler.
+   * 
+   * @param dialogHandler The given dialog handler.
+   */
+  public static void showDialog(IDialogHandler dialogHandler) {
+    viewManager.showDialog(dialogHandler);
   }
 }

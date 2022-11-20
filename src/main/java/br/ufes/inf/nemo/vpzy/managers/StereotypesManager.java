@@ -47,7 +47,6 @@ public class StereotypesManager {
   /** Existing stereotypes in the current project, indexed by name. */
   protected Map<String, IStereotype> existingStereotypes;
 
-  /** Constructor. */
   protected StereotypesManager(IProject project) {
     this.project = project;
     init();
@@ -59,7 +58,7 @@ public class StereotypesManager {
    * 
    * @return A StereotypesManager instance for the currently opened project.
    */
-  public static final StereotypesManager getInstance() {
+  public static StereotypesManager getInstance() {
     return getInstance(ProjectManagerUtils.getCurrentProject());
   }
 
@@ -70,7 +69,7 @@ public class StereotypesManager {
    * @param project The given project.
    * @return A StereotypesManager instance for the given project.
    */
-  public static final StereotypesManager getInstance(IProject project) {
+  public static StereotypesManager getInstance(IProject project) {
     return getInstance(project, StereotypesManager.class);
   }
 
@@ -82,7 +81,7 @@ public class StereotypesManager {
    * @param clazz The given class, that must be StereotypesManager or one of its subclasses.
    * @return A StereotypesManager instance for the given project.
    */
-  public static final <T extends StereotypesManager> StereotypesManager getInstance(
+  public static <T extends StereotypesManager> StereotypesManager getInstance(
       Class<T> clazz) {
     return getInstance(ProjectManagerUtils.getCurrentProject(), clazz);
   }
@@ -95,7 +94,7 @@ public class StereotypesManager {
    * @param clazz The given class, that must be StereotypesManager or one of its subclasses.
    * @return A StereotypesManager instance for the given project.
    */
-  public static final <T extends StereotypesManager> StereotypesManager getInstance(
+  public static <T extends StereotypesManager> StereotypesManager getInstance(
       IProject project, Class<T> clazz) {
     String projectId = project.getId();
     Logger.log(Level.FINER, "Providing {0} to project {1} (ID: {2})",
