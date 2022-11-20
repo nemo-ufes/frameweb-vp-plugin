@@ -31,6 +31,23 @@
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.CheckModelController" />
       </action>
+      <!-- -->
+
+      <!-- Toolbar Button: Plug-in Settings. -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/settings_597292 -->
+      <!-- Icon author: https://www.flaticon.com/authors/prosymbols -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actions.OpenPluginSettingsAction"
+        actionType="generalAction"
+        description="Opens the FrameWeb Tools Settings window."
+        style="normal"
+        tooltip="Opens the FrameWeb Tools Settings window"
+        icon="icons/gear-and-wrench.png"
+        label="FrameWeb Tools Settings"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.OpenPluginSettingsController" />
+      </action>
+      <!-- -->
     </actionSet>
     <!-- -->
 

@@ -1,5 +1,6 @@
 package br.ufes.inf.nemo.vpzy.utils;
 
+import java.io.File;
 import com.vp.plugin.ApplicationManager;
 
 /**
@@ -10,4 +11,13 @@ import com.vp.plugin.ApplicationManager;
 public final class ApplicationManagerUtils {
   /** The Visual Paradigm view manager. */
   static final ApplicationManager instance = ApplicationManager.instance();
+
+  /**
+   * Obtain the location of the current Visual Paradigm workspace.
+   * 
+   * @return A {@code File} object representing the location.
+   */
+  public static File getWorkspaceLocation() {
+    return instance.getWorkspaceLocation();
+  }
 }

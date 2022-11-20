@@ -6,6 +6,7 @@ import com.vp.plugin.VPPluginInfo;
 import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebPackageListener;
 import br.ufes.inf.nemo.vpzy.listeners.ListenersManager;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
 
 /**
  * Implementation of VPPlugin responsible for configuring FrameWeb Plugin's behavior when loading
@@ -16,10 +17,24 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 public class FrameWebPlugin implements VPPlugin {
   public static final String PLUGIN_VERSION_RELEASE = "0.1";
   public static final String PLUGIN_ID = "br.ufes.inf.nemo.frameweb.vp";
-  public static final String PLUGIN_NAME = "FrameWeb Plugin";
+  public static final String PLUGIN_NAME = "FrameWeb Tools";
   public static final String PLUGIN_REPO = "https://github.com/nemo-ufes/frameweb-vp-plugin/";
   public static final String PLUGIN_REPO_OWNER = "NEMO/UFES";
   public static final String PLUGIN_REPO_NAME = "frameweb-vp-plugin";
+
+  /** Configuration manager for the plug-in. */
+  private static ConfigurationManager configManager;
+
+  /** Indicates if the Plug-in Settings Dialog is open. */
+  private static boolean pluginSettingsDialogOpen = false;
+
+  public static boolean isPluginSettingsDialogOpen() {
+    return pluginSettingsDialogOpen;
+  }
+
+  public static void setPluginSettingsDialogOpen(boolean pluginSettingsDialogOpen) {
+    FrameWebPlugin.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
+  }
 
   /**
    * Called by Visual Paradigm when the plugin is loaded.
@@ -32,6 +47,11 @@ public class FrameWebPlugin implements VPPlugin {
     ListenersManager listenersManager = new ListenersManager();
     listenersManager.setup();
     listenersManager.addModelListener(new FrameWebPackageListener());
+
+    // Loads the plug-in configuration.
+    configManager = ConfigurationManager.getInstance();
+
+    // FIXME: have configManager return a logger level based on the configuration and use below.
 
     // Sets up a specific logger for this plug-in.
     Logger.setup(PLUGIN_NAME, Level.INFO);
