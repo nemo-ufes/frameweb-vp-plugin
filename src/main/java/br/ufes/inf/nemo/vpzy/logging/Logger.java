@@ -11,48 +11,42 @@ import java.util.logging.Level;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public final class Logger {
-  /** The default logger name. */
-  private static final String DEFAULT_LOGGER_NAME = "Plug-in Log";
-
-  /** The default logging level for the plug-in. */
-  private static final Level DEFAULT_LOGGING_LEVEL = Level.INFO;
-
-  /** The default logger to be used by the plug-in. */
-  private static java.util.logging.Logger logger =
-      java.util.logging.Logger.getLogger(DEFAULT_LOGGER_NAME);
-
-  // Default logger configuration.
-  static {
-    logger.addHandler(new ViewManagerHandler());
-    logger.setLevel(DEFAULT_LOGGING_LEVEL);
-  }
+  /** The logger to be used by the plug-in. */
+  private static java.util.logging.Logger logger;
 
   /**
-   * Replace the default logger configuration with a plug-in specific configuration.
+   * Sets up logging for the plug-in.
    */
-  public static void setup(String loggerName, Level defaultLevel) {
+  public static void setup(String loggerName, Level level) {
     logger = java.util.logging.Logger.getLogger(loggerName);
-    logger.addHandler(new ViewManagerHandler());
-    logger.setLevel(defaultLevel);
+    logger.setLevel(level);
+
+    // Only add a handler if not already present.
+    if (logger.getHandlers().length == 0)
+      logger.addHandler(new ViewManagerHandler());
   }
 
   /** Delegates the logging to the current logger. */
   public static void log(Level level, String msg) {
-    logger.log(level, msg);
+    if (logger != null)
+      logger.log(level, msg);
   }
 
   /** Delegates the logging to the current logger. */
   public static void log(Level level, String msg, Object param1) {
-    logger.log(level, msg, param1);
+    if (logger != null)
+      logger.log(level, msg, param1);
   }
 
   /** Delegates the logging to the current logger. */
   public static void log(Level level, String msg, Object[] params) {
-    logger.log(level, msg, params);
+    if (logger != null)
+      logger.log(level, msg, params);
   }
 
   /** Delegates the logging to the current logger. */
   public static void log(Level level, String msg, Throwable thrown) {
-    logger.log(level, msg, thrown);
+    if (logger != null)
+      logger.log(level, msg, thrown);
   }
 }

@@ -26,12 +26,15 @@
         description="Tests if the model complies to FrameWeb's syntactical constraints."
         style="normal"
         tooltip="Tests if the model complies to FrameWeb's syntactical constraints."
-        icon="icons/checkmark-green.png"
-        label="Check Model"
+        icon="icons/checkmark-green-circle.png"
+        label="Check FrameWeb Model"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.CheckModelController" />
       </action>
       <!-- -->
+
+      <separator id="br.ufes.inf.nemo.frameweb.vp.separator.beforeOpenPluginSettingsAction"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#" />
 
       <!-- Toolbar Button: Plug-in Settings. -->
       <!-- Icon source: https://www.flaticon.com/free-icon/settings_597292 -->
@@ -46,6 +49,21 @@
         label="FrameWeb Tools Settings"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.OpenPluginSettingsController" />
+      </action>
+      <!-- -->
+      <!-- Toolbar Button: Reload Plug-in. -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/reloading_5690471 -->
+      <!-- Icon author: https://www.flaticon.com/authors/iyahicon -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actions.ReloadPluginAction"
+        actionType="generalAction"
+        description="Reloads the FrameWeb Tools plug-in."
+        style="normal"
+        tooltip="Reloads the FrameWeb Tools plug-in"
+        icon="icons/circular-arrow-red-circle.png"
+        label="Reload FrameWeb Tools"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ReloadPluginController" />
       </action>
       <!-- -->
     </actionSet>

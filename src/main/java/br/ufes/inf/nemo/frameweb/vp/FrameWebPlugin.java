@@ -7,6 +7,7 @@ import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebPackageListener;
 import br.ufes.inf.nemo.vpzy.listeners.ListenersManager;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
+import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
 
 /**
  * Implementation of VPPlugin responsible for configuring FrameWeb Plugin's behavior when loading
@@ -22,6 +23,9 @@ public class FrameWebPlugin implements VPPlugin {
   public static final String PLUGIN_REPO_OWNER = "NEMO/UFES";
   public static final String PLUGIN_REPO_NAME = "frameweb-vp-plugin";
 
+  /** Listeners manager for the plug-in. */
+  private static ListenersManager listenersManager;
+
   /** Configuration manager for the plug-in. */
   private static ConfigurationManager configManager;
 
@@ -36,13 +40,7 @@ public class FrameWebPlugin implements VPPlugin {
     FrameWebPlugin.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
   }
 
-  /**
-   * Called by Visual Paradigm when the plugin is loaded.
-   *
-   * @param pluginInfo Plugin information supplied by Visual Paradigm.
-   */
-  @Override
-  public void loaded(VPPluginInfo pluginInfo) {
+  private static void setup() {
     // Creates the plug-in's listeners manager and sets up all the listeners.
     ListenersManager listenersManager = new ListenersManager();
     listenersManager.setup();
@@ -57,10 +55,34 @@ public class FrameWebPlugin implements VPPlugin {
     Logger.setup(PLUGIN_NAME, Level.INFO);
   }
 
+  private static void shutdown() {
+    // Shuts down the listeners manager.
+    listenersManager.shutdown();
+  }
+
+  public static void reload() {
+    shutdown();
+    ApplicationManagerUtils.reloadPluginClasses(FrameWebPlugin.PLUGIN_ID);
+    setup();
+  }
+
+  /**
+   * Called by Visual Paradigm when the plugin is loaded.
+   *
+   * @param pluginInfo Plugin information supplied by Visual Paradigm.
+   */
+  @Override
+  public void loaded(VPPluginInfo pluginInfo) {
+    setup();
+    Logger.log(Level.FINE, "FrameWeb Tools is being loaded.");
+  }
+
   /**
    * Called by Visual Paradigm when the plugin is unloaded (i.e., Visual Paradigm will be exited).
    * This method is not called when the plugin is reloaded.
    */
   @Override
-  public void unloaded() {}
+  public void unloaded() {
+    Logger.log(Level.FINE, "FrameWeb Tools is being unloaded.");
+  }
 }

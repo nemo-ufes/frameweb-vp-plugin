@@ -53,6 +53,22 @@ public class ListenersManager {
     project.addProjectListener(projectListener);
   }
 
+  /**
+   * Shuts down the listeners for the plug-in.
+   */
+  public void shutdown() {
+    Logger.log(Level.FINE, "Shutting up the Listeners Manager");
+
+    IProject project = ProjectManagerUtils.getCurrentProject();
+    project.removeProjectListener(projectListener);
+
+    for (IProjectDiagramListener listener : projectDiagramListeners)
+      project.removeProjectDiagramListener(listener);
+
+    for (IProjectModelListener listener : projectModelListeners)
+      project.removeProjectModelListener(listener);
+  }
+
   public void addDiagramListener(IDiagramListener listener) {
     Logger.log(Level.FINE, "Adding {0} to the list of diagram listeners", listener.getClass());
     diagramListeners.add(listener);

@@ -13,6 +13,15 @@ public final class ApplicationManagerUtils {
   static final ApplicationManager instance = ApplicationManager.instance();
 
   /**
+   * Reloads the classes of a plug-in given its ID.
+   * 
+   * @param pluginID The given ID.
+   */
+  public static void reloadPluginClasses(String pluginID) {
+    instance.reloadPluginClasses(pluginID);
+  }
+
+  /**
    * Obtain the location of the current Visual Paradigm workspace.
    * 
    * @return A {@code File} object representing the location.
