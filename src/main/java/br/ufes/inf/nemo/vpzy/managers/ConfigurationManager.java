@@ -155,4 +155,14 @@ public class ConfigurationManager {
   public String getProperty(String key) {
     return properties.getProperty(key);
   }
+
+  /**
+   * Set the value for a configuration item given its key and the new value to set.
+   * 
+   * @param key The given key.
+   * @param value The new value to set.
+   */
+  public void setProperty(String key, String value) {
+    properties.setProperty(key, value);
+  }
 }

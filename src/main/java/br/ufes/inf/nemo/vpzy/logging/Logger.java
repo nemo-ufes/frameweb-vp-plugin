@@ -14,9 +14,7 @@ public final class Logger {
   /** The logger to be used by the plug-in. */
   private static java.util.logging.Logger logger;
 
-  /**
-   * Sets up logging for the plug-in.
-   */
+  /** Sets up logging for the plug-in. */
   public static void setup(String loggerName, Level level) {
     logger = java.util.logging.Logger.getLogger(loggerName);
     logger.setLevel(level);
@@ -24,6 +22,11 @@ public final class Logger {
     // Only add a handler if not already present.
     if (logger.getHandlers().length == 0)
       logger.addHandler(new ViewManagerHandler());
+  }
+
+  /* Change the logging level. */
+  public static void setLevel(Level level) {
+    logger.setLevel(level);
   }
 
   /** Delegates the logging to the current logger. */

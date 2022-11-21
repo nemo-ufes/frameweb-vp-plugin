@@ -1,13 +1,20 @@
 package br.ufes.inf.nemo.frameweb.vp.view;
 
+import java.util.logging.Level;
 import com.vp.plugin.view.IDialog;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
 
 public class PluginSettingsPanel extends javax.swing.JPanel {
   private IDialog containerDialog;
 
+  /** Provides the configuration values and lets us change them. */
+  private ConfigurationManager configManager = ConfigurationManager.getInstance();
+
   public PluginSettingsPanel() {
     initComponents();
+    readConfig();
   }
 
   public void setContainerDialog(IDialog containerDialog) {
@@ -30,6 +37,9 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
     setLayout(new java.awt.BorderLayout());
 
     logginLevelLabel.setText("Logging level:");
+
+    loggingLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"ALL",
+        "FINEST", "FINER", "FINE", "CONFIG", "INFO", "WARNING", "SEVERE", "OFF"}));
 
     javax.swing.GroupLayout loggingPanelLayout = new javax.swing.GroupLayout(loggingPanel);
     loggingPanel.setLayout(loggingPanelLayout);
@@ -91,11 +101,28 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
     add(buttonsPanel, java.awt.BorderLayout.PAGE_END);
   }
 
+  /** Read the configuration values and set them as initial value for the form fields. */
+  private void readConfig() {
+    loggingLevelComboBox
+        .setSelectedItem(configManager.getProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL));
+  }
+
   private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO: change the configuration and save.
+    // Change the logging configuration.
+    String loggingLevel = loggingLevelComboBox.getSelectedItem().toString();
+    configManager.setProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL, loggingLevel);
+    Logger.setLevel(Level.parse(loggingLevel));
+
+    // Save the configuration.
+    configManager.save();
+
+    // Close the configuration dialog.
+    containerDialog.close();
+    FrameWebPlugin.setPluginSettingsDialogOpen(false);
   }
 
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    // Close the configuration dialog.
     containerDialog.close();
     FrameWebPlugin.setPluginSettingsDialogOpen(false);
   }

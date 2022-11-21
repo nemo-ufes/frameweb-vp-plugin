@@ -1,15 +1,12 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.Component;
-import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
 import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.view.PluginSettingsPanel;
-import br.ufes.inf.nemo.vpzy.logging.Logger;
-import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
@@ -39,14 +36,6 @@ public class OpenPluginSettingsController implements VPActionController {
       return;
     else
       FrameWebPlugin.setPluginSettingsDialogOpen(true);
-
-    // FIXME: continue development of the Plug-in Settings.
-    // Display levels in the drop-down
-    // Show the currently selected level in the drop-down
-    // Allow changing the level and save in the plug-in configuration
-    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
-    Logger.log(Level.INFO, "Testing Configurations Manager: logging.level = {0}",
-        configurationManager.getProperty("logging.level"));
 
     // Open the dialog.
     ViewManagerUtils.showDialog(new PluginSettingsDialogHandler());

@@ -23,6 +23,8 @@ public class FrameWebPlugin implements VPPlugin {
   public static final String PLUGIN_REPO_OWNER = "NEMO/UFES";
   public static final String PLUGIN_REPO_NAME = "frameweb-vp-plugin";
 
+  public static final String CONFIG_LOGGING_LEVEL = "logging.level";
+
   /** Listeners manager for the plug-in. */
   private static ListenersManager listenersManager;
 
@@ -40,6 +42,9 @@ public class FrameWebPlugin implements VPPlugin {
     FrameWebPlugin.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
   }
 
+  /**
+   * Sets up the plug-in (initialization).
+   */
   private static void setup() {
     // Creates the plug-in's listeners manager and sets up all the listeners.
     ListenersManager listenersManager = new ListenersManager();
@@ -49,17 +54,21 @@ public class FrameWebPlugin implements VPPlugin {
     // Loads the plug-in configuration.
     configManager = ConfigurationManager.getInstance();
 
-    // FIXME: have configManager return a logger level based on the configuration and use below.
-
     // Sets up a specific logger for this plug-in.
-    Logger.setup(PLUGIN_NAME, Level.INFO);
+    Logger.setup(PLUGIN_NAME, Level.parse(configManager.getProperty(CONFIG_LOGGING_LEVEL)));
   }
 
+  /**
+   * Shuts down the plug-in, deactivating resources.
+   */
   private static void shutdown() {
     // Shuts down the listeners manager.
     listenersManager.shutdown();
   }
 
+  /**
+   * Reloads the plug-in, in case its classes get updated. Used mostly by plug-in developers.
+   */
   public static void reload() {
     shutdown();
     ApplicationManagerUtils.reloadPluginClasses(FrameWebPlugin.PLUGIN_ID);
