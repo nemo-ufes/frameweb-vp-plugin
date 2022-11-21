@@ -3,6 +3,7 @@ package br.ufes.inf.nemo.frameweb.vp.managers;
 import java.util.logging.Level;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.factory.IModelElementFactory;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
@@ -30,10 +31,20 @@ public class FrameWebStereotypesManager extends StereotypesManager {
     // Initializes the stereotypes manager with default stereotypes.
     super.init();
 
-    // Checks if the project has FrameWeb Model stereotypes, create the missing ones.
-    for (FrameWebPackage model : FrameWebPackage.values()) {
-      if (model != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
-        checkStereotype(model.getStereotypeName(), IModelElementFactory.MODEL_TYPE_PACKAGE);
+    // Checks if the project has FrameWeb Package stereotypes, create the missing ones.
+    for (FrameWebPackage frameWebPackage : FrameWebPackage.values()) {
+      if (frameWebPackage != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
+        checkStereotype(frameWebPackage.getStereotypeName(),
+            IModelElementFactory.MODEL_TYPE_PACKAGE);
+    }
+
+    // Checks if the project has FrameWeb Class stereotypes, create the missing ones.
+    for (FrameWebClass frameWebClass : FrameWebClass.values()) {
+      if (frameWebClass != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+        String stereotypeName = frameWebClass.getStereotypeName();
+        if (stereotypeName != null && !stereotypeName.trim().isEmpty())
+          checkStereotype(stereotypeName, IModelElementFactory.MODEL_TYPE_CLASS);
+      }
     }
   }
 }

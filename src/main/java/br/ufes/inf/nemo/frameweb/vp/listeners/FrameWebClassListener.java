@@ -3,24 +3,24 @@ package br.ufes.inf.nemo.frameweb.vp.listeners;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramElement;
-import com.vp.plugin.diagram.shape.IPackageUIModel;
+import com.vp.plugin.diagram.shape.IClassUIModel;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.vpzy.listeners.ManagedModelListener;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
- * Listener that handles changes in packages that have to do with FrameWeb, e.g., when a package
+ * Listener that handles changes in classes that have to do with FrameWeb, e.g., when a c ass
  * changes its stereotype because it has been set to be used as part of a FrameWeb model.
  * 
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
-public class FrameWebPackageListener extends ManagedModelListener {
-  public FrameWebPackageListener() {
-    // This listener applies only to package elements.
-    super(IModelElementFactory.MODEL_TYPE_PACKAGE);
+public class FrameWebClassListener extends ManagedModelListener {
+  public FrameWebClassListener() {
+    // This listener applies only to class elements.
+    super(IModelElementFactory.MODEL_TYPE_CLASS);
   }
 
   @Override
@@ -39,7 +39,7 @@ public class FrameWebPackageListener extends ManagedModelListener {
         // Handle changes according to the property that has been changed.
         switch (propertyName) {
           case IStereotype.PROP_STEREOTYPES:
-            handlePackageStereotypeChange(modelElement);
+            handleClassStereotypeChange(modelElement);
             break;
         }
       }
@@ -47,26 +47,26 @@ public class FrameWebPackageListener extends ManagedModelListener {
   }
 
   /**
-   * Handle the situation in which a package has changed stereotypes. Check if a FrameWeb package
+   * Handle the situation in which a class has changed stereotypes. Check if a FrameWeb class
    * stereotype has been applied and act accordingly.
    * 
    * @param modelElement The model element in which the change took place.
    */
-  private void handlePackageStereotypeChange(IModelElement modelElement) {
-    // Look for a FrameWeb package stereotype in the model element.
-    FrameWebPackage model = FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE;
+  private void handleClassStereotypeChange(IModelElement modelElement) {
+    // Look for a FrameWeb class stereotype in the model element.
+    FrameWebClass model = FrameWebClass.NOT_A_FRAMEWEB_CLASS;
     for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
-      model = FrameWebPackage.ofStereotype(stereotype.getName());
+      model = FrameWebClass.ofStereotype(stereotype.getName());
     }
 
-    // If a FrameWeb package stereotype has been applied, change the package color.
-    if (model != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+    // If a FrameWeb class stereotype has been applied, change the class color.
+    if (model != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
       for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
-        if (diagramElement instanceof IPackageUIModel) {
+        if (diagramElement instanceof IClassUIModel) {
           Logger.log(Level.FINE, "Changing color of {0} to {1} ({2})", new Object[] {
               diagramElement.getModelElement().getName(), model.getColor(), model.getName()});
-          IPackageUIModel packageUIModel = (IPackageUIModel) diagramElement;
-          packageUIModel.getFillColor().setColor1(model.getColor().getAwtColor());
+          IClassUIModel classUIModel = (IClassUIModel) diagramElement;
+          classUIModel.getFillColor().setColor1(model.getColor().getAwtColor());
         }
       }
     }

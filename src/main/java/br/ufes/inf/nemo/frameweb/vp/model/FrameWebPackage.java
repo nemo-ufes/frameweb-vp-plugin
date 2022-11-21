@@ -21,13 +21,13 @@ public enum FrameWebPackage {
 
   NOT_A_FRAMEWEB_PACKAGE("", "", Color.WHITE);
 
-  /** The model's official name, which identifies it in the plug-in UI. */
+  /** The package's official name, which identifies it in the plug-in UI. */
   private String name;
 
-  /** The name of the stereotype of the package that represents the model. */
+  /** The name of the stereotype of the package. */
   private String stereotypeName;
 
-  /** The fill color of the package that represents the model. */
+  /** The fill color of the package. */
   private Color color;
 
   private FrameWebPackage(String name, String stereotypeName, Color color) {
@@ -49,11 +49,11 @@ public enum FrameWebPackage {
   }
 
   /**
-   * Provides the enum value that refers to a specific FrameWeb model given its name.
+   * Provides the enum value that refers to a specific FrameWeb package given its name.
    * 
-   * @param name The name of the FrameWeb model.
-   * @return An enum value that represents a FrameWeb model or {@code NOT_A_FRAMEWEB_MODEL} if no
-   *         model with the given name exists.
+   * @param name The name of the FrameWeb package.
+   * @return An enum value that represents a FrameWeb package or {@code NOT_A_FRAMEWEB_PACKAGE} if
+   *         no package with the given name exists.
    */
   public static FrameWebPackage of(String name) {
     for (FrameWebPackage obj : FrameWebPackage.values())
@@ -63,11 +63,11 @@ public enum FrameWebPackage {
   }
 
   /**
-   * Provides the enum value that refers to a specific FrameWeb model given its stereotype name.
+   * Provides the enum value that refers to a specific FrameWeb package given its stereotype name.
    * 
    * @param stereotypeName The name of the stereotype.
-   * @return An enum value that represents a FrameWeb model or {@code NOT_A_FRAMEWEB_MODEL} if no
-   *         model with the given stereotype name exists.
+   * @return An enum value that represents a FrameWeb package or {@code NOT_A_FRAMEWEB_PACKAGE} if
+   *         no model with the given stereotype name exists.
    */
   public static FrameWebPackage ofStereotype(String stereotypeName) {
     for (FrameWebPackage obj : FrameWebPackage.values())

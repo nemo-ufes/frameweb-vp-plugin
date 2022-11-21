@@ -3,6 +3,7 @@ package br.ufes.inf.nemo.frameweb.vp;
 import java.util.logging.Level;
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;
+import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebClassListener;
 import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebPackageListener;
 import br.ufes.inf.nemo.vpzy.listeners.ListenersManager;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
@@ -67,6 +68,7 @@ public class FrameWebPlugin implements VPPlugin {
     ListenersManager listenersManager = new ListenersManager();
     listenersManager.setup();
     listenersManager.addModelListener(new FrameWebPackageListener());
+    listenersManager.addModelListener(new FrameWebClassListener());
 
     // Loads the plug-in configuration.
     configManager = new ConfigurationManager(PLUGIN_NAME, CONFIG_FILE_NAME);
