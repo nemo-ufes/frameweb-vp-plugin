@@ -49,11 +49,14 @@ public class SetFrameWebStereotypeToPackageContextController implements VPContex
           new Object[] {frameWebPackage.getStereotypeName(), modelElement.getName()});
 
       // Remove other FrameWeb stereotypes the package may have, as they are disjoint.
-      for (IStereotype existingStereotype : modelElement.toStereotypeModelArray()) {
+      IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
+      if (existingStereotypes != null) {
+        for (IStereotype existingStereotype : existingStereotypes) {
         FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
         if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
           modelElement.removeStereotype(existingStereotype);
       }
+    }
 
       // Add the new FrameWeb package stereotype.
       IStereotype newStereotype =
