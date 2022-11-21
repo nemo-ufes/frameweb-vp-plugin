@@ -7,10 +7,14 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
 
 public class PluginSettingsPanel extends javax.swing.JPanel {
+  /** The dialog to which this panel serves as contents. */
   private IDialog containerDialog;
 
+  /** Instance of the FrameWeb plug-in running. */
+  private FrameWebPlugin plugin = FrameWebPlugin.instance();
+
   /** Provides the configuration values and lets us change them. */
-  private ConfigurationManager configManager = ConfigurationManager.getInstance();
+  private ConfigurationManager configManager = plugin.getConfigManager();
 
   public PluginSettingsPanel() {
     initComponents();
@@ -118,13 +122,13 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
 
     // Close the configuration dialog.
     containerDialog.close();
-    FrameWebPlugin.setPluginSettingsDialogOpen(false);
+    plugin.setPluginSettingsDialogOpen(false);
   }
 
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
     // Close the configuration dialog.
     containerDialog.close();
-    FrameWebPlugin.setPluginSettingsDialogOpen(false);
+    plugin.setPluginSettingsDialogOpen(false);
   }
 
   // Variables declaration - do not modify

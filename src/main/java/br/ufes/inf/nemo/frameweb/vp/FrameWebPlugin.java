@@ -16,6 +16,7 @@ import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public class FrameWebPlugin implements VPPlugin {
+  /* Plug-in information. */
   public static final String PLUGIN_VERSION_RELEASE = "0.1";
   public static final String PLUGIN_ID = "br.ufes.inf.nemo.frameweb.vp";
   public static final String PLUGIN_NAME = "FrameWeb Tools";
@@ -23,36 +24,52 @@ public class FrameWebPlugin implements VPPlugin {
   public static final String PLUGIN_REPO_OWNER = "NEMO/UFES";
   public static final String PLUGIN_REPO_NAME = "frameweb-vp-plugin";
 
+  /** Name of the configuration file. */
+  private static final String CONFIG_FILE_NAME = "frameweb-tools.properties";
+
+  /* Plug-in configuration keys. */
   public static final String CONFIG_LOGGING_LEVEL = "logging.level";
 
+  /** The active instance of the plug-in. */
+  private static FrameWebPlugin activeInstance;
+
   /** Listeners manager for the plug-in. */
-  private static ListenersManager listenersManager;
+  private ListenersManager listenersManager;
 
   /** Configuration manager for the plug-in. */
-  private static ConfigurationManager configManager;
+  private ConfigurationManager configManager;
 
   /** Indicates if the Plug-in Settings Dialog is open. */
-  private static boolean pluginSettingsDialogOpen = false;
+  private boolean pluginSettingsDialogOpen = false;
 
-  public static boolean isPluginSettingsDialogOpen() {
+  /** Returns the active instance of the plug-in. */
+  public static FrameWebPlugin instance() {
+    return activeInstance;
+  }
+
+  public ConfigurationManager getConfigManager() {
+    return configManager;
+  }
+
+  public boolean isPluginSettingsDialogOpen() {
     return pluginSettingsDialogOpen;
   }
 
-  public static void setPluginSettingsDialogOpen(boolean pluginSettingsDialogOpen) {
-    FrameWebPlugin.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
+  public void setPluginSettingsDialogOpen(boolean pluginSettingsDialogOpen) {
+    this.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
   }
 
   /**
    * Sets up the plug-in (initialization).
    */
-  private static void setup() {
+  private void setup() {
     // Creates the plug-in's listeners manager and sets up all the listeners.
     ListenersManager listenersManager = new ListenersManager();
     listenersManager.setup();
     listenersManager.addModelListener(new FrameWebPackageListener());
 
     // Loads the plug-in configuration.
-    configManager = ConfigurationManager.getInstance();
+    configManager = new ConfigurationManager(PLUGIN_NAME, CONFIG_FILE_NAME);
 
     // Sets up a specific logger for this plug-in.
     Logger.setup(PLUGIN_NAME, Level.parse(configManager.getProperty(CONFIG_LOGGING_LEVEL)));
@@ -61,7 +78,7 @@ public class FrameWebPlugin implements VPPlugin {
   /**
    * Shuts down the plug-in, deactivating resources.
    */
-  private static void shutdown() {
+  private void shutdown() {
     // Shuts down the listeners manager.
     listenersManager.shutdown();
   }
@@ -69,7 +86,7 @@ public class FrameWebPlugin implements VPPlugin {
   /**
    * Reloads the plug-in, in case its classes get updated. Used mostly by plug-in developers.
    */
-  public static void reload() {
+  public void reload() {
     shutdown();
     ApplicationManagerUtils.reloadPluginClasses(FrameWebPlugin.PLUGIN_ID);
     setup();
@@ -82,8 +99,8 @@ public class FrameWebPlugin implements VPPlugin {
    */
   @Override
   public void loaded(VPPluginInfo pluginInfo) {
+    FrameWebPlugin.activeInstance = this;
     setup();
-    Logger.log(Level.FINE, "FrameWeb Tools is being loaded.");
   }
 
   /**
@@ -92,6 +109,6 @@ public class FrameWebPlugin implements VPPlugin {
    */
   @Override
   public void unloaded() {
-    Logger.log(Level.FINE, "FrameWeb Tools is being unloaded.");
+    FrameWebPlugin.activeInstance = null;
   }
 }

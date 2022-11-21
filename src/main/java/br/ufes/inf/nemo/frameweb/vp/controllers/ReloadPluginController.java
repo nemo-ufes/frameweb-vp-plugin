@@ -23,6 +23,6 @@ public class ReloadPluginController implements VPActionController {
   @Override
   public void performAction(VPAction action) {
     Logger.log(Level.INFO, "Reloading the FrameWeb Tools plug-in...");
-    FrameWebPlugin.reload();
+    FrameWebPlugin.instance().reload();
   }
 }

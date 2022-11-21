@@ -31,11 +31,13 @@ public class OpenPluginSettingsController implements VPActionController {
   /** Called when the button is pressed. Opens the Plug-in Settings window. */
   @Override
   public void performAction(VPAction action) {
+    FrameWebPlugin plugin = FrameWebPlugin.instance();
+
     // If the dialog is already open, ignore.
-    if (FrameWebPlugin.isPluginSettingsDialogOpen())
+    if (plugin.isPluginSettingsDialogOpen())
       return;
     else
-      FrameWebPlugin.setPluginSettingsDialogOpen(true);
+      plugin.setPluginSettingsDialogOpen(true);
 
     // Open the dialog.
     ViewManagerUtils.showDialog(new PluginSettingsDialogHandler());
@@ -71,7 +73,7 @@ public class OpenPluginSettingsController implements VPActionController {
     /** Called when the dialog is closed by the user clicking on the close button of the frame. */
     @Override
     public boolean canClosed() {
-      FrameWebPlugin.setPluginSettingsDialogOpen(false);
+      FrameWebPlugin.instance().setPluginSettingsDialogOpen(false);
       return true;
     }
   }

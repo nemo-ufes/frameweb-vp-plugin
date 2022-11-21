@@ -6,10 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Constructor;
 import java.util.Properties;
 import java.util.logging.Level;
-import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
 
@@ -19,61 +17,27 @@ import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public class ConfigurationManager {
-  /** Name of the configuration file. */
-  private static final String CONFIG_FILE_NAME = "frameweb-tools.properties";
-
-  /** The configuration manager for the plug-in. */
-  private static ConfigurationManager manager;
-
   /** The contents of the configuration. */
   private Properties properties = new Properties();
 
-  /** Constructor loads the configuration items from properties file. */
-  protected ConfigurationManager() {
+  /** Name of the plug-in. */
+  private String pluginName;
+
+  /** Name of the configuration file. */
+  private String configFileName;
+
+  /** The file in which to save the configuration. */
+  private File configFile;
+
+  /** Constructor loads the configuration items from the config file. */
+  public ConfigurationManager(String pluginName, String configFileName) {
+    this.pluginName = pluginName;
+    this.configFileName = configFileName;
+
+    // Locate the config file in Visual Paradigm's workspace and loads it.
+    File workspace = ApplicationManagerUtils.getWorkspaceLocation();
+    configFile = new File(workspace, configFileName);
     load();
-  }
-
-  /**
-   * Provides the ConfigurationsManager instance for the plug-in. If none exists, create a new
-   * default one and store it for future use.
-   * 
-   * @return A ConfigurationsManager instance for the plug-in.
-   */
-  public static ConfigurationManager getInstance() {
-    return getInstance(ConfigurationManager.class);
-  }
-
-  /**
-   * Provides the ConfigurationsManager instancefor the plug-in. If none exists, create a new
-   * instance from the given class and store it for future use.
-   * 
-   * @param clazz The given class, that must be StereotypesManager or one of its subclasses.
-   * @return A ConfigurationsManager instance for the plug-in.
-   */
-  public static <T extends ConfigurationManager> ConfigurationManager getInstance(Class<T> clazz) {
-    Logger.log(Level.FINER, "Providing {0} for plug-in {1}",
-        new Object[] {clazz.getName(), FrameWebPlugin.PLUGIN_NAME});
-
-    // Checks if the configuration manager for the plug-in has already been created.
-    if (manager == null) {
-      // Tries to instantiate the class that was specified.
-      try {
-        Logger.log(Level.FINE, "Creating a new {0} for plug-in {1}",
-            new Object[] {clazz.getName(), FrameWebPlugin.PLUGIN_NAME});
-        Constructor<T> constructor = clazz.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        manager = constructor.newInstance();
-      }
-
-      // If not possible, instantiate a default stereotypes manager.
-      catch (Exception e) {
-        Logger.log(Level.WARNING,
-            "Cannot instantiate {0}. A {1} is thrown. Default ConfigurationsManager provided to plug-in {2}.",
-            new Object[] {clazz.getName(), e.getClass().getName(), FrameWebPlugin.PLUGIN_NAME});
-        manager = new ConfigurationManager();
-      }
-    }
-    return manager;
   }
 
   /**
@@ -84,12 +48,8 @@ public class ConfigurationManager {
    * This method is called during the construction of a ConfigurationManager.
    */
   protected void load() {
-    // Locate the config file in Visual Paradigm's workspace.
-    File workspace = ApplicationManagerUtils.getWorkspaceLocation();
-    File configFile = new File(workspace, CONFIG_FILE_NAME);
-
-    Logger.log(Level.FINE, "Loading configuration from {0}. File exists? {1}",
-        new Object[] {configFile.getAbsolutePath(), configFile.exists()});
+    Logger.log(Level.FINE, "Loading {0} configuration from {1}. File exists? {2}",
+        new Object[] {pluginName, configFile.getAbsolutePath(), configFile.exists()});
 
     // If there's already a config file, load it.
     if (configFile.exists()) {
@@ -98,26 +58,26 @@ public class ConfigurationManager {
         return;
       } catch (IOException e) {
         Logger.log(Level.SEVERE,
-            "Cannot read {0}. Will try to use the default configurations instead.",
-            new Object[] {configFile.getAbsolutePath()});
+            "Cannot read {0}. Will try to use the default {1} configurations instead.",
+            new Object[] {configFile.getAbsolutePath(), pluginName});
       }
     }
 
     // If the config file doesn't exist, create one based on default values and save.
     Logger.log(Level.FINE, "Will load configuration from classpath location {0} and save to {1}",
-        new Object[] {CONFIG_FILE_NAME, configFile.getAbsolutePath()});
+        new Object[] {configFileName, configFile.getAbsolutePath()});
     InputStream input =
-        ConfigurationManager.class.getClassLoader().getResourceAsStream(CONFIG_FILE_NAME);
+        ConfigurationManager.class.getClassLoader().getResourceAsStream(configFileName);
     try {
       properties.load(input);
       save();
     } catch (IOException e) {
       Logger.log(Level.SEVERE,
-          "Cannot read default configurations. Plug-in will not function properly.",
-          new Object[] {configFile.getAbsolutePath()});
+          "Cannot read default configurations. Plug-in {0} will not function properly.",
+          pluginName);
     }
 
-    Logger.log(Level.FINER, "Configuration successfully loaded.");
+    Logger.log(Level.FINER, "Configuration successfully loaded for plug-in {0}.", pluginName);
   }
 
   /**
@@ -125,24 +85,20 @@ public class ConfigurationManager {
    * Paradigm's workspace directory, allowing users to persist configuration changes.
    */
   public void save() {
-    // Locate the config file in Visual Paradigm's workspace.
-    File workspace = ApplicationManagerUtils.getWorkspaceLocation();
-    File configFile = new File(workspace, CONFIG_FILE_NAME);
-
-    Logger.log(Level.FINE, "Saving configuration to {0}. File exists? {1}",
-        new Object[] {configFile.getAbsolutePath(), configFile.exists()});
+    Logger.log(Level.FINE, "Saving {0} configuration to {1}. File exists? {2}",
+        new Object[] {pluginName, configFile.getAbsolutePath(), configFile.exists()});
 
     // Stores the properties in the file.
     try {
       OutputStream output = new FileOutputStream(configFile);
-      properties.store(output, "FrameWeb Tools Configuration");
+      properties.store(output, pluginName + " Configuration");
     } catch (IOException e) {
       Logger.log(Level.SEVERE,
-          "Cannot save configurations. Plug-in will not remember configuration changes.",
-          new Object[] {configFile.getAbsolutePath()});
+          "Cannot save {0} configurations. Plug-in will not remember configuration changes.",
+          pluginName);
     }
 
-    Logger.log(Level.FINER, "Configuration successfully saved.");
+    Logger.log(Level.FINER, "Configuration successfully saved for plug-in {0}.", pluginName);
   }
 
   /**
