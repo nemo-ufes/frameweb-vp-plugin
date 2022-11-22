@@ -9,6 +9,13 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public enum FrameWebClass {
+  /* Application Model classes: */
+  SERVICE_CLASS("Service Class", "service", Color.GOLD, FrameWebPackage.APPLICATION_PACKAGE),
+
+  SERVICE_INTERFACE("Service Interface", "service-interface", Color.GOLD,
+      FrameWebPackage.APPLICATION_PACKAGE),
+
+  /* Entity Model classes: */
   PERSISTENT_CLASS("Persistent Class", "persistent", Color.MEDIUM_SEA_GREEN,
       FrameWebPackage.ENTITY_PACKAGE),
 
@@ -17,6 +24,18 @@ public enum FrameWebClass {
   MAPPED_SUPERCLASS("Mapped Superclass", "mapped", Color.MEDIUM_SPRING_GREEN,
       FrameWebPackage.ENTITY_PACKAGE),
 
+  /* Navigation Model classes: */
+  CONTROLLER_CLASS("Controller Class", "controller", Color.TURQUOISE,
+      FrameWebPackage.CONTROLLER_PACKAGE),
+
+  PAGE_COMPONENT("Web Page", "page", Color.SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
+
+  FORM_COMPONENT("Web Form", "form", Color.DEEP_SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
+
+  /* Persistence Model classes: */
+  DAO_CLASS("DAO Class", "dao", Color.TOMATO, FrameWebPackage.PERSISTENCE_PACKAGE),
+
+  /* Not a FrameWeb class: */
   NOT_A_FRAMEWEB_CLASS("", "", Color.WHITE, FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE);
 
   /** The class's official name, which identifies it in the plug-in UI. */
