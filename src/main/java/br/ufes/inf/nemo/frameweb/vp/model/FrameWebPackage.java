@@ -9,17 +9,21 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public enum FrameWebPackage {
-  APPLICATION_PACKAGE("Application Package", "FrameWeb Application Package", Color.PALE_GOLDEN_ROD),
+  APPLICATION_PACKAGE("Application Package", "FrameWeb Application Package", Color.PALE_GOLDEN_ROD,
+      null),
 
-  CONTROLLER_PACKAGE("Controller Package", "FrameWeb Controller Package", Color.PALE_TURQUOISE),
+  CONTROLLER_PACKAGE("Controller Package", "FrameWeb Controller Package", Color.PALE_TURQUOISE,
+      null),
 
-  ENTITY_PACKAGE("Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN),
+  ENTITY_PACKAGE("Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN,
+      FrameWebClass.PERSISTENT_CLASS),
 
-  PERSISTENCE_PACKAGE("Persistence Package", "FrameWeb Persistence Package", Color.LIGHT_SALMON),
+  PERSISTENCE_PACKAGE("Persistence Package", "FrameWeb Persistence Package", Color.LIGHT_SALMON,
+      null),
 
-  VIEW_PACKAGE("View Package", "FrameWeb View Package", Color.LIGHT_BLUE),
+  VIEW_PACKAGE("View Package", "FrameWeb View Package", Color.LIGHT_BLUE, null),
 
-  NOT_A_FRAMEWEB_PACKAGE("", "", Color.WHITE);
+  NOT_A_FRAMEWEB_PACKAGE("", "", Color.WHITE, null);
 
   /** The package's official name, which identifies it in the plug-in UI. */
   private String name;
@@ -30,10 +34,15 @@ public enum FrameWebPackage {
   /** The fill color of the package. */
   private Color color;
 
-  private FrameWebPackage(String name, String stereotypeName, Color color) {
+  /** The default type of class in the package, if any. */
+  private FrameWebClass defaultClassType;
+
+  private FrameWebPackage(String name, String stereotypeName, Color color,
+      FrameWebClass defaultClassType) {
     this.name = name;
     this.stereotypeName = stereotypeName;
     this.color = color;
+    this.defaultClassType = defaultClassType;
   }
 
   public String getName() {
@@ -46,6 +55,10 @@ public enum FrameWebPackage {
 
   public Color getColor() {
     return color;
+  }
+
+  public FrameWebClass getDefaultClassType() {
+    return defaultClassType;
   }
 
   /**
