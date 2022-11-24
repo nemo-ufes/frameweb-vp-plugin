@@ -2,14 +2,15 @@ package br.ufes.inf.nemo.frameweb.vp.listeners;
 
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
-import com.vp.plugin.diagram.IDiagramElement;
-import com.vp.plugin.diagram.shape.IClassUIModel;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
+import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.listeners.ManagedModelListener;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
  * Listener that handles changes in classes that have to do with FrameWeb, e.g., when a c ass
@@ -53,21 +54,26 @@ public class FrameWebClassListener extends ManagedModelListener {
    * @param modelElement The model element in which the change took place.
    */
   private void handleClassStereotypeChange(IModelElement modelElement) {
-    // Look for a FrameWeb class stereotype in the model element.
+    // Looks for a FrameWeb class stereotype in the model element.
     FrameWebClass frameWebClass = FrameWebClass.NOT_A_FRAMEWEB_CLASS;
     for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
       frameWebClass = FrameWebClass.ofStereotype(stereotype.getName());
     }
 
-    // If a FrameWeb class stereotype has been applied, change the class color.
+    // If a FrameWeb class stereotype has been applied, changes the class color.
     if (frameWebClass != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
-      for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
-        if (diagramElement instanceof IClassUIModel) {
-          Logger.log(Level.FINE, "Changing color of {0} to {1} ({2})", new Object[] {
-              diagramElement.getModelElement().getName(), frameWebClass.getColor(),
-              frameWebClass.getName()});
-          IClassUIModel classUIModel = (IClassUIModel) diagramElement;
-          classUIModel.getFillColor().setColor1(frameWebClass.getColor().getAwtColor());
+      ModelElementUtils.changeFillColor(modelElement, frameWebClass.getColor());
+    }
+
+    // Otherwise, checks if the package to which the class belongs has a default class type.
+    else {
+      IModelElement parent = modelElement.getParent();
+      if (parent != null && IModelElementFactory.MODEL_TYPE_PACKAGE.equals(parent.getModelType())) {
+        FrameWebPackage frameWebPackage = FrameWebUtils.getFrameWebPackage(parent);
+        FrameWebClass defaultClassType = frameWebPackage.getDefaultClassType();
+        if (defaultClassType != null) {
+          // Sets the color of the element to the color of the default class type.
+          ModelElementUtils.changeFillColor(modelElement, defaultClassType.getColor());
         }
       }
     }

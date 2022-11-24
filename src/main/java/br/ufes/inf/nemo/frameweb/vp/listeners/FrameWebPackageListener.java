@@ -2,14 +2,16 @@ package br.ufes.inf.nemo.frameweb.vp.listeners;
 
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
-import com.vp.plugin.diagram.IDiagramElement;
-import com.vp.plugin.diagram.shape.IPackageUIModel;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
+import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
+import br.ufes.inf.nemo.vpzy.listeners.ListenersManager;
 import br.ufes.inf.nemo.vpzy.listeners.ManagedModelListener;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
  * Listener that handles changes in packages that have to do with FrameWeb, e.g., when a package
@@ -39,7 +41,18 @@ public class FrameWebPackageListener extends ManagedModelListener {
         // Handle changes according to the property that has been changed.
         switch (propertyName) {
           case IStereotype.PROP_STEREOTYPES:
+            // The stereotype of the package has been changed.
             handlePackageStereotypeChange(modelElement);
+            break;
+
+          case ListenersManager.PROP_CHILD_ADDED:
+            // A new element has been added to the package. Check if it's a class.
+            if (event.getNewValue() instanceof IModelElement) {
+              IModelElement child = (IModelElement) event.getNewValue();
+              if (IModelElementFactory.MODEL_TYPE_CLASS.equals(child.getModelType())) {
+                handleNewClassAdded(modelElement, child);
+              }
+            }
             break;
         }
       }
@@ -53,22 +66,28 @@ public class FrameWebPackageListener extends ManagedModelListener {
    * @param modelElement The model element in which the change took place.
    */
   private void handlePackageStereotypeChange(IModelElement modelElement) {
-    // Look for a FrameWeb package stereotype in the model element.
-    FrameWebPackage model = FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE;
-    for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
-      model = FrameWebPackage.ofStereotype(stereotype.getName());
-    }
-
     // If a FrameWeb package stereotype has been applied, change the package color.
-    if (model != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
-      for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
-        if (diagramElement instanceof IPackageUIModel) {
-          Logger.log(Level.FINE, "Changing color of {0} to {1} ({2})", new Object[] {
-              diagramElement.getModelElement().getName(), model.getColor(), model.getName()});
-          IPackageUIModel packageUIModel = (IPackageUIModel) diagramElement;
-          packageUIModel.getFillColor().setColor1(model.getColor().getAwtColor());
-        }
-      }
+    FrameWebPackage frameWebPackage = FrameWebUtils.getFrameWebPackage(modelElement);
+    if (frameWebPackage != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+      ModelElementUtils.changeFillColor(modelElement, frameWebPackage.getColor());
+    }
+  }
+
+  /**
+   * Handle the situation in which a new class has been added to the package. Check if the package
+   * has a FrameWeb stereotype and if this stereotype has a default type of class. In such case,
+   * apply the default class color to the new class.
+   * 
+   * @param parentPackage The package in which the class was added.
+   * @param newClass The new class that was added to the package.
+   */
+  private void handleNewClassAdded(IModelElement parentPackage, IModelElement newClass) {
+    // Checks if this is a FrameWeb package that has a default class type.
+    FrameWebPackage frameWebPackage = FrameWebUtils.getFrameWebPackage(parentPackage);
+    FrameWebClass defaultClassType = frameWebPackage.getDefaultClassType();
+    if (defaultClassType != null) {
+      // Sets the color of the element to the color of the default class type.
+      ModelElementUtils.changeFillColor(newClass, defaultClassType.getColor());
     }
   }
 }

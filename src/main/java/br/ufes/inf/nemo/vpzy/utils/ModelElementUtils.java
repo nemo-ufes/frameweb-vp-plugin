@@ -4,8 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramElement;
+import com.vp.plugin.diagram.IShapeUIModel;
 import com.vp.plugin.model.IModelElement;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.view.Color;
 
 /**
  * Utility class that provides helper methods regarding Model Elements in Visual Paradigm.
@@ -30,5 +32,23 @@ public final class ModelElementUtils {
     Logger.log(Level.FINER, "Getting the selected model elements returns {0} objects",
         selectedModelElements.size());
     return selectedModelElements;
+  }
+
+  /**
+   * Change the fill color of the diagram elements associated with a given model element to a given
+   * color.
+   * 
+   * @param modelElement The given model element.
+   * @param color The given color.
+   */
+  public static void changeFillColor(IModelElement modelElement, Color color) {
+    for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
+      if (diagramElement instanceof IShapeUIModel) {
+        Logger.log(Level.FINE, "Changing color of {0} to {1}",
+            new Object[] {modelElement.getName(), color});
+        IShapeUIModel classUIModel = (IShapeUIModel) diagramElement;
+        classUIModel.getFillColor().setColor1(color.getAwtColor());
+      }
+    }
   }
 }

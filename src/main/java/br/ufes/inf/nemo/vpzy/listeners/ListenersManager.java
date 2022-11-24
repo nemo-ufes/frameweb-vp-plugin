@@ -19,6 +19,9 @@ import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public class ListenersManager {
+  /** Value for property change name that indicates a child has been added. */
+  public static final String PROP_CHILD_ADDED = "childAdded";
+
   /** The project listener to be used with the plug-in. */
   protected IProjectListener projectListener;
 
