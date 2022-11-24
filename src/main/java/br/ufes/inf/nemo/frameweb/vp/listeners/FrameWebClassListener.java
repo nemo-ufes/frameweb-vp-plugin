@@ -54,19 +54,20 @@ public class FrameWebClassListener extends ManagedModelListener {
    */
   private void handleClassStereotypeChange(IModelElement modelElement) {
     // Look for a FrameWeb class stereotype in the model element.
-    FrameWebClass model = FrameWebClass.NOT_A_FRAMEWEB_CLASS;
+    FrameWebClass frameWebClass = FrameWebClass.NOT_A_FRAMEWEB_CLASS;
     for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
-      model = FrameWebClass.ofStereotype(stereotype.getName());
+      frameWebClass = FrameWebClass.ofStereotype(stereotype.getName());
     }
 
     // If a FrameWeb class stereotype has been applied, change the class color.
-    if (model != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+    if (frameWebClass != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
       for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
         if (diagramElement instanceof IClassUIModel) {
           Logger.log(Level.FINE, "Changing color of {0} to {1} ({2})", new Object[] {
-              diagramElement.getModelElement().getName(), model.getColor(), model.getName()});
+              diagramElement.getModelElement().getName(), frameWebClass.getColor(),
+              frameWebClass.getName()});
           IClassUIModel classUIModel = (IClassUIModel) diagramElement;
-          classUIModel.getFillColor().setColor1(model.getColor().getAwtColor());
+          classUIModel.getFillColor().setColor1(frameWebClass.getColor().getAwtColor());
         }
       }
     }
