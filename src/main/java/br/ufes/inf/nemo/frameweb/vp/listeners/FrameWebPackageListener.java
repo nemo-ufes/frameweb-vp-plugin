@@ -27,7 +27,7 @@ public class FrameWebPackageListener extends ManagedModelListener {
   public void propertyChange(PropertyChangeEvent event) {
     Object changeSource = event.getSource();
     String propertyName = event.getPropertyName();
-    Logger.log(Level.FINER, "Handling change on property {0} in source {1}",
+    Logger.log(Level.FINER, "Package listener handling change on property {0} in source {1}",
         new Object[] {propertyName, changeSource});
 
     // Only handle changes in model elements that have the property name specified.
