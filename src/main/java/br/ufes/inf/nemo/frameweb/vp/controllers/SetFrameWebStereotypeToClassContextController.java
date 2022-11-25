@@ -8,8 +8,11 @@ import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
+import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.managers.FrameWebStereotypesManager;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
+import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
@@ -27,7 +30,23 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
    */
   @Override
   public void update(VPAction action, VPContext context) {
-    // TODO: hide stereotypes that do not belong to the package.
+    // Checks if the class that was clicked belongs to a package with a FrameWeb stereotype.
+    IModelElement modelElement = context.getModelElement();
+    IModelElement parent = modelElement.getParent();
+    if (parent != null && IModelElementFactory.MODEL_TYPE_PACKAGE.equals(parent.getModelType())) {
+      FrameWebPackage modelElementFrameWebPackage = FrameWebUtils.getFrameWebPackage(parent);
+      if (modelElementFrameWebPackage != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+        // Checks to which FrameWeb package the action belongs.
+        FrameWebClass actionFrameWebClass = FrameWebClass.ofPluginUIID(action.getActionId());
+        FrameWebPackage actionFrameWebPackage = actionFrameWebClass.getFrameWebPackage();
+        Logger.log(Level.SEVERE,
+            "actionId: {0}, actionFrameWebClass: {1}, actionFrameWebPackage: {2}",
+            new Object[] {action.getActionId(), actionFrameWebClass, actionFrameWebPackage});
+
+        // Disable actions that refer to a different package.
+        // action.setEnabled(modelElementFrameWebPackage == actionFrameWebPackage);
+      }
+    }
   }
 
   /** Called when the button is pressed. Sets the class' stereotype. */
