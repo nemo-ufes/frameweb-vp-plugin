@@ -39,7 +39,7 @@ public enum FrameWebPackage {
   /** The ID of the package in the plugin UI configuration. */
   private String pluginUIID;
 
-  /** The package's official name, which identifies it in the plug-in UI. */
+  /** The package's official name. */
   private String name;
 
   /** The name of the stereotype of the package. */
@@ -93,7 +93,7 @@ public enum FrameWebPackage {
    * 
    * @param pluginUIID The ID of the FrameWeb package in the plugin UI configuration.
    * @return An enum value that represents a FrameWeb package or {@code NOT_A_FRAMEWEB_PACKAGE} if
-   *         no package with the given name exists.
+   *         no package with the given UI ID exists.
    */
   public static FrameWebPackage ofPluginUIID(String pluginUIID) {
     for (FrameWebPackage obj : FrameWebPackage.values()) {
@@ -109,7 +109,7 @@ public enum FrameWebPackage {
    * 
    * @param stereotypeName The name of the stereotype.
    * @return An enum value that represents a FrameWeb package or {@code NOT_A_FRAMEWEB_PACKAGE} if
-   *         no model with the given stereotype name exists.
+   *         no package with the given stereotype name exists.
    */
   public static FrameWebPackage ofStereotype(String stereotypeName) {
     for (FrameWebPackage obj : FrameWebPackage.values())

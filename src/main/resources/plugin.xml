@@ -156,6 +156,26 @@
       <contextTypes all="false" />
       <include type="Class" />
 
+      <!-- Menu: Add FrameWeb Constraint. -->
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.constraint"
+        label="Add FrameWeb Constraint"
+        mnemonic="F"
+        menuPath="#"
+        icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: Table name -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.constraint.entity.persistent.table"
+        label="Persistent Class: Table name"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassContextController" />
+      </action>
+
       <!-- Menu: Set FrameWeb Stereotype. -->
       <menu
         id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype"
@@ -212,13 +232,9 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
-      <!-- Separator: Application Model /// Entity Model -->
-      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
-        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes/br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.entity.service" />
-
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
-      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator.end"
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes" />
     </contextSensitiveActionSet>
     <!-- -->

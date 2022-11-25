@@ -18,8 +18,8 @@ import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
- * Controller that handles the Set FrameWeb Stereotype to Package action, activated by a context
- * menu (right-click) for UML Class elements.
+ * Controller that handles the Set FrameWeb Stereotype to Class action, activated by a context menu
+ * (right-click) for UML Class elements.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
@@ -56,18 +56,18 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
     StereotypesManager stereotypesManager =
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
 
-    // Determine which FrameWeb Model to apply from the menu item that has been selected.
+    // Determines which FrameWeb Model to apply from the menu item that has been selected.
     FrameWebClass frameWebClass = FrameWebClass.ofPluginUIID(action.getActionId());
 
-    // Collect the model elements whose diagram elements are currently selected.
+    // Collects the model elements whose diagram elements are currently selected.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
 
-    // For each model element selected, apply a stereotype that refers to the FrameWeb model.
+    // For each model element selected, applies the selected stereotype.
     for (IModelElement modelElement : selectedModelElements) {
       Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
           new Object[] {frameWebClass.getStereotypeName(), modelElement.getName()});
 
-      // Remove other FrameWeb stereotypes the class may have, as they are disjoint.
+      // Removes other FrameWeb stereotypes the class may have, as they are disjoint.
       IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
       if (existingStereotypes != null) {
         for (IStereotype existingStereotype : existingStereotypes) {
@@ -77,7 +77,7 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
         }
       }
 
-      // Add the new FrameWeb class stereotype.
+      // Adds the new FrameWeb class stereotype.
       IStereotype newStereotype =
           stereotypesManager.getStereotype(frameWebClass.getStereotypeName());
       modelElement.addStereotype(newStereotype);

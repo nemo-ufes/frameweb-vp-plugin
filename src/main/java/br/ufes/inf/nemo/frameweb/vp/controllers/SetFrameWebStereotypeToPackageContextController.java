@@ -38,28 +38,28 @@ public class SetFrameWebStereotypeToPackageContextController implements VPContex
     StereotypesManager stereotypesManager =
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
 
-    // Determine which FrameWeb Model to apply from the menu item that has been selected.
+    // Determines which FrameWeb Model to apply from the menu item that has been selected.
     FrameWebPackage frameWebPackage = FrameWebPackage.ofPluginUIID(action.getActionId());
 
-    // Collect the model elements whose diagram elements are currently selected.
+    // Collects the model elements whose diagram elements are currently selected.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
 
-    // For each model element selected, apply a stereotype that refers to the FrameWeb package.
+    // For each model element selected, applies the selected stereotype.
     for (IModelElement modelElement : selectedModelElements) {
       Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
           new Object[] {frameWebPackage.getStereotypeName(), modelElement.getName()});
 
-      // Remove other FrameWeb stereotypes the package may have, as they are disjoint.
+      // Removes other FrameWeb stereotypes the package may have, as they are disjoint.
       IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
       if (existingStereotypes != null) {
         for (IStereotype existingStereotype : existingStereotypes) {
-        FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
-        if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
-          modelElement.removeStereotype(existingStereotype);
+          FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
+          if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
+            modelElement.removeStereotype(existingStereotype);
+        }
       }
-    }
 
-      // Add the new FrameWeb package stereotype.
+      // Adds the new FrameWeb package stereotype.
       IStereotype newStereotype =
           stereotypesManager.getStereotype(frameWebPackage.getStereotypeName());
       modelElement.addStereotype(newStereotype);

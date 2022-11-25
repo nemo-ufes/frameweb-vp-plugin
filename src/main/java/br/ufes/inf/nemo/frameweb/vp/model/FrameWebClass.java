@@ -47,7 +47,7 @@ public enum FrameWebClass {
   /** The ID of the package in the plugin UI configuration. */
   private String pluginUIID;
 
-  /** The class's official name, which identifies it in the plug-in UI. */
+  /** The class's official name. */
   private String name;
 
   /** The name of the stereotype of the class. */
@@ -103,7 +103,7 @@ public enum FrameWebClass {
    * 
    * @param pluginUIID The ID of the FrameWeb class in the plugin UI configuration.
    * @return An enum value that represents a FrameWeb class or {@code NOT_A_FRAMEWEB_CLASS} if no
-   *         class with the given name exists.
+   *         class with the given UI ID exists.
    */
   public static FrameWebClass ofPluginUIID(String pluginUIID) {
     for (FrameWebClass obj : FrameWebClass.values()) {
@@ -119,7 +119,7 @@ public enum FrameWebClass {
    * 
    * @param stereotypeName The name of the stereotype.
    * @return An enum value that represents a FrameWeb class or {@code NOT_A_FRAMEWEB_CLASS} if no
-   *         model with the given stereotype name exists.
+   *         class with the given stereotype name exists.
    */
   public static FrameWebClass ofStereotype(String stereotypeName) {
     for (FrameWebClass obj : FrameWebClass.values())

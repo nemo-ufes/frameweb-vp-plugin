@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 
@@ -34,5 +35,44 @@ public final class FrameWebUtils {
     Logger.log(Level.FINER, "The FrameWeb package of {0} ({1}) is {2}",
         new Object[] {modelElement.getName(), modelElement.getModelType(), frameWebPackage});
     return frameWebPackage;
+  }
+
+  /**
+   * Identifies if a given model element represents a FrameWeb class. Returns
+   * {@code FrameWebClass.NOT_A_FRAMEWEB_CLASS} if it doesn't.
+   * 
+   * @param modelElement The given model element.
+   * @return The {@code FrameWebClass} enum value corresponding to the given model element.
+   */
+  public static FrameWebClass getFrameWebClass(IModelElement modelElement) {
+    FrameWebClass frameWebClass = FrameWebClass.NOT_A_FRAMEWEB_CLASS;
+
+    // Looks for a FrameWeb class stereotype in the element, which must be a class.
+    if (IModelElementFactory.MODEL_TYPE_CLASS.equals(modelElement.getModelType())) {
+      // If the class has no stereotypes, checks if the package it is in has a default class type.
+      IStereotype[] stereotypes = modelElement.toStereotypeModelArray();
+      IModelElement parent = modelElement.getParent();
+      if ((stereotypes == null || stereotypes.length == 0) && parent != null) {
+        FrameWebPackage frameWebPackage = getFrameWebPackage(parent);
+        FrameWebClass clazz = frameWebPackage.getDefaultClassType();
+
+        // If a default class is found, stores it to be returned.
+        if (clazz != null && clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
+          frameWebClass = clazz;
+      }
+
+      // Otherwise looks for the FrameWeb stereotype.
+      else
+        for (IStereotype stereotype : stereotypes) {
+          FrameWebClass clazz = FrameWebClass.ofStereotype(stereotype.getName());
+          // If a FrameWeb class stereotype is found, stores it to be returned.
+          if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
+            frameWebClass = clazz;
+        }
+    }
+
+    Logger.log(Level.FINER, "The FrameWeb class of {0} ({1}) is {2}",
+        new Object[] {modelElement.getName(), modelElement.getModelType(), frameWebClass});
+    return frameWebClass;
   }
 }
