@@ -200,9 +200,25 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
+      <!-- Menu Item: Set FrameWeb Stereotype > Service Class -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.application.service"
+        label="Service Class"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
+        icon="icons/letter-a-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
+      </action>
+
+      <!-- Separator: Application Model /// Entity Model -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes/br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.entity.service" />
+
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
-      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator.end"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes" />
     </contextSensitiveActionSet>
     <!-- -->

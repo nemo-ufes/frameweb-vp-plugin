@@ -9,21 +9,31 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public enum FrameWebPackage {
-  APPLICATION_PACKAGE("Application Package", "FrameWeb Application Package", Color.PALE_GOLDEN_ROD,
+  APPLICATION_PACKAGE("application", "Application Package", "FrameWeb Application Package",
+      Color.PALE_GOLDEN_ROD,
       null),
 
-  CONTROLLER_PACKAGE("Controller Package", "FrameWeb Controller Package", Color.PALE_TURQUOISE,
+  CONTROLLER_PACKAGE("controller", "Controller Package", "FrameWeb Controller Package",
+      Color.PALE_TURQUOISE,
       null),
 
-  ENTITY_PACKAGE("Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN,
+  ENTITY_PACKAGE("entity", "Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN,
       FrameWebClass.PERSISTENT_CLASS),
 
-  PERSISTENCE_PACKAGE("Persistence Package", "FrameWeb Persistence Package", Color.LIGHT_SALMON,
+  PERSISTENCE_PACKAGE("persistence", "Persistence Package", "FrameWeb Persistence Package",
+      Color.LIGHT_SALMON,
       null),
 
-  VIEW_PACKAGE("View Package", "FrameWeb View Package", Color.LIGHT_BLUE, null),
+  VIEW_PACKAGE("view", "View Package", "FrameWeb View Package", Color.LIGHT_BLUE, null),
 
-  NOT_A_FRAMEWEB_PACKAGE("", "", Color.WHITE, null);
+  NOT_A_FRAMEWEB_PACKAGE("", "", "", Color.WHITE, null);
+
+  /** The prefix used in the ID of context actions to set the package stereotypes. */
+  private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
+      "br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.stereotype.";
+
+  /** The ID of the package in the plugin UI configuration. */
+  private String pluginUIID;
 
   /** The package's official name, which identifies it in the plug-in UI. */
   private String name;
@@ -37,8 +47,9 @@ public enum FrameWebPackage {
   /** The default type of class in the package, if any. */
   private FrameWebClass defaultClassType;
 
-  private FrameWebPackage(String name, String stereotypeName, Color color,
+  private FrameWebPackage(String pluginUIID, String name, String stereotypeName, Color color,
       FrameWebClass defaultClassType) {
+    this.pluginUIID = pluginUIID;
     this.name = name;
     this.stereotypeName = stereotypeName;
     this.color = color;
@@ -72,6 +83,22 @@ public enum FrameWebPackage {
     for (FrameWebPackage obj : FrameWebPackage.values())
       if (obj.name.equalsIgnoreCase(name))
         return obj;
+    return NOT_A_FRAMEWEB_PACKAGE;
+  }
+
+  /**
+   * Provides the enum value that refers to a specific FrameWeb package given its plugin UI ID.
+   * 
+   * @param pluginUIID The ID of the FrameWeb package in the plugin UI configuration.
+   * @return An enum value that represents a FrameWeb package or {@code NOT_A_FRAMEWEB_PACKAGE} if
+   *         no package with the given name exists.
+   */
+  public static FrameWebPackage ofPluginUIID(String pluginUIID) {
+    for (FrameWebPackage obj : FrameWebPackage.values()) {
+      String fullID = PLUGIN_UI_CONTEXT_ACTION_PREFIX + obj.pluginUIID;
+      if (fullID.equalsIgnoreCase(pluginUIID))
+        return obj;
+    }
     return NOT_A_FRAMEWEB_PACKAGE;
   }
 

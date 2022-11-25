@@ -39,7 +39,7 @@ public class SetFrameWebStereotypeToPackageContextController implements VPContex
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
 
     // Determine which FrameWeb Model to apply from the menu item that has been selected.
-    FrameWebPackage frameWebPackage = FrameWebPackage.of(event.getActionCommand());
+    FrameWebPackage frameWebPackage = FrameWebPackage.ofPluginUIID(action.getActionId());
 
     // Collect the model elements whose diagram elements are currently selected.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
