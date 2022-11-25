@@ -156,26 +156,6 @@
       <contextTypes all="false" />
       <include type="Class" />
 
-      <!-- Menu: Add FrameWeb Constraint. -->
-      <menu
-        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.constraint"
-        label="Add FrameWeb Constraint"
-        mnemonic="F"
-        menuPath="#"
-        icon="icons/frameweb-logo.png" />
-
-      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: Table name -->
-      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
-      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
-      <action
-        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.constraint.entity.persistent.table"
-        label="Persistent Class: Table name"
-        style="normal"
-        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.constraint/#"
-        icon="icons/letter-e-black-block.png">
-        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassContextController" />
-      </action>
-
       <!-- Menu: Set FrameWeb Stereotype. -->
       <menu
         id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype"
@@ -235,7 +215,40 @@
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
       <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
-        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotypes" />
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype" />
+    </contextSensitiveActionSet>
+    <!-- -->
+
+    <!-- Context-menus (right-click) for UML Class attribute elements. -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute">
+      <!-- Applies to classes. -->
+      <contextTypes all="false" />
+      <include type="Attribute" />
+
+      <!-- Menu: Add FrameWeb Constraint. -->
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint"
+        label="Add FrameWeb Constraint"
+        mnemonic="F"
+        menuPath="#"
+        icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: nullable -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.nullable"
+        label="Persistent Class attribute: nullable"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
+      </action>
+
+      <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
+      <!-- Should be placed after the last menu in this action set. -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint" />
     </contextSensitiveActionSet>
     <!-- -->
   </actionSets>
