@@ -10,27 +10,31 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  */
 public enum FrameWebPackage {
   APPLICATION_PACKAGE("application", "Application Package", "FrameWeb Application Package",
-      Color.PALE_GOLDEN_ROD,
-      null),
+      Color.PALE_GOLDEN_ROD),
 
   CONTROLLER_PACKAGE("controller", "Controller Package", "FrameWeb Controller Package",
-      Color.PALE_TURQUOISE,
-      null),
+      Color.PALE_TURQUOISE),
 
-  ENTITY_PACKAGE("entity", "Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN,
-      FrameWebClass.PERSISTENT_CLASS),
+  ENTITY_PACKAGE("entity", "Entity Package", "FrameWeb Entity Package", Color.PALE_GREEN),
 
   PERSISTENCE_PACKAGE("persistence", "Persistence Package", "FrameWeb Persistence Package",
-      Color.LIGHT_SALMON,
-      null),
+      Color.LIGHT_SALMON),
 
-  VIEW_PACKAGE("view", "View Package", "FrameWeb View Package", Color.LIGHT_BLUE, null),
+  VIEW_PACKAGE("view", "View Package", "FrameWeb View Package", Color.LIGHT_BLUE),
 
-  NOT_A_FRAMEWEB_PACKAGE("", "", "", Color.WHITE, null);
+  NOT_A_FRAMEWEB_PACKAGE("", "", "", Color.WHITE);
 
   /** The prefix used in the ID of context actions to set the package stereotypes. */
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.stereotype.";
+
+  /* Set the default class of each package in a static block to avoid a circular reference. */
+  static {
+    APPLICATION_PACKAGE.defaultClassType = FrameWebClass.SERVICE_CLASS;
+    CONTROLLER_PACKAGE.defaultClassType = FrameWebClass.CONTROLLER_CLASS;
+    ENTITY_PACKAGE.defaultClassType = FrameWebClass.PERSISTENT_CLASS;
+    PERSISTENCE_PACKAGE.defaultClassType = FrameWebClass.DAO_CLASS;
+  }
 
   /** The ID of the package in the plugin UI configuration. */
   private String pluginUIID;
@@ -47,13 +51,11 @@ public enum FrameWebPackage {
   /** The default type of class in the package, if any. */
   private FrameWebClass defaultClassType;
 
-  private FrameWebPackage(String pluginUIID, String name, String stereotypeName, Color color,
-      FrameWebClass defaultClassType) {
+  private FrameWebPackage(String pluginUIID, String name, String stereotypeName, Color color) {
     this.pluginUIID = pluginUIID;
     this.name = name;
     this.stereotypeName = stereotypeName;
     this.color = color;
-    this.defaultClassType = defaultClassType;
   }
 
   public String getName() {

@@ -39,12 +39,9 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
         // Checks to which FrameWeb package the action belongs.
         FrameWebClass actionFrameWebClass = FrameWebClass.ofPluginUIID(action.getActionId());
         FrameWebPackage actionFrameWebPackage = actionFrameWebClass.getFrameWebPackage();
-        Logger.log(Level.SEVERE,
-            "actionId: {0}, actionFrameWebClass: {1}, actionFrameWebPackage: {2}",
-            new Object[] {action.getActionId(), actionFrameWebClass, actionFrameWebPackage});
 
         // Disable actions that refer to a different package.
-        // action.setEnabled(modelElementFrameWebPackage == actionFrameWebPackage);
+        action.setEnabled(modelElementFrameWebPackage == actionFrameWebPackage);
       }
     }
   }
