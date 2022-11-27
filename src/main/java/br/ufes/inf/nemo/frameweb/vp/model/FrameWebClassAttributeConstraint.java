@@ -1,7 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp.model;
 
 /**
- * Enumeration of FrameWeb constraint types and their respective names, expressions, class types,
+ * Enumeration of FrameWeb constraint types and their respective names, specifications, class types,
  * etc., which can be applied to class attributes in the plug-in.
  * 
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
@@ -23,8 +23,8 @@ public enum FrameWebClassAttributeConstraint {
   /** The constraint's official name. */
   private String name;
 
-  /** The expression of the constraint. */
-  private String expression;
+  /** The specification of the constraint. */
+  private String specification;
 
   /** Indicates if the constraint takes a value. */
   private boolean parameterized;
@@ -32,11 +32,11 @@ public enum FrameWebClassAttributeConstraint {
   /** The class to which the constraint can be applied. */
   private FrameWebClass frameWebClass;
 
-  private FrameWebClassAttributeConstraint(String pluginUIID, String name, String expression,
+  private FrameWebClassAttributeConstraint(String pluginUIID, String name, String specification,
       boolean parameterized, FrameWebClass frameWebClass) {
     this.pluginUIID = pluginUIID;
     this.name = name;
-    this.expression = expression;
+    this.specification = specification;
     this.parameterized = parameterized;
     this.frameWebClass = frameWebClass;
   }
@@ -45,8 +45,8 @@ public enum FrameWebClassAttributeConstraint {
     return name;
   }
 
-  public String getExpression() {
-    return expression;
+  public String getSpecification() {
+    return specification;
   }
 
   public boolean isParameterized() {
@@ -94,16 +94,16 @@ public enum FrameWebClassAttributeConstraint {
 
   /**
    * Provides the enum value that refers to a specific FrameWeb class attribute constraint given its
-   * expression.
+   * specification.
    * 
-   * @param expression The expression used by the class attribute constraint.
+   * @param specification The specification used by the class attribute constraint.
    * @return An enum value that represents a FrameWeb class attribute constraint or
    *         {@code NOT_A_FRAMEWEB_CLASS_CONSTRAINT} if no class attribute constraint with the given
-   *         expression exists.
+   *         specification exists.
    */
-  public static FrameWebClassAttributeConstraint ofExpression(String expression) {
+  public static FrameWebClassAttributeConstraint ofspecification(String specification) {
     for (FrameWebClassAttributeConstraint obj : FrameWebClassAttributeConstraint.values())
-      if (obj.expression.equalsIgnoreCase(expression))
+      if (obj.specification.equalsIgnoreCase(specification))
         return obj;
     return NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
   }
