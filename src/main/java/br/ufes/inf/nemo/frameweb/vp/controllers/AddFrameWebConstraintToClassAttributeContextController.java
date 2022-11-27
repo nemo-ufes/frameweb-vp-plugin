@@ -1,12 +1,11 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
+import com.vp.plugin.model.ICompositeValueSpecification;
 import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.factory.IModelElementFactory;
@@ -14,7 +13,6 @@ import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassAttributeConstraint;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
-import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
  * Controller that handles the Add FrameWeb Constraint to Class Attribute action, activated by a
@@ -53,23 +51,29 @@ public class AddFrameWebConstraintToClassAttributeContextController
     Logger.log(Level.FINE, "Performing action: Add FrameWeb Constraint (Class Attribute) > {0}",
         event.getActionCommand());
 
-    // Determine which FrameWeb Class Attribute Constraint to apply from the selected menu item.
-    FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
-        FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
+    // Determines the selected attribute.
+    IModelElement selectedModelElement = context.getModelElement();
+    if (selectedModelElement != null
+        && IModelElementFactory.MODEL_TYPE_ATTRIBUTE.equals(selectedModelElement.getModelType())) {
+      // Determine which FrameWeb Class Attribute Constraint to apply from the selected menu item.
+      FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
+          FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
 
-    // Collect the model elements whose diagram elements are currently selected.
-    // FIXME: this gets the selected classes from the diagram. Not what I need!
-    // Explore action, context and event objects to see if I can get the selected attributes.
-    // If successful, maybe consider changing this in the other controllers as well?
-    Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
-
-    // For each model element selected, adds the selected constraint.
-    for (IModelElement modelElement : selectedModelElements) {
+      // Adds the constraint to the selected attribute.
       Logger.log(Level.INFO, "Adding constraint {0} to {1}",
-          new Object[] {frameWebClassAttributeConstraint.getExpression(), modelElement.getName()});
+          new Object[] {frameWebClassAttributeConstraint.getSpecification(),
+              selectedModelElement.getName()});
+      IConstraintElement constraintElement =
+          IModelElementFactory.instance().createConstraintElement();
+      ICompositeValueSpecification constraintSpec =
+          IModelElementFactory.instance().createCompositeValueSpecification();
+      constraintElement.setName(frameWebClassAttributeConstraint.getName());
+      constraintSpec.setValue(frameWebClassAttributeConstraint.getSpecification());
+      constraintElement.setSpecification(constraintSpec);
+      constraintElement.addConstrainedElement(selectedModelElement);
 
-      Logger.log(Level.SEVERE, "modelElement: {0}, name: {1}, type: {2}",
-          new Object[] {modelElement, modelElement.getName(), modelElement.getModelType()});
+      // FIXME: have a constraint manager to avoid repetition.
+      // FIXME: check if this can be applied to multiple elements at once.
     }
   }
 }
