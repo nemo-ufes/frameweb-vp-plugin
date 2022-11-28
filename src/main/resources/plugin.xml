@@ -233,6 +233,18 @@
         menuPath="#"
         icon="icons/frameweb-logo.png" />
 
+      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: not null -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.notnull"
+        label="Persistent Class attribute: not null"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
+      </action>
+
       <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: nullable -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->

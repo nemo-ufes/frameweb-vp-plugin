@@ -7,15 +7,27 @@ package br.ufes.inf.nemo.frameweb.vp.model;
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
 public enum FrameWebClassAttributeConstraint {
-  /* Application Model classes: */
+  /* Constraints for attributes of Entity Model classes: */
   PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "Persistent Class attribute: nullable",
       "nullable", false, FrameWebClass.PERSISTENT_CLASS),
+
+  PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "Persistent Class attribute: not null",
+      "not null", false, FrameWebClass.PERSISTENT_CLASS),
 
   NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT("", "", "", false, FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 
   /** The prefix used in the ID of context actions to set the package stereotypes. */
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.";
+
+  /* Builds the disjoint arrays for the constraints that have disjoint sets. */
+  static {
+    // Entity Model > Persistent Class > {null | not null}.
+    FrameWebClassAttributeConstraint[] nullableDisjoints =
+        {PERSISTENT_CLASS_NULLABLE, PERSISTENT_CLASS_NOT_NULL};
+    for (FrameWebClassAttributeConstraint constraint : nullableDisjoints)
+      constraint.disjoints = nullableDisjoints;
+  }
 
   /** The ID of the package in the plugin UI configuration. */
   private String pluginUIID;
@@ -31,6 +43,9 @@ public enum FrameWebClassAttributeConstraint {
 
   /** The class to which the constraint can be applied. */
   private FrameWebClass frameWebClass;
+
+  /** Array of constraints that are disjoint among themselves. */
+  private FrameWebClassAttributeConstraint[] disjoints;
 
   private FrameWebClassAttributeConstraint(String pluginUIID, String name, String specification,
       boolean parameterized, FrameWebClass frameWebClass) {
@@ -59,6 +74,10 @@ public enum FrameWebClassAttributeConstraint {
 
   public FrameWebClass getFrameWebClass() {
     return frameWebClass;
+  }
+
+  public FrameWebClassAttributeConstraint[] getDisjoints() {
+    return disjoints;
   }
 
   /**
