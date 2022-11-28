@@ -14,6 +14,18 @@ public enum FrameWebClassAttributeConstraint {
   PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "Persistent Class attribute: not null",
       "not null", false, FrameWebClass.PERSISTENT_CLASS),
 
+  PERSISTENT_CLASS_PRECISION_DATE("entity.persistent.precision.date",
+      "Persistent Class attribute: precision = date", "precision = date", false,
+      FrameWebClass.PERSISTENT_CLASS),
+
+  PERSISTENT_CLASS_PRECISION_TIME("entity.persistent.precision.time",
+      "Persistent Class attribute: precision = time", "precision = time", false,
+      FrameWebClass.PERSISTENT_CLASS),
+
+  PERSISTENT_CLASS_PRECISION_TIMESTAMP("entity.persistent.precision.timestamp",
+      "Persistent Class attribute: precision = timestamp", "precision = timestamp", false,
+      FrameWebClass.PERSISTENT_CLASS),
+
   NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT("", "", "", false, FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 
   /** The prefix used in the ID of context actions to set the package stereotypes. */
@@ -27,6 +39,12 @@ public enum FrameWebClassAttributeConstraint {
         {PERSISTENT_CLASS_NULLABLE, PERSISTENT_CLASS_NOT_NULL};
     for (FrameWebClassAttributeConstraint constraint : nullableDisjoints)
       constraint.disjoints = nullableDisjoints;
+
+    // Entity Model > Persistent Class > precision = {date | time | timestamp}.
+    FrameWebClassAttributeConstraint[] precisionDisjoints = {PERSISTENT_CLASS_PRECISION_DATE,
+        PERSISTENT_CLASS_PRECISION_TIME, PERSISTENT_CLASS_PRECISION_TIMESTAMP};
+    for (FrameWebClassAttributeConstraint constraint : precisionDisjoints)
+      constraint.disjoints = precisionDisjoints;
   }
 
   /** The ID of the package in the plugin UI configuration. */
