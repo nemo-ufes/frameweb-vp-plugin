@@ -49,10 +49,18 @@ public final class FrameWebUtils {
 
     // Looks for a FrameWeb class stereotype in the element, which must be a class.
     if (IModelElementFactory.MODEL_TYPE_CLASS.equals(modelElement.getModelType())) {
-      // If the class has no stereotypes, checks if the package it is in has a default class type.
       IStereotype[] stereotypes = modelElement.toStereotypeModelArray();
+      for (IStereotype stereotype : stereotypes) {
+        FrameWebClass clazz = FrameWebClass.ofStereotype(stereotype.getName());
+        // If a FrameWeb class stereotype is found, stores it to be returned.
+        if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+          frameWebClass = clazz;
+        }
+      }
+
+      // If a FrameWeb class stereotype was not found, check the package for the default.
       IModelElement parent = modelElement.getParent();
-      if ((stereotypes == null || stereotypes.length == 0) && parent != null) {
+      if (parent != null) {
         FrameWebPackage frameWebPackage = getFrameWebPackage(parent);
         FrameWebClass clazz = frameWebPackage.getDefaultClassType();
 
@@ -60,15 +68,6 @@ public final class FrameWebUtils {
         if (clazz != null && clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
           frameWebClass = clazz;
       }
-
-      // Otherwise looks for the FrameWeb stereotype.
-      else
-        for (IStereotype stereotype : stereotypes) {
-          FrameWebClass clazz = FrameWebClass.ofStereotype(stereotype.getName());
-          // If a FrameWeb class stereotype is found, stores it to be returned.
-          if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
-            frameWebClass = clazz;
-        }
     }
 
     Logger.log(Level.FINER, "The FrameWeb class of {0} ({1}) is {2}",

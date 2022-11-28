@@ -32,21 +32,6 @@ public enum FrameWebClassAttributeConstraint {
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.";
 
-  /* Builds the disjoint arrays for the constraints that have disjoint sets. */
-  static {
-    // Entity Model > Persistent Class > {null | not null}.
-    FrameWebClassAttributeConstraint[] nullableDisjoints =
-        {PERSISTENT_CLASS_NULLABLE, PERSISTENT_CLASS_NOT_NULL};
-    for (FrameWebClassAttributeConstraint constraint : nullableDisjoints)
-      constraint.disjoints = nullableDisjoints;
-
-    // Entity Model > Persistent Class > precision = {date | time | timestamp}.
-    FrameWebClassAttributeConstraint[] precisionDisjoints = {PERSISTENT_CLASS_PRECISION_DATE,
-        PERSISTENT_CLASS_PRECISION_TIME, PERSISTENT_CLASS_PRECISION_TIMESTAMP};
-    for (FrameWebClassAttributeConstraint constraint : precisionDisjoints)
-      constraint.disjoints = precisionDisjoints;
-  }
-
   /** The ID of the package in the plugin UI configuration. */
   private String pluginUIID;
 
@@ -74,6 +59,26 @@ public enum FrameWebClassAttributeConstraint {
     this.frameWebClass = frameWebClass;
   }
 
+  /**
+   * Builds the disjoint arrays for the constraints that have disjoint sets. This method is called
+   * lazily from {@code getDefaultClassType()} as setting it in the constructor doesn't work because
+   * of the circular reference and having it in a {@code static} block was sometimes not working
+   * either and I don't know why.
+   */
+  private static void initDisjoints() {
+    // Entity Model > Persistent Class > {null | not null}.
+    FrameWebClassAttributeConstraint[] nullableDisjoints =
+        {PERSISTENT_CLASS_NULLABLE, PERSISTENT_CLASS_NOT_NULL};
+    for (FrameWebClassAttributeConstraint constraint : nullableDisjoints)
+      constraint.disjoints = nullableDisjoints;
+
+    // Entity Model > Persistent Class > precision = {date | time | timestamp}.
+    FrameWebClassAttributeConstraint[] precisionDisjoints = {PERSISTENT_CLASS_PRECISION_DATE,
+        PERSISTENT_CLASS_PRECISION_TIME, PERSISTENT_CLASS_PRECISION_TIMESTAMP};
+    for (FrameWebClassAttributeConstraint constraint : precisionDisjoints)
+      constraint.disjoints = precisionDisjoints;
+  }
+
   public String getPluginUIID() {
     return pluginUIID;
   }
@@ -95,6 +100,10 @@ public enum FrameWebClassAttributeConstraint {
   }
 
   public FrameWebClassAttributeConstraint[] getDisjoints() {
+    // Lazily initialize the disjoint sets.
+    if (PERSISTENT_CLASS_NULLABLE.disjoints == null) {
+      initDisjoints();
+    }
     return disjoints;
   }
 

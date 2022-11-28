@@ -28,14 +28,6 @@ public enum FrameWebPackage {
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.package.menu.stereotype.";
 
-  /* Set the default class of each package in a static block to avoid a circular reference. */
-  static {
-    APPLICATION_PACKAGE.defaultClassType = FrameWebClass.SERVICE_CLASS;
-    CONTROLLER_PACKAGE.defaultClassType = FrameWebClass.CONTROLLER_CLASS;
-    ENTITY_PACKAGE.defaultClassType = FrameWebClass.PERSISTENT_CLASS;
-    PERSISTENCE_PACKAGE.defaultClassType = FrameWebClass.DAO_CLASS;
-  }
-
   /** The ID of the package in the plugin UI configuration. */
   private String pluginUIID;
 
@@ -58,6 +50,19 @@ public enum FrameWebPackage {
     this.color = color;
   }
 
+  /**
+   * Set the default class types of each package. This method is called lazily from
+   * {@code getDefaultClassType()} as setting it in the constructor doesn't work because of the
+   * circular reference and having it in a {@code static} block was sometimes not working either and
+   * I don't know why.
+   */
+  private static void initDefaultClassTypes() {
+    APPLICATION_PACKAGE.defaultClassType = FrameWebClass.SERVICE_CLASS;
+    CONTROLLER_PACKAGE.defaultClassType = FrameWebClass.CONTROLLER_CLASS;
+    ENTITY_PACKAGE.defaultClassType = FrameWebClass.PERSISTENT_CLASS;
+    PERSISTENCE_PACKAGE.defaultClassType = FrameWebClass.DAO_CLASS;
+  }
+
   public String getName() {
     return name;
   }
@@ -71,6 +76,10 @@ public enum FrameWebPackage {
   }
 
   public FrameWebClass getDefaultClassType() {
+    // Lazily initialize the default class types.
+    if (defaultClassType == null) {
+      initDefaultClassTypes();
+    }
     return defaultClassType;
   }
 
