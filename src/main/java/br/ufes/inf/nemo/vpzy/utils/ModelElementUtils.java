@@ -23,11 +23,23 @@ public final class ModelElementUtils {
    */
   public static Set<IModelElement> getSelectedModelElements() {
     Set<IModelElement> selectedModelElements = new HashSet<>();
+
+    // Get the selected diagram elements.
     Set<IDiagramElement> diagramElements = DiagramElementUtils.getSelectedDiagramElements();
     for (IDiagramElement diagramElement : diagramElements) {
+      // Retrieves the model element from the diagram element. Add it to the set.
       IModelElement modelElement = diagramElement.getModelElement();
       if (modelElement != null)
         selectedModelElements.add(modelElement);
+
+      // Checks if the diagram element has selected members.
+      if (diagramElement instanceof IShapeUIModel) {
+        IShapeUIModel shapeUIModel = (IShapeUIModel) diagramElement;
+        IModelElement[] selectedShapeMembers = shapeUIModel.getSelectedShapeMembers();
+        if (selectedShapeMembers != null && selectedShapeMembers.length > 0)
+          for (IModelElement selectedMember : selectedShapeMembers)
+            selectedModelElements.add(selectedMember);
+      }
     }
     Logger.log(Level.FINER, "Getting the selected model elements returns {0} objects",
         selectedModelElements.size());

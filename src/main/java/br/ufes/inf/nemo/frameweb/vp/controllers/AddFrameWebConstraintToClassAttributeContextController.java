@@ -2,6 +2,7 @@ package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.event.ActionEvent;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
@@ -14,6 +15,7 @@ import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassAttributeConstraint;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConstraintsManager;
+import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
  * Controller that handles the Add FrameWeb Constraint to Class Attribute action, activated by a
@@ -50,44 +52,43 @@ public class AddFrameWebConstraintToClassAttributeContextController
     Logger.log(Level.FINE, "Performing action: Add FrameWeb Constraint (Class Attribute) > {0}",
         event.getActionCommand());
 
-    // Determines the selected attribute.
-    IModelElement selectedModelElement = context.getModelElement();
-    if (selectedModelElement != null
-        && IModelElementFactory.MODEL_TYPE_ATTRIBUTE.equals(selectedModelElement.getModelType())) {
-      // Determine which FrameWeb Class Attribute Constraint to apply from the selected menu item.
-      FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
-          FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
-      Logger.log(Level.INFO, "Adding constraint {0} to {1}",
-          new Object[] {frameWebClassAttributeConstraint.getSpecification(),
-              selectedModelElement.getName()});
+    // Process all selected attributes.
+    Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
+    for (IModelElement selectedModelElement : selectedModelElements) {
+      if (IModelElementFactory.MODEL_TYPE_ATTRIBUTE.equals(selectedModelElement.getModelType())) {
+        // Determine which FrameWeb Class Attribute Constraint to apply from the selected menu item.
+        FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
+            FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
+        Logger.log(Level.INFO, "Adding constraint {0} to {1}", new Object[] {
+            frameWebClassAttributeConstraint.getSpecification(), selectedModelElement.getName()});
 
-      // Remove any disjoint constraints in the element, if any.
-      FrameWebClassAttributeConstraint[] disjoints =
-          frameWebClassAttributeConstraint.getDisjoints();
-      if (disjoints != null) {
-        Iterator<?> iterator = selectedModelElement.constraintsIterator();
-        while (iterator.hasNext()) {
-          Object obj = iterator.next();
-          if (obj instanceof IConstraintElement) {
-            IConstraintElement existingConstraintElement = (IConstraintElement) obj;
-            for (FrameWebClassAttributeConstraint disjointConstraint : disjoints) {
-              if (disjointConstraint.getPluginUIID().equals(existingConstraintElement.getName()))
-                existingConstraintElement.removeConstrainedElement(selectedModelElement);
+        // Remove any disjoint constraints in the element, if any.
+        FrameWebClassAttributeConstraint[] disjoints =
+            frameWebClassAttributeConstraint.getDisjoints();
+        if (disjoints != null) {
+          Iterator<?> iterator = selectedModelElement.constraintsIterator();
+          while (iterator.hasNext()) {
+            Object obj = iterator.next();
+            if (obj instanceof IConstraintElement) {
+              IConstraintElement existingConstraintElement = (IConstraintElement) obj;
+              for (FrameWebClassAttributeConstraint disjointConstraint : disjoints) {
+                if (disjointConstraint.getPluginUIID().equals(existingConstraintElement.getName()))
+                  existingConstraintElement.removeConstrainedElement(selectedModelElement);
+              }
             }
           }
         }
+
+        // Adds the constraint to the selected attribute.
+        ConstraintsManager constraintsManager = ConstraintsManager.getInstance();
+        IConstraintElement constraintElement =
+            constraintsManager.getConstraint(frameWebClassAttributeConstraint.getPluginUIID(),
+                frameWebClassAttributeConstraint.getSpecification(),
+                frameWebClassAttributeConstraint.isParameterized());
+        constraintElement.addConstrainedElement(selectedModelElement);
+
+        // FIXME: when parameterized, ask for the parameter value.
       }
-
-      // Adds the constraint to the selected attribute.
-      ConstraintsManager constraintsManager = ConstraintsManager.getInstance();
-      IConstraintElement constraintElement =
-          constraintsManager.getConstraint(frameWebClassAttributeConstraint.getPluginUIID(),
-              frameWebClassAttributeConstraint.getSpecification(),
-              frameWebClassAttributeConstraint.isParameterized());
-      constraintElement.addConstrainedElement(selectedModelElement);
-
-      // FIXME: when parameterized, ask for the parameter value.
-      // FIXME: check if this can be applied to multiple elements at once.
     }
   }
 }
