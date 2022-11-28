@@ -22,32 +22,46 @@ public final class ModelElementUtils {
    *         active diagram.
    */
   public static Set<IModelElement> getSelectedModelElements() {
+    Logger.log(Level.FINEST, "Retrieving all selected model elements");
     Set<IModelElement> selectedModelElements = new HashSet<>();
 
-    // Get the selected diagram elements.
+    // Gets the selected diagram elements.
     Set<IDiagramElement> diagramElements = DiagramElementUtils.getSelectedDiagramElements();
+    Logger.log(Level.FINEST, "Checking {0} selected diagram elements", diagramElements.size());
     for (IDiagramElement diagramElement : diagramElements) {
       // Retrieves the model element from the diagram element. Add it to the set.
       IModelElement modelElement = diagramElement.getModelElement();
-      if (modelElement != null)
+      if (modelElement != null) {
+        Logger.log(Level.FINEST,
+            "A selected diagram element represents model element: {0} ({1}), will be added to the set",
+            new Object[] {modelElement.getName(), modelElement.getModelType()});
         selectedModelElements.add(modelElement);
+      }
 
-      // Checks if the diagram element has selected members.
+      // Checks if the diagram element has selected members. Add them to the set.
       if (diagramElement instanceof IShapeUIModel) {
         IShapeUIModel shapeUIModel = (IShapeUIModel) diagramElement;
         IModelElement[] selectedShapeMembers = shapeUIModel.getSelectedShapeMembers();
-        if (selectedShapeMembers != null && selectedShapeMembers.length > 0)
-          for (IModelElement selectedMember : selectedShapeMembers)
+        if (selectedShapeMembers != null && selectedShapeMembers.length > 0) {
+          Logger.log(Level.FINEST, "Checking {0} selected members from a selected diagram element",
+              selectedShapeMembers.length);
+          for (IModelElement selectedMember : selectedShapeMembers) {
+            Logger.log(Level.FINEST, "Add selected member to the set: {0} ({1})",
+                new Object[] {selectedMember.getName(), selectedMember.getModelType()});
             selectedModelElements.add(selectedMember);
+          }
+        }
       }
     }
+
+    // Finally, returns the set of selected elements.
     Logger.log(Level.FINER, "Getting the selected model elements returns {0} objects",
         selectedModelElements.size());
     return selectedModelElements;
   }
 
   /**
-   * Change the fill color of the diagram elements associated with a given model element to a given
+   * Changes the fill color of the diagram elements associated with a given model element to a given
    * color.
    * 
    * @param modelElement The given model element.
@@ -56,7 +70,7 @@ public final class ModelElementUtils {
   public static void changeFillColor(IModelElement modelElement, Color color) {
     for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
       if (diagramElement instanceof IShapeUIModel) {
-        Logger.log(Level.FINE, "Changing color of {0} to {1}",
+        Logger.log(Level.FINER, "Changing color of {0} to {1}",
             new Object[] {modelElement.getName(), color});
         IShapeUIModel classUIModel = (IShapeUIModel) diagramElement;
         classUIModel.getFillColor().setColor1(color.getAwtColor());

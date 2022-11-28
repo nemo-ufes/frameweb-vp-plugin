@@ -1,7 +1,9 @@
 package br.ufes.inf.nemo.vpzy.utils;
 
 import java.io.File;
+import java.util.logging.Level;
 import com.vp.plugin.ApplicationManager;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Utility class that provides helper methods regarding the Application Manager in Visual Paradigm.
@@ -18,15 +20,19 @@ public final class ApplicationManagerUtils {
    * @param pluginID The given ID.
    */
   public static void reloadPluginClasses(String pluginID) {
+    Logger.log(Level.FINEST, "Reloading plug-in classes for: {0}", pluginID);
     instance.reloadPluginClasses(pluginID);
   }
 
   /**
-   * Obtain the location of the current Visual Paradigm workspace.
+   * Obtains the location of the current Visual Paradigm workspace.
    * 
    * @return A {@code File} object representing the location.
    */
   public static File getWorkspaceLocation() {
-    return instance.getWorkspaceLocation();
+    File workspaceLocation = instance.getWorkspaceLocation();
+    Logger.log(Level.FINEST, "Retrieving workspace location returns: {0}",
+        workspaceLocation.getAbsolutePath());
+    return workspaceLocation;
   }
 }

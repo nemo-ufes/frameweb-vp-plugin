@@ -34,7 +34,7 @@ public class ConfigurationManager {
     this.pluginName = pluginName;
     this.configFileName = configFileName;
 
-    // Locate the config file in Visual Paradigm's workspace and loads it.
+    // Locates the config file in Visual Paradigm's workspace and loads it.
     File workspace = ApplicationManagerUtils.getWorkspaceLocation();
     configFile = new File(workspace, configFileName);
     load();
@@ -48,13 +48,14 @@ public class ConfigurationManager {
    * This method is called during the construction of a ConfigurationManager.
    */
   protected void load() {
-    Logger.log(Level.FINE, "Loading {0} configuration from {1}. File exists? {2}",
+    Logger.log(Level.FINER, "Loading {0} configuration from {1}. File exists? {2}",
         new Object[] {pluginName, configFile.getAbsolutePath(), configFile.exists()});
 
-    // If there's already a config file, load it.
+    // If there's already a config file, loads it.
     if (configFile.exists()) {
       try {
         properties.load(new FileInputStream(configFile));
+        Logger.log(Level.FINEST, "Configuration successfully loaded for plug-in {0}.", pluginName);
         return;
       } catch (IOException e) {
         Logger.log(Level.SEVERE,
@@ -63,21 +64,22 @@ public class ConfigurationManager {
       }
     }
 
-    // If the config file doesn't exist, create one based on default values and save.
-    Logger.log(Level.FINE, "Will load configuration from classpath location {0} and save to {1}",
-        new Object[] {configFileName, configFile.getAbsolutePath()});
+    // If the config file doesn't exist, creates one based on default values and saves.
+    Logger.log(Level.FINE,
+        "Loading {0} configuration from classpath location {1} and saving to {2}",
+        new Object[] {pluginName, configFileName, configFile.getAbsolutePath()});
     InputStream input =
         ConfigurationManager.class.getClassLoader().getResourceAsStream(configFileName);
     try {
       properties.load(input);
       save();
+      Logger.log(Level.FINEST, "Configuration successfully loaded for plug-in {0}, saved to {1}.",
+          new Object[] {pluginName, configFile.getAbsolutePath()});
     } catch (IOException e) {
       Logger.log(Level.SEVERE,
-          "Cannot read default configurations. Plug-in {0} will not function properly.",
+          "Cannot read default configurations. Plug-in {0} will probably not function properly.",
           pluginName);
     }
-
-    Logger.log(Level.FINER, "Configuration successfully loaded for plug-in {0}.", pluginName);
   }
 
   /**
@@ -85,40 +87,43 @@ public class ConfigurationManager {
    * Paradigm's workspace directory, allowing users to persist configuration changes.
    */
   public void save() {
-    Logger.log(Level.FINE, "Saving {0} configuration to {1}. File exists? {2}",
+    Logger.log(Level.FINER, "Saving {0} configuration to {1}. File exists? {2}",
         new Object[] {pluginName, configFile.getAbsolutePath(), configFile.exists()});
 
     // Stores the properties in the file.
     try {
       OutputStream output = new FileOutputStream(configFile);
       properties.store(output, pluginName + " Configuration");
+      Logger.log(Level.FINEST, "Configuration successfully saved for plug-in {0}.", pluginName);
     } catch (IOException e) {
       Logger.log(Level.SEVERE,
           "Cannot save {0} configurations. Plug-in will not remember configuration changes.",
           pluginName);
     }
-
-    Logger.log(Level.FINER, "Configuration successfully saved for plug-in {0}.", pluginName);
   }
 
   /**
-   * Get the value for a configuration item given its key.
+   * Gets the value for a configuration item given its key.
    * 
    * @param key The given key.
    * @return The value of the configuration item, or {@code null} if no configuration item with the
    *         given key is found.
    */
   public String getProperty(String key) {
-    return properties.getProperty(key);
+    String value = properties.getProperty(key);
+    Logger.log(Level.FINEST, "Retrieving configuration for key {0}: {1}.",
+        new Object[] {key, value});
+    return value;
   }
 
   /**
-   * Set the value for a configuration item given its key and the new value to set.
+   * Sets the value for a configuration item given its key and the new value to set.
    * 
    * @param key The given key.
    * @param value The new value to set.
    */
   public void setProperty(String key, String value) {
+    Logger.log(Level.FINEST, "Changing configuration for key {0}: {1}.", new Object[] {key, value});
     properties.setProperty(key, value);
   }
 }

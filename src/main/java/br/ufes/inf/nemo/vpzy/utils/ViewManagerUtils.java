@@ -2,10 +2,12 @@ package br.ufes.inf.nemo.vpzy.utils;
 
 
 import java.awt.Component;
+import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import com.vp.plugin.ViewManager;
 import com.vp.plugin.view.IDialogHandler;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
  * Utility class that provides helper methods regarding the View Manager in Visual Paradigm.
@@ -62,6 +64,7 @@ public final class ViewManagerUtils {
    * @param message The message to be displayed in the dialog.
    */
   public static void showMessageDialog(Object message) {
+    Logger.log(Level.FINEST, "Showing message in a dialog: {0}", message);
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message);
   }
@@ -75,6 +78,8 @@ public final class ViewManagerUtils {
    *        class.
    */
   public static void showMessageDialog(Object message, String title, int messageType) {
+    Logger.log(Level.FINEST, "Showing message in a dialog, with title \"{0}\" and type {1}: {2}",
+        new Object[] {title, messageType, message});
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message, title, messageType);
   }
@@ -91,16 +96,21 @@ public final class ViewManagerUtils {
    */
   public static void showMessageDialog(Object message, String title, int messageType,
       Icon icon) {
+    Logger.log(Level.FINEST,
+        "Showing message in a dialog, with title \"{0}\", type {1} and icon {2}: {3}",
+        new Object[] {title, messageType, icon, message});
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message, title, messageType, icon);
   }
 
   /**
-   * Show a dialog based on the given dialog handler.
+   * Shows a dialog based on the given dialog handler.
    * 
    * @param dialogHandler The given dialog handler.
    */
   public static void showDialog(IDialogHandler dialogHandler) {
+    Logger.log(Level.FINEST, "Showing a dialog based on dialog handler {0}",
+        dialogHandler.getClass().getName());
     viewManager.showDialog(dialogHandler);
   }
 }

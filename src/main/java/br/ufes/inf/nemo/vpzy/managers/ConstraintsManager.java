@@ -56,11 +56,13 @@ public class ConstraintsManager {
    */
   public static ConstraintsManager getInstance(IProject project) {
     String projectId = project.getId();
-    Logger.log(Level.FINER, "Providing ConstraintsManager to project {0} (ID: {1})",
+    Logger.log(Level.FINEST, "Providing ConstraintsManager to project {0} (ID: {1})",
         new Object[] {project.getName(), projectId});
 
     // Checks if the constraints manager for this project has already been created and returns.
     if (!MANAGERS.containsKey(projectId)) {
+      Logger.log(Level.FINER, "Creating new ConstraintsManager to project {0} (ID: {1})",
+          new Object[] {project.getName(), projectId});
       MANAGERS.put(projectId, new ConstraintsManager(project));
     }
     return MANAGERS.get(projectId);
@@ -74,10 +76,16 @@ public class ConstraintsManager {
     existingConstraints = new HashMap<>();
     IModelElement[] allConstraints =
         project.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_CONSTRAINT_ELEMENT);
-    Logger.log(Level.INFO, "Initializing Constraints Manager with {0} constraints",
-        allConstraints.length);
-    for (IModelElement element : allConstraints)
-      existingConstraints.put(element.getName(), (IConstraintElement) element);
+    if (allConstraints != null && allConstraints.length > 0) {
+      Logger.log(Level.FINER,
+          "Initializing constraints manager for project {0} ({1}) with {2} constraints",
+          new Object[] {project.getName(), project.getId(), allConstraints.length});
+      for (IModelElement element : allConstraints) {
+        Logger.log(Level.FINEST, "Registering existing constraints for project {0} ({1}): {2}",
+            new Object[] {project.getName(), project.getId(), element.getName()});
+        existingConstraints.put(element.getName(), (IConstraintElement) element);
+      }
+    }
   }
 
   /**
@@ -89,8 +97,9 @@ public class ConstraintsManager {
    * @return The newly created IConstraintElement.
    */
   protected IConstraintElement createConstraint(String name, String specification) {
-    Logger.log(Level.FINE, "Registering a new constraint {0} with specification {1}",
-        new Object[] {name, specification});
+    Logger.log(Level.FINER,
+        "Registering a new constraint {0} with specification {1} for project {2} ({3})",
+        new Object[] {name, specification, project.getName(), project.getId()});
     IConstraintElement newConstraintElement =
         IModelElementFactory.instance().createConstraintElement();
     newConstraintElement.setName(name);
@@ -116,21 +125,28 @@ public class ConstraintsManager {
    */
   public IConstraintElement getConstraint(String name, String specification,
       boolean parameterized) {
-    Logger.log(Level.FINER,
-        "Checking the existence of constraint {0} with specification {1} (parameterized: {2})",
-        new Object[] {name, specification, parameterized});
+    Logger.log(Level.FINEST,
+        "Checking the existence of constraint {0} with specification {1} (parameterized: {2}) for project {3} ({4})",
+        new Object[] {name, specification, parameterized, project.getName(), project.getId()});
 
-    // Establish the key for the constraint. Parameterized constraints must have unique keys as they
-    // cannot be shared among different elements. Each can have a different parameter in the spec.
+    // Establishes the key for the constraint. Parameterized ones must have unique keys as they are
+    // not shared among different elements (they can have different parameter in their specs).
     String key = name;
     if (parameterized)
       key += "-" + UUID.randomUUID().toString();
+    Logger.log(Level.FINEST,
+        "Using key {0} for constraint {1} (specification: {2}, parameterized: {3}) for project {4} ({5})",
+        new Object[] {key, name, specification, parameterized, project.getName(), project.getId()});
 
     // If the constraint already exists, gets it from the map. Otherwise, creates and stores one.
     IConstraintElement constraintElement = null;
     if (existingConstraints.containsKey(key)) {
+      Logger.log(Level.FINEST, "Constraint key {0} exists in project {1} ({2})",
+          new Object[] {key, project.getName(), project.getId()});
       constraintElement = existingConstraints.get(key);
     } else {
+      Logger.log(Level.FINEST, "Constraint key {0} doesn't exist in project {1} ({2})",
+          new Object[] {key, project.getName(), project.getId()});
       constraintElement = createConstraint(name, specification);
       existingConstraints.put(key, constraintElement);
     }
