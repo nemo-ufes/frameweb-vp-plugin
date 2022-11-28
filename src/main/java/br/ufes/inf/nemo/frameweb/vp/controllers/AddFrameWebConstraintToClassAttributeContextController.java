@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
-import com.vp.plugin.model.ICompositeValueSpecification;
 import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.factory.IModelElementFactory;
@@ -13,6 +12,7 @@ import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassAttributeConstraint;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.managers.ConstraintsManager;
 
 /**
  * Controller that handles the Add FrameWeb Constraint to Class Attribute action, activated by a
@@ -63,16 +63,14 @@ public class AddFrameWebConstraintToClassAttributeContextController
       Logger.log(Level.INFO, "Adding constraint {0} to {1}",
           new Object[] {frameWebClassAttributeConstraint.getSpecification(),
               selectedModelElement.getName()});
+      ConstraintsManager constraintsManager = ConstraintsManager.getInstance();
       IConstraintElement constraintElement =
-          IModelElementFactory.instance().createConstraintElement();
-      ICompositeValueSpecification constraintSpec =
-          IModelElementFactory.instance().createCompositeValueSpecification();
-      constraintElement.setName(frameWebClassAttributeConstraint.getName());
-      constraintSpec.setValue(frameWebClassAttributeConstraint.getSpecification());
-      constraintElement.setSpecification(constraintSpec);
+          constraintsManager.getConstraint(frameWebClassAttributeConstraint.getPluginUIID(),
+              frameWebClassAttributeConstraint.getSpecification(),
+              frameWebClassAttributeConstraint.isParameterized());
       constraintElement.addConstrainedElement(selectedModelElement);
 
-      // FIXME: have a constraint manager to avoid repetition.
+      // FIXME: when parameterized, ask for the parameter value.
       // FIXME: check if this can be applied to multiple elements at once.
     }
   }

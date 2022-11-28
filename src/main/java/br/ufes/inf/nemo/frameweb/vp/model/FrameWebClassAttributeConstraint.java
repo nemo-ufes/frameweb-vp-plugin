@@ -41,6 +41,10 @@ public enum FrameWebClassAttributeConstraint {
     this.frameWebClass = frameWebClass;
   }
 
+  public String getPluginUIID() {
+    return pluginUIID;
+  }
+
   public String getName() {
     return name;
   }
