@@ -41,28 +41,32 @@ public class AddFrameWebConstraintToClassAttributeContextController
       // FrameWeb class.
       FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
           FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
+      Logger.log(Level.FINE,
+          "Updating action: Add FrameWeb Constraint (Class Attribute) > {0}. Attribute in class: {1}. Action refers to package: {2}",
+          new Object[] {action.getLabel(), modelElementFrameWebClass,
+              frameWebClassAttributeConstraint.getFrameWebClass()});
       action.setEnabled(
           modelElementFrameWebClass == frameWebClassAttributeConstraint.getFrameWebClass());
     }
   }
 
-  /** Called when the button is pressed. Add the constraint to the class attribute. */
+  /** Called when the button is pressed. Adds the constraint to the class attribute. */
   @Override
   public void performAction(VPAction action, VPContext context, ActionEvent event) {
-    Logger.log(Level.FINE, "Performing action: Add FrameWeb Constraint (Class Attribute) > {0}",
+    Logger.log(Level.CONFIG, "Performing action: Add FrameWeb Constraint (Class Attribute) > {0}",
         event.getActionCommand());
 
-    // Process all selected attributes.
+    // Processes all selected attributes.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
     for (IModelElement selectedModelElement : selectedModelElements) {
       if (IModelElementFactory.MODEL_TYPE_ATTRIBUTE.equals(selectedModelElement.getModelType())) {
-        // Determine which FrameWeb Class Attribute Constraint to apply from the selected menu item.
+        // Determines which FrameWeb Class Attribute Constraint to apply from the menu item.
         FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
             FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
         Logger.log(Level.INFO, "Adding constraint {0} to {1}", new Object[] {
             frameWebClassAttributeConstraint.getSpecification(), selectedModelElement.getName()});
 
-        // Remove any disjoint constraints in the element, if any.
+        // Removes any disjoint constraints in the element, if any.
         FrameWebClassAttributeConstraint[] disjoints =
             frameWebClassAttributeConstraint.getDisjoints();
         if (disjoints != null) {
@@ -72,8 +76,13 @@ public class AddFrameWebConstraintToClassAttributeContextController
             if (obj instanceof IConstraintElement) {
               IConstraintElement existingConstraintElement = (IConstraintElement) obj;
               for (FrameWebClassAttributeConstraint disjointConstraint : disjoints) {
-                if (disjointConstraint.getPluginUIID().equals(existingConstraintElement.getName()))
+                if (disjointConstraint.getPluginUIID()
+                    .equals(existingConstraintElement.getName())) {
+                  Logger.log(Level.CONFIG, "Removing disjoing stereotype {0} from {1}",
+                      new Object[] {existingConstraintElement.getSpecification(),
+                          selectedModelElement.getName()});
                   existingConstraintElement.removeConstrainedElement(selectedModelElement);
+                }
               }
             }
           }

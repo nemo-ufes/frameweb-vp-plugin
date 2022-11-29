@@ -1,12 +1,14 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.Component;
+import java.util.logging.Level;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
 import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.view.PluginSettingsPanel;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
@@ -31,15 +33,15 @@ public class OpenPluginSettingsController implements VPActionController {
   /** Called when the button is pressed. Opens the Plug-in Settings window. */
   @Override
   public void performAction(VPAction action) {
+    Logger.log(Level.CONFIG, "Performing action: Open Plug-in Settings");
     FrameWebPlugin plugin = FrameWebPlugin.instance();
 
-    // If the dialog is already open, ignore.
+    // If the dialog is already open, ignores the action.
     if (plugin.isPluginSettingsDialogOpen())
       return;
-    else
-      plugin.setPluginSettingsDialogOpen(true);
 
-    // Open the dialog.
+    // Otherwise, opens the dialog.
+    plugin.setPluginSettingsDialogOpen(true);
     ViewManagerUtils.showDialog(new PluginSettingsDialogHandler());
   }
 
@@ -55,7 +57,7 @@ public class OpenPluginSettingsController implements VPActionController {
       return pluginSettingsPanel;
     }
 
-    /** Called after getComponent(), dialog is created but not shown. Set outlook of the dialog. */
+    /** Called after getComponent(), dialog is created but not shown. Sets outlook of the dialog. */
     @Override
     public void prepare(IDialog dialog) {
       pluginSettingsDialog = dialog;

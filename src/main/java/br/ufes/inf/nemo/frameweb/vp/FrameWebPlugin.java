@@ -11,8 +11,8 @@ import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
 
 /**
- * Implementation of VPPlugin responsible for configuring FrameWeb Plugin's behavior when loading
- * and unloading.
+ * Implementation of VPPlugin responsible for configuring FrameWeb plug-in's behavior when loading
+ * and unloading. This class also centralizes global information on the FrameWeb plug-in.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
  */
@@ -86,7 +86,8 @@ public class FrameWebPlugin implements VPPlugin {
   }
 
   /**
-   * Reloads the plug-in, in case its classes get updated. Used mostly by plug-in developers.
+   * Reloads the plug-in, in case its classes get updated. Used mostly by plug-in developers. And it
+   * doesn't always work as expected, unfortunately...
    */
   public void reload() {
     shutdown();
@@ -95,7 +96,7 @@ public class FrameWebPlugin implements VPPlugin {
   }
 
   /**
-   * Called by Visual Paradigm when the plugin is loaded.
+   * Called by Visual Paradigm when the plug-in is loaded.
    *
    * @param pluginInfo Plugin information supplied by Visual Paradigm.
    */
@@ -106,8 +107,8 @@ public class FrameWebPlugin implements VPPlugin {
   }
 
   /**
-   * Called by Visual Paradigm when the plugin is unloaded (i.e., Visual Paradigm will be exited).
-   * This method is not called when the plugin is reloaded.
+   * Called by Visual Paradigm when the plug-in is unloaded (i.e., Visual Paradigm will be exited).
+   * This method is not called when the plug-in is reloaded.
    */
   @Override
   public void unloaded() {

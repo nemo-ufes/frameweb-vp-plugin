@@ -29,16 +29,19 @@ public class FrameWebPackageListener extends ManagedModelListener {
   public void propertyChange(PropertyChangeEvent event) {
     Object changeSource = event.getSource();
     String propertyName = event.getPropertyName();
-    Logger.log(Level.FINER, "Package listener handling change on property {0} in source {1}",
+    Logger.log(Level.FINE,
+        "FrameWeb Package listener handling change on property {0} in source {1}",
         new Object[] {propertyName, changeSource});
 
-    // Only handle changes in model elements that have the property name specified.
+    // Only handles changes in model elements that have the property name specified.
     if (changeSource instanceof IModelElement && propertyName != null) {
       IModelElement modelElement = (IModelElement) changeSource;
+      Logger.log(Level.FINE, "FrameWeb Package listener identified source name: {0}, and type: {1}",
+          new Object[] {modelElement.getName(), modelElement.getModelType()});
 
-      // More specifically, only handle changes in elements this listener supports.
+      // More specifically, only handles changes in elements this listener supports.
       if (getModelType().equals(modelElement.getModelType())) {
-        // Handle changes according to the property that has been changed.
+        // Handles changes according to the property that has been changed.
         switch (propertyName) {
           case IStereotype.PROP_STEREOTYPES:
             // The stereotype of the package has been changed.
@@ -46,7 +49,7 @@ public class FrameWebPackageListener extends ManagedModelListener {
             break;
 
           case ListenersManager.PROP_CHILD_ADDED:
-            // A new element has been added to the package. Check if it's a class.
+            // A new element has been added to the package. Checks if it's a class.
             if (event.getNewValue() instanceof IModelElement) {
               IModelElement child = (IModelElement) event.getNewValue();
               if (IModelElementFactory.MODEL_TYPE_CLASS.equals(child.getModelType())) {
@@ -60,23 +63,26 @@ public class FrameWebPackageListener extends ManagedModelListener {
   }
 
   /**
-   * Handle the situation in which a package has changed stereotypes. Check if a FrameWeb package
+   * Handles the situation in which a package has changed stereotypes. Checks if a FrameWeb package
    * stereotype has been applied and act accordingly.
    * 
    * @param modelElement The model element in which the change took place.
    */
   private void handlePackageStereotypeChange(IModelElement modelElement) {
-    // If a FrameWeb package stereotype has been applied, change the package color.
+    // If a FrameWeb package stereotype has been applied, changes the package color.
     FrameWebPackage frameWebPackage = FrameWebUtils.getFrameWebPackage(modelElement);
+    Logger.log(Level.CONFIG,
+        "FrameWeb Package listener handling stereotype change for class {0}: {1}",
+        new Object[] {modelElement.getName(), frameWebPackage});
     if (frameWebPackage != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
       ModelElementUtils.changeFillColor(modelElement, frameWebPackage.getColor());
     }
   }
 
   /**
-   * Handle the situation in which a new class has been added to the package. Check if the package
+   * Handles the situation in which a new class has been added to the package. Checks if the package
    * has a FrameWeb stereotype and if this stereotype has a default type of class. In such case,
-   * apply the default class color to the new class.
+   * applies the default class color to the new class.
    * 
    * @param parentPackage The package in which the class was added.
    * @param newClass The new class that was added to the package.
@@ -85,8 +91,13 @@ public class FrameWebPackageListener extends ManagedModelListener {
     // Checks if this is a FrameWeb package that has a default class type.
     FrameWebPackage frameWebPackage = FrameWebUtils.getFrameWebPackage(parentPackage);
     FrameWebClass defaultClassType = frameWebPackage.getDefaultClassType();
+    Logger.log(Level.CONFIG,
+        "FrameWeb Package listener identified new class added: {0}, in package: {1} (type: {2}, default class type: {3})",
+        new Object[] {newClass.getName(), parentPackage.getName(), frameWebPackage,
+            defaultClassType});
+
+    // Sets the color of the element to the color of the default class type, if any.
     if (defaultClassType != null) {
-      // Sets the color of the element to the color of the default class type.
       ModelElementUtils.changeFillColor(newClass, defaultClassType.getColor());
     }
   }

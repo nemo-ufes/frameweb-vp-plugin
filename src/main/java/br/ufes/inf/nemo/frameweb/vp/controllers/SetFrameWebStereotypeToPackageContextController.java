@@ -31,7 +31,7 @@ public class SetFrameWebStereotypeToPackageContextController implements VPContex
   /** Called when the button is pressed. Sets the package's stereotype. */
   @Override
   public void performAction(VPAction action, VPContext context, ActionEvent event) {
-    Logger.log(Level.FINE, "Performing action: Set FrameWeb Stereotype (Package) > {0}",
+    Logger.log(Level.CONFIG, "Performing action: Set FrameWeb Stereotype (Package) > {0}",
         event.getActionCommand());
 
     // Gets the FrameWeb stereotypes manager associated with the current project.
@@ -54,8 +54,11 @@ public class SetFrameWebStereotypeToPackageContextController implements VPContex
       if (existingStereotypes != null) {
         for (IStereotype existingStereotype : existingStereotypes) {
           FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
-          if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE)
+          if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+            Logger.log(Level.CONFIG, "Removing disjoing stereotype {0} from {1}",
+                new Object[] {existingStereotype, modelElement.getName()});
             modelElement.removeStereotype(existingStereotype);
+          }
         }
       }
 

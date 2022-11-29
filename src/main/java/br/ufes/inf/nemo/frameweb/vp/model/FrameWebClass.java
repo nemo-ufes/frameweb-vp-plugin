@@ -1,5 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp.model;
 
+import java.util.logging.Level;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.view.Color;
 
 /**
@@ -92,10 +94,16 @@ public enum FrameWebClass {
    *         class with the given name exists.
    */
   public static FrameWebClass of(String name) {
-    for (FrameWebClass obj : FrameWebClass.values())
-      if (obj.name.equalsIgnoreCase(name))
-        return obj;
-    return NOT_A_FRAMEWEB_CLASS;
+    FrameWebClass clazz = NOT_A_FRAMEWEB_CLASS;
+    for (FrameWebClass obj : FrameWebClass.values()) {
+      if (obj.name.equalsIgnoreCase(name)) {
+        clazz = obj;
+      }
+    }
+
+    Logger.log(Level.FINE, "Providing FrameWeb class for name {0}: {1}",
+        new Object[] {name, clazz});
+    return clazz;
   }
 
   /**
@@ -106,12 +114,17 @@ public enum FrameWebClass {
    *         class with the given UI ID exists.
    */
   public static FrameWebClass ofPluginUIID(String pluginUIID) {
+    FrameWebClass clazz = NOT_A_FRAMEWEB_CLASS;
     for (FrameWebClass obj : FrameWebClass.values()) {
       String fullID = PLUGIN_UI_CONTEXT_ACTION_PREFIX + obj.pluginUIID;
-      if (fullID.equalsIgnoreCase(pluginUIID))
-        return obj;
+      if (fullID.equalsIgnoreCase(pluginUIID)) {
+        clazz = obj;
+      }
     }
-    return NOT_A_FRAMEWEB_CLASS;
+
+    Logger.log(Level.FINE, "Providing FrameWeb class for plug-in UI ID {0}: {1}",
+        new Object[] {pluginUIID, clazz});
+    return clazz;
   }
 
   /**
@@ -122,9 +135,15 @@ public enum FrameWebClass {
    *         class with the given stereotype name exists.
    */
   public static FrameWebClass ofStereotype(String stereotypeName) {
-    for (FrameWebClass obj : FrameWebClass.values())
-      if (obj.stereotypeName.equalsIgnoreCase(stereotypeName))
-        return obj;
-    return NOT_A_FRAMEWEB_CLASS;
+    FrameWebClass clazz = NOT_A_FRAMEWEB_CLASS;
+    for (FrameWebClass obj : FrameWebClass.values()) {
+      if (obj.stereotypeName.equalsIgnoreCase(stereotypeName)) {
+        clazz = obj;
+      }
+    }
+
+    Logger.log(Level.FINE, "Providing FrameWeb class for stereotype {0}: {1}",
+        new Object[] {stereotypeName, clazz});
+    return clazz;
   }
 }

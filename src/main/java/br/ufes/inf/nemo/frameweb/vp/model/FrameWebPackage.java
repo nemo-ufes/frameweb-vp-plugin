@@ -1,5 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp.model;
 
+import java.util.logging.Level;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.view.Color;
 
 /**
@@ -57,6 +59,7 @@ public enum FrameWebPackage {
    * I don't know why.
    */
   private static void initDefaultClassTypes() {
+    Logger.log(Level.CONFIG, "Initializing default class types for FrameWeb packages");
     APPLICATION_PACKAGE.defaultClassType = FrameWebClass.SERVICE_CLASS;
     CONTROLLER_PACKAGE.defaultClassType = FrameWebClass.CONTROLLER_CLASS;
     ENTITY_PACKAGE.defaultClassType = FrameWebClass.PERSISTENT_CLASS;
@@ -91,10 +94,16 @@ public enum FrameWebPackage {
    *         no package with the given name exists.
    */
   public static FrameWebPackage of(String name) {
-    for (FrameWebPackage obj : FrameWebPackage.values())
-      if (obj.name.equalsIgnoreCase(name))
-        return obj;
-    return NOT_A_FRAMEWEB_PACKAGE;
+    FrameWebPackage pkg = NOT_A_FRAMEWEB_PACKAGE;
+    for (FrameWebPackage obj : FrameWebPackage.values()) {
+      if (obj.name.equalsIgnoreCase(name)) {
+        pkg = obj;
+      }
+    }
+
+    Logger.log(Level.FINE, "Providing FrameWeb package for name {0}: {1}",
+        new Object[] {name, pkg});
+    return pkg;
   }
 
   /**
@@ -105,12 +114,17 @@ public enum FrameWebPackage {
    *         no package with the given UI ID exists.
    */
   public static FrameWebPackage ofPluginUIID(String pluginUIID) {
+    FrameWebPackage pkg = NOT_A_FRAMEWEB_PACKAGE;
     for (FrameWebPackage obj : FrameWebPackage.values()) {
       String fullID = PLUGIN_UI_CONTEXT_ACTION_PREFIX + obj.pluginUIID;
-      if (fullID.equalsIgnoreCase(pluginUIID))
-        return obj;
+      if (fullID.equalsIgnoreCase(pluginUIID)) {
+        pkg = obj;
+      }
     }
-    return NOT_A_FRAMEWEB_PACKAGE;
+
+    Logger.log(Level.FINE, "Providing FrameWeb package for plug-in UI ID {0}: {1}",
+        new Object[] {pluginUIID, pkg});
+    return pkg;
   }
 
   /**
@@ -121,9 +135,15 @@ public enum FrameWebPackage {
    *         no package with the given stereotype name exists.
    */
   public static FrameWebPackage ofStereotype(String stereotypeName) {
-    for (FrameWebPackage obj : FrameWebPackage.values())
-      if (obj.stereotypeName.equalsIgnoreCase(stereotypeName))
-        return obj;
-    return NOT_A_FRAMEWEB_PACKAGE;
+    FrameWebPackage pkg = NOT_A_FRAMEWEB_PACKAGE;
+    for (FrameWebPackage obj : FrameWebPackage.values()) {
+      if (obj.stereotypeName.equalsIgnoreCase(stereotypeName)) {
+        pkg = obj;
+      }
+    }
+
+    Logger.log(Level.FINE, "Providing FrameWeb package for stereotype {0}: {1}",
+        new Object[] {stereotypeName, pkg});
+    return pkg;
   }
 }

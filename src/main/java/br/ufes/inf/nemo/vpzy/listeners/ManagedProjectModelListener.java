@@ -22,10 +22,11 @@ public class ManagedProjectModelListener implements IProjectModelListener {
 
   @Override
   public void modelAdded(IProject project, IModelElement modelElement) {
-    Logger.log(Level.FINER, "Listener acting on: model element {0} added to project {1}",
-        new Object[] {modelElement.getName(), project.getName()});
+    Logger.log(Level.FINEST,
+        "Project Model Listener acting on: model element {0} added to project {1} ({2})",
+        new Object[] {modelElement.getName(), project.getName(), project.getId()});
 
-    // When new model elements are added, attach the appropriate listeners to them.
+    // When new model elements are added, attaches the appropriate listeners to them.
     manager.attachModelListeners(modelElement);
   }
 

@@ -41,6 +41,9 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
         FrameWebPackage actionFrameWebPackage = actionFrameWebClass.getFrameWebPackage();
 
         // Disable actions that refer to a different package.
+        Logger.log(Level.FINE,
+            "Updating action: Set FrameWeb Stereotype (Class) > {0}. Class in package: {1}. Action refers to package: {2}",
+            new Object[] {action.getLabel(), modelElementFrameWebPackage, actionFrameWebPackage});
         action.setEnabled(modelElementFrameWebPackage == actionFrameWebPackage);
       }
     }
@@ -49,7 +52,7 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
   /** Called when the button is pressed. Sets the class' stereotype. */
   @Override
   public void performAction(VPAction action, VPContext context, ActionEvent event) {
-    Logger.log(Level.FINE, "Performing action: Set FrameWeb Stereotype (Class) > {0}",
+    Logger.log(Level.CONFIG, "Performing action: Set FrameWeb Stereotype (Class) > {0}",
         event.getActionCommand());
 
     // Gets the FrameWeb stereotypes manager associated with the current project.
@@ -72,8 +75,11 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
       if (existingStereotypes != null) {
         for (IStereotype existingStereotype : existingStereotypes) {
           FrameWebClass clazz = FrameWebClass.ofStereotype(existingStereotype.getName());
-          if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
+          if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+            Logger.log(Level.CONFIG, "Removing disjoing stereotype {0} from {1}",
+                new Object[] {existingStereotype, modelElement.getName()});
             modelElement.removeStereotype(existingStereotype);
+          }
         }
       }
 

@@ -105,28 +105,38 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
     add(buttonsPanel, java.awt.BorderLayout.PAGE_END);
   }
 
-  /** Read the configuration values and set them as initial value for the form fields. */
+  /** Reads the configuration values and sets them as initial value for the form fields. */
   private void readConfig() {
-    loggingLevelComboBox
-        .setSelectedItem(configManager.getProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL));
+    Logger.log(Level.CONFIG, "Reading current FrameWeb Tools configuration values");
+
+    String value = configManager.getProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL);
+    Logger.log(Level.FINE, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_LOGGING_LEVEL, value});
+    loggingLevelComboBox.setSelectedItem(value);
   }
 
   private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // Change the logging configuration.
-    String loggingLevel = loggingLevelComboBox.getSelectedItem().toString();
-    configManager.setProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL, loggingLevel);
-    Logger.setLevel(Level.parse(loggingLevel));
+    Logger.log(Level.CONFIG, "Saving FrameWeb Tools configuration from dialog");
 
-    // Save the configuration.
+    // Changes the logging configuration.
+    String value = loggingLevelComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINE, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_LOGGING_LEVEL, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL, value);
+    Logger.setLevel(Level.parse(value));
+
+    // Saves the configuration.
     configManager.save();
 
-    // Close the configuration dialog.
+    // Closes the configuration dialog.
     containerDialog.close();
     plugin.setPluginSettingsDialogOpen(false);
   }
 
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // Close the configuration dialog.
+    Logger.log(Level.CONFIG, "Canceling the FrameWeb Tools configuration dialog");
+
+    // Closes the configuration dialog.
     containerDialog.close();
     plugin.setPluginSettingsDialogOpen(false);
   }

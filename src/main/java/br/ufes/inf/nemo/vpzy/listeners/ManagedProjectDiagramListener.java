@@ -22,8 +22,9 @@ public class ManagedProjectDiagramListener implements IProjectDiagramListener {
 
   @Override
   public void diagramAdded(IProject project, IDiagramUIModel diagramUIModel) {
-    Logger.log(Level.FINER, "Listener acting on: diagram {0} added to project {1}",
-        new Object[] {diagramUIModel.getName(), project.getName()});
+    Logger.log(Level.FINEST,
+        "Project Diagram Listener acting on: diagram {0} added to project {1} ({2})",
+        new Object[] {diagramUIModel.getName(), project.getName(), project.getId()});
     manager.attachDiagramListeners(diagramUIModel);
   }
 

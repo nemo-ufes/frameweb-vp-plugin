@@ -28,12 +28,14 @@ public class FrameWebClassListener extends ManagedModelListener {
   public void propertyChange(PropertyChangeEvent event) {
     Object changeSource = event.getSource();
     String propertyName = event.getPropertyName();
-    Logger.log(Level.FINER, "Class listener handling change on property {0} in source {1}",
+    Logger.log(Level.FINE, "FrameWeb Class listener handling change on property {0} in source {1}",
         new Object[] {propertyName, changeSource});
 
     // Only handle changes in model elements that have the property name specified.
     if (changeSource instanceof IModelElement && propertyName != null) {
       IModelElement modelElement = (IModelElement) changeSource;
+      Logger.log(Level.FINE, "FrameWeb Class listener identified source name: {0}, and type: {1}",
+          new Object[] {modelElement.getName(), modelElement.getModelType()});
 
       // More specifically, only handle changes in elements this listener supports.
       if (getModelType().equals(modelElement.getModelType())) {
@@ -59,6 +61,8 @@ public class FrameWebClassListener extends ManagedModelListener {
     for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
       frameWebClass = FrameWebClass.ofStereotype(stereotype.getName());
     }
+    Logger.log(Level.CONFIG, "FrameWeb Class listener handling stereotype change: {0}",
+        frameWebClass);
 
     // If a FrameWeb class stereotype has been applied, changes the class color.
     if (frameWebClass != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
@@ -71,8 +75,13 @@ public class FrameWebClassListener extends ManagedModelListener {
       if (parent != null && IModelElementFactory.MODEL_TYPE_PACKAGE.equals(parent.getModelType())) {
         FrameWebPackage frameWebPackage = FrameWebUtils.getFrameWebPackage(parent);
         FrameWebClass defaultClassType = frameWebPackage.getDefaultClassType();
+        Logger.log(Level.CONFIG,
+            "FrameWeb Class listener identified class {0} with no stereotype in package: {1} (type: {2}, default class type: {3})",
+            new Object[] {modelElement.getName(), parent.getName(), frameWebPackage,
+                defaultClassType});
+
+        // Sets the color of the element to the color of the default class type, if any.
         if (defaultClassType != null) {
-          // Sets the color of the element to the color of the default class type.
           ModelElementUtils.changeFillColor(modelElement, defaultClassType.getColor());
         }
       }

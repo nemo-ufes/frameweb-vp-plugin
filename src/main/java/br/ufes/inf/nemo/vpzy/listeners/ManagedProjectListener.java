@@ -28,22 +28,24 @@ public class ManagedProjectListener implements IProjectListener {
 
   @Override
   public void projectNewed(IProject project) {
-    Logger.log(Level.FINER, "Listener acting on: project {0} created", project.getName());
+    Logger.log(Level.FINEST, "Project Listener acting on: project {0} ({1}) created",
+        new Object[] {project.getName(), project.getId()});
 
-    // Attach project diagram and project model listeners to newly created project.
+    // Attaches project diagram and project model listeners to newly created project.
     manager.attachProjectDiagramListeners(project);
     manager.attachProjectModelListeners(project);
   }
 
   @Override
   public void projectOpened(IProject project) {
-    Logger.log(Level.FINER, "Listener acting on: project {0} opened", project.getName());
+    Logger.log(Level.FINEST, "Project Listener acting on: project {0} ({1}) opened",
+        new Object[] {project.getName(), project.getId()});
 
-    // Attach project diagram and project model listeners to opened project.
+    // Attaches project diagram and project model listeners to opened project.
     manager.attachProjectDiagramListeners(project);
     manager.attachProjectModelListeners(project);
 
-    // Attach model listeners to the existing elements of the model.
+    // Attaches model listeners to the existing elements of the model.
     for (IModelElement modelElement : project.toAllLevelModelElementArray()) {
       if (modelElement != null) {
         manager.attachModelListeners(modelElement);

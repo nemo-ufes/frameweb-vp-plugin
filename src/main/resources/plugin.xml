@@ -51,10 +51,11 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.OpenPluginSettingsController" />
       </action>
       <!-- -->
+
       <!-- Toolbar Button: Reload Plug-in. -->
       <!-- Icon source: https://www.flaticon.com/free-icon/reloading_5690471 -->
       <!-- Icon author: https://www.flaticon.com/authors/iyahicon -->
-      <action
+      <!-- action
         id="br.ufes.inf.nemo.frameweb.vp.actions.ReloadPluginAction"
         actionType="generalAction"
         description="Reloads the FrameWeb Tools plug-in."
@@ -62,9 +63,9 @@
         tooltip="Reloads the FrameWeb Tools plug-in"
         icon="icons/circular-arrow-red-circle.png"
         label="Reload FrameWeb Tools"
-        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
-        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ReloadPluginController" />
-      </action>
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#" -->
+        <!-- actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.ReloadPluginController" / -->
+      <!-- /action -->
       <!-- -->
     </actionSet>
     <!-- -->

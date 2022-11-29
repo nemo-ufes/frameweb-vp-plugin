@@ -1,5 +1,8 @@
 package br.ufes.inf.nemo.frameweb.vp.model;
 
+import java.util.logging.Level;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
+
 /**
  * Enumeration of FrameWeb constraint types and their respective names, specifications, class types,
  * etc., which can be applied to class attributes in the plug-in.
@@ -66,6 +69,9 @@ public enum FrameWebClassAttributeConstraint {
    * either and I don't know why.
    */
   private static void initDisjoints() {
+    Logger.log(Level.CONFIG,
+        "Initializing disjoint arrays of FrameWeb class attribute constraints");
+
     // Entity Model > Persistent Class > {null | not null}.
     FrameWebClassAttributeConstraint[] nullableDisjoints =
         {PERSISTENT_CLASS_NULLABLE, PERSISTENT_CLASS_NOT_NULL};
@@ -117,10 +123,16 @@ public enum FrameWebClassAttributeConstraint {
    *         name exists.
    */
   public static FrameWebClassAttributeConstraint of(String name) {
-    for (FrameWebClassAttributeConstraint obj : FrameWebClassAttributeConstraint.values())
-      if (obj.name.equalsIgnoreCase(name))
-        return obj;
-    return NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
+    FrameWebClassAttributeConstraint constraint = NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
+    for (FrameWebClassAttributeConstraint obj : FrameWebClassAttributeConstraint.values()) {
+      if (obj.name.equalsIgnoreCase(name)) {
+        constraint = obj;
+      }
+    }
+
+    Logger.log(Level.FINE, "Providing FrameWeb class attribute constraint for name {0}: {1}",
+        new Object[] {name, constraint});
+    return constraint;
   }
 
   /**
@@ -134,12 +146,18 @@ public enum FrameWebClassAttributeConstraint {
    *         UI ID exists.
    */
   public static FrameWebClassAttributeConstraint ofPluginUIID(String pluginUIID) {
+    FrameWebClassAttributeConstraint constraint = NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
     for (FrameWebClassAttributeConstraint obj : FrameWebClassAttributeConstraint.values()) {
       String fullID = PLUGIN_UI_CONTEXT_ACTION_PREFIX + obj.pluginUIID;
-      if (fullID.equalsIgnoreCase(pluginUIID))
-        return obj;
+      if (fullID.equalsIgnoreCase(pluginUIID)) {
+        constraint = obj;
+      }
     }
-    return NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
+
+    Logger.log(Level.FINE,
+        "Providing FrameWeb class attribute constraint for plug-in UI ID {0}: {1}",
+        new Object[] {pluginUIID, constraint});
+    return constraint;
   }
 
   /**
@@ -152,9 +170,16 @@ public enum FrameWebClassAttributeConstraint {
    *         specification exists.
    */
   public static FrameWebClassAttributeConstraint ofspecification(String specification) {
-    for (FrameWebClassAttributeConstraint obj : FrameWebClassAttributeConstraint.values())
-      if (obj.specification.equalsIgnoreCase(specification))
-        return obj;
-    return NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
+    FrameWebClassAttributeConstraint constraint = NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
+    for (FrameWebClassAttributeConstraint obj : FrameWebClassAttributeConstraint.values()) {
+      if (obj.specification.equalsIgnoreCase(specification)) {
+        constraint = obj;
+      }
+    }
+
+    Logger.log(Level.FINE,
+        "Providing FrameWeb class attribute constraint for specification {0}: {1}",
+        new Object[] {specification, constraint});
+    return constraint;
   }
 }
