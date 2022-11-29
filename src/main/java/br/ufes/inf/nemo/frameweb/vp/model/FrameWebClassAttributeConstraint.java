@@ -12,23 +12,24 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 public enum FrameWebClassAttributeConstraint {
   /* Constraints for attributes of Entity Model classes: */
   PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "Persistent Class attribute: nullable",
-      "nullable", false, FrameWebClass.PERSISTENT_CLASS),
+      "nullable", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "Persistent Class attribute: not null",
-      "not null", false, FrameWebClass.PERSISTENT_CLASS),
+      "not null", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_DATE("entity.persistent.precision.date",
       "Persistent Class attribute: precision = date", "precision = date", false,
-      FrameWebClass.PERSISTENT_CLASS),
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_TIME("entity.persistent.precision.time",
       "Persistent Class attribute: precision = time", "precision = time", false,
-      FrameWebClass.PERSISTENT_CLASS),
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_TIMESTAMP("entity.persistent.precision.timestamp",
       "Persistent Class attribute: precision = timestamp", "precision = timestamp", false,
-      FrameWebClass.PERSISTENT_CLASS),
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
+  /* Not a FrameWeb class attribute constraint (default value). */
   NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT("", "", "", false, FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 
   /** The prefix used in the ID of context actions to set the package stereotypes. */
@@ -47,19 +48,19 @@ public enum FrameWebClassAttributeConstraint {
   /** Indicates if the constraint takes a value. */
   private boolean parameterized;
 
-  /** The class to which the constraint can be applied. */
-  private FrameWebClass frameWebClass;
+  /** The classes to which the constraint can be applied. */
+  private FrameWebClass[] frameWebClasses;
 
   /** Array of constraints that are disjoint among themselves. */
   private FrameWebClassAttributeConstraint[] disjoints;
 
   private FrameWebClassAttributeConstraint(String pluginUIID, String name, String specification,
-      boolean parameterized, FrameWebClass frameWebClass) {
+      boolean parameterized, FrameWebClass... frameWebClasses) {
     this.pluginUIID = pluginUIID;
     this.name = name;
     this.specification = specification;
     this.parameterized = parameterized;
-    this.frameWebClass = frameWebClass;
+    this.frameWebClasses = frameWebClasses;
   }
 
   /**
@@ -101,8 +102,8 @@ public enum FrameWebClassAttributeConstraint {
     return parameterized;
   }
 
-  public FrameWebClass getFrameWebClass() {
-    return frameWebClass;
+  public FrameWebClass[] getFrameWebClasses() {
+    return frameWebClasses;
   }
 
   public FrameWebClassAttributeConstraint[] getDisjoints() {

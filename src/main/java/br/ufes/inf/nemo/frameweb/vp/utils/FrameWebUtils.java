@@ -59,14 +59,16 @@ public final class FrameWebUtils {
       }
 
       // If a FrameWeb class stereotype was not found, check the package for the default.
-      IModelElement parent = modelElement.getParent();
-      if (parent != null) {
-        FrameWebPackage frameWebPackage = getFrameWebPackage(parent);
-        FrameWebClass clazz = frameWebPackage.getDefaultClassType();
+      if (frameWebClass == FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+        IModelElement parent = modelElement.getParent();
+        if (parent != null) {
+          FrameWebPackage frameWebPackage = getFrameWebPackage(parent);
+          FrameWebClass clazz = frameWebPackage.getDefaultClassType();
 
-        // If a default class is found, stores it to be returned.
-        if (clazz != null && clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
-          frameWebClass = clazz;
+          // If a default class is found, stores it to be returned.
+          if (clazz != null && clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS)
+            frameWebClass = clazz;
+        }
       }
     }
 

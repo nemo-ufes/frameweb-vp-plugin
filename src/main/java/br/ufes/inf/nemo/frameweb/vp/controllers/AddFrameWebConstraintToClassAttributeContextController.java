@@ -1,6 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
@@ -42,11 +43,16 @@ public class AddFrameWebConstraintToClassAttributeContextController
       FrameWebClassAttributeConstraint frameWebClassAttributeConstraint =
           FrameWebClassAttributeConstraint.ofPluginUIID(action.getActionId());
       Logger.log(Level.FINE,
-          "Updating action: Add FrameWeb Constraint (Class Attribute) > {0}. Attribute in class: {1}. Action refers to package: {2}",
+          "Updating action: Add FrameWeb Constraint (Class Attribute) > {0}. Attribute class: {1}. Action refers to classes: {2}",
           new Object[] {action.getLabel(), modelElementFrameWebClass,
-              frameWebClassAttributeConstraint.getFrameWebClass()});
-      action.setEnabled(
-          modelElementFrameWebClass == frameWebClassAttributeConstraint.getFrameWebClass());
+              Arrays.toString(frameWebClassAttributeConstraint.getFrameWebClasses())});
+      boolean enabled = false;
+      for (FrameWebClass clazz : frameWebClassAttributeConstraint.getFrameWebClasses()) {
+        if (modelElementFrameWebClass == clazz) {
+          enabled = true;
+        }
+      }
+      action.setEnabled(enabled);
     }
   }
 
