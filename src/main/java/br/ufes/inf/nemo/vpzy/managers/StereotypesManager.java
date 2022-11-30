@@ -44,7 +44,7 @@ public class StereotypesManager {
   /** Project to which the manager is associated. */
   protected IProject project;
 
-  /** Existing stereotypes in the current project, indexed by name. */
+  /** Existing stereotypes in the current project, indexed by their name + base type. */
   protected Map<String, IStereotype> existingStereotypes;
 
   protected StereotypesManager(IProject project) {
@@ -127,6 +127,30 @@ public class StereotypesManager {
   }
 
   /**
+   * Makes a key for a given stereotype based on its name and base type. This key is used to index
+   * the stereotypes in the {@code existingStereotypes} map.
+   * 
+   * @param stereotype The given stereotype.
+   * @return The key to index this stereotype in the map.
+   */
+  private static String makeKey(IStereotype stereotype) {
+    return stereotype.getName() + "-" + stereotype.getBaseType();
+  }
+
+
+  /**
+   * Makes a key for a stereotype based on its given name and base type. This key is used to index
+   * the stereotypes in the {@code existingStereotypes} map.
+   * 
+   * @param name The given name.
+   * @param baseType The given base type.
+   * @return The key to index this stereotype in the map.
+   */
+  private static String makeKey(String name, String baseType) {
+    return name + "-" + baseType;
+  }
+
+  /**
    * Initializes the stereotypes manager, i.e., indexes the existing stereotypes in order to make
    * them available to client classes that need them.
    */
@@ -139,9 +163,10 @@ public class StereotypesManager {
           "Initializing stereotypes manager for project {0} ({1}) with {2} existing stereotypes",
           new Object[] {project.getName(), project.getId(), allStereotypes.length});
       for (IModelElement element : allStereotypes) {
+        IStereotype stereotype = (IStereotype) element;
         Logger.log(Level.FINEST, "Registering existing stereotype for project {0} ({1}): {2}",
             new Object[] {project.getName(), project.getId(), element.getName()});
-      existingStereotypes.put(element.getName(), (IStereotype) element);
+        existingStereotypes.put(makeKey(stereotype), (IStereotype) element);
     }
   }
 }
@@ -161,7 +186,7 @@ public class StereotypesManager {
     IStereotype newStereotype = IModelElementFactory.instance().createStereotype();
     newStereotype.setName(stereotypeName);
     newStereotype.setBaseType(baseType);
-    existingStereotypes.put(stereotypeName, newStereotype);
+    existingStereotypes.put(makeKey(stereotypeName, baseType), newStereotype);
   }
 
   /**
@@ -176,7 +201,7 @@ public class StereotypesManager {
         "Checking the existence of stereotype {0} for base type {1} in project {2} ({3})",
         new Object[] {stereotypeName, baseType, project.getName(), project.getId()});
 
-    if (!existingStereotypes.containsKey(stereotypeName)) {
+    if (!existingStereotypes.containsKey(makeKey(stereotypeName, baseType))) {
       Logger.log(Level.FINER, "Stereotype {0} for base type {1} doesn't exist in project {2} ({3})",
           new Object[] {stereotypeName, baseType, project.getName(), project.getId()});
       createStereotype(stereotypeName, baseType);
@@ -190,9 +215,10 @@ public class StereotypesManager {
    * @return The IStereotype instance with the given name, or {@code null} if no stereotype exists
    *         with that name.
    */
-  public IStereotype getStereotype(String stereotypeName) {
-    Logger.log(Level.FINEST, "Retrieving stereotype named {0} in project {1} ({2})",
-        new Object[] {stereotypeName, project.getName(), project.getId()});
-    return existingStereotypes.get(stereotypeName);
+  public IStereotype getStereotype(String stereotypeName, String baseType) {
+    Logger.log(Level.FINEST,
+        "Retrieving stereotype named {0} for base type {1} in project {2} ({3})",
+        new Object[] {stereotypeName, baseType, project.getName(), project.getId()});
+    return existingStereotypes.get(makeKey(stereotypeName, baseType));
   }
 }

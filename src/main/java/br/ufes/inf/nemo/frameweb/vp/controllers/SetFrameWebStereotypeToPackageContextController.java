@@ -8,6 +8,7 @@ import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IStereotype;
+import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.managers.FrameWebStereotypesManager;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
@@ -38,34 +39,36 @@ public class SetFrameWebStereotypeToPackageContextController implements VPContex
     StereotypesManager stereotypesManager =
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
 
-    // Determines which FrameWeb Model to apply from the menu item that has been selected.
+    // Determines which FrameWeb package it is from the menu item that has been selected.
     FrameWebPackage frameWebPackage = FrameWebPackage.ofPluginUIID(action.getActionId());
 
     // Collects the model elements whose diagram elements are currently selected.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
 
     // For each model element selected, applies the selected stereotype.
+    IStereotype newStereotype = stereotypesManager.getStereotype(
+        frameWebPackage.getStereotypeName(), IModelElementFactory.MODEL_TYPE_PACKAGE);
     for (IModelElement modelElement : selectedModelElements) {
-      Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
-          new Object[] {frameWebPackage.getStereotypeName(), modelElement.getName()});
+      if (IModelElementFactory.MODEL_TYPE_PACKAGE.equals(modelElement.getModelType())) {
+        Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
+            new Object[] {frameWebPackage.getStereotypeName(), modelElement.getName()});
 
-      // Removes other FrameWeb stereotypes the package may have, as they are disjoint.
-      IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
-      if (existingStereotypes != null) {
-        for (IStereotype existingStereotype : existingStereotypes) {
-          FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
-          if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
-            Logger.log(Level.CONFIG, "Removing disjoing stereotype {0} from {1}",
-                new Object[] {existingStereotype, modelElement.getName()});
-            modelElement.removeStereotype(existingStereotype);
+        // Removes other FrameWeb stereotypes the package may have, as they are disjoint.
+        IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
+        if (existingStereotypes != null) {
+          for (IStereotype existingStereotype : existingStereotypes) {
+            FrameWebPackage pkg = FrameWebPackage.ofStereotype(existingStereotype.getName());
+            if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+              Logger.log(Level.CONFIG, "Removing disjoint stereotype {0} from {1}",
+                  new Object[] {existingStereotype, modelElement.getName()});
+              modelElement.removeStereotype(existingStereotype);
+            }
           }
         }
-      }
 
-      // Adds the new FrameWeb package stereotype.
-      IStereotype newStereotype =
-          stereotypesManager.getStereotype(frameWebPackage.getStereotypeName());
-      modelElement.addStereotype(newStereotype);
+        // Adds the new FrameWeb package stereotype.
+        modelElement.addStereotype(newStereotype);
+      }
     }
   }
 }

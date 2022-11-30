@@ -46,7 +46,7 @@ public enum FrameWebClass {
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.";
 
-  /** The ID of the package in the plugin UI configuration. */
+  /** The ID of the class in the plugin UI configuration. */
   private String pluginUIID;
 
   /** The class's official name. */
