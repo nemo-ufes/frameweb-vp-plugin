@@ -2,6 +2,7 @@ package br.ufes.inf.nemo.vpzy.utils;
 
 
 import java.awt.Component;
+import java.util.Arrays;
 import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
@@ -73,7 +74,7 @@ public final class ViewManagerUtils {
    * Shows a message dialog with a given message and title, also indicating the message type.
    * 
    * @param message The message to be displayed in the dialog.
-   * @param title The title of the diagram.
+   * @param title The title of the dialog.
    * @param messageType The type of the message, one of the {@code *_MESSAGE} constants in this
    *        class.
    */
@@ -89,9 +90,8 @@ public final class ViewManagerUtils {
    * customized icon.
    * 
    * @param message The message to be displayed in the dialog.
-   * @param title The title of the diagram.
-   * @param messageType The type of the message, one of the {@code *_MESSAGE} constants in this
-   *        class.
+   * @param title The title of the dialog.
+   * @param messageType The type of the message, one of the {@code *_MESSAGE} constants herein.
    * @param icon The customized icon to use in the dialog.
    */
   public static void showMessageDialog(Object message, String title, int messageType,
@@ -101,6 +101,73 @@ public final class ViewManagerUtils {
         new Object[] {title, messageType, icon, message});
     Component parentFrame = viewManager.getRootFrame();
     viewManager.showMessageDialog(parentFrame, message, title, messageType, icon);
+  }
+
+  /**
+   * Request user input using a dialog, with a given message.
+   * 
+   * @param message The message to be displayed in the dialog.
+   * @return The user input.
+   */
+  public static String showInputDialog(Object message) {
+    Logger.log(Level.FINEST, "Requesting input in a dialog, with message {0}", message);
+    Component parentFrame = viewManager.getRootFrame();
+    return viewManager.showInputDialog(parentFrame, message);
+  }
+
+  /**
+   * Request user input using a dialog, with a given message and an initial value.
+   * 
+   * @param message The message to be displayed in the dialog.
+   * @param initialSelectedValue An initial value for the user input.
+   * @return The user input.
+   */
+  public static String showInputDialog(Object message, Object initialSelectedValue) {
+    Logger.log(Level.FINEST, "Requesting input in a dialog, with message {0} and initial value {1}",
+        new Object[] {message, initialSelectedValue});
+    Component parentFrame = viewManager.getRootFrame();
+    return viewManager.showInputDialog(parentFrame, message, initialSelectedValue);
+  }
+
+  /**
+   * Request user input using a dialog, with a given message and title, also indicating the message
+   * type.
+   * 
+   * @param message The message to be displayed in the dialog.
+   * @param title The title of the dialog.
+   * @param messageType The type of the message, one of the {@code *_MESSAGE} constants herein.
+   * @return The user input.
+   */
+  public static String showInputDialog(Object message, String title, int messageType) {
+    Logger.log(Level.FINEST,
+        "Requesting input in a dialog, with message {0}, title {1} and message type {2}",
+        new Object[] {message, title, messageType});
+    Component parentFrame = viewManager.getRootFrame();
+    return viewManager.showInputDialog(parentFrame, message, title, messageType);
+  }
+
+  /**
+   * Request user input using a dialog, with a given message and title, also indicating the message
+   * type, a customized icon, an array of possible selections and an initial value for the user
+   * input.
+   * 
+   * @param message The message to be displayed in the dialog.
+   * @param title The title of the dialog.
+   * @param messageType The type of the message, one of the {@code *_MESSAGE} constants herein.
+   * @param icon The customized icon to use in the dialog.
+   * @param selectionValues Possible selections for the user input.
+   * @param initialSelectedValue Initial value for the user input.
+   * @return The user input.
+   */
+  public static Object showInputDialog(Object message, String title, int messageType, Icon icon,
+      Object[] selectionValues, Object initialSelectedValue) {
+    Logger.log(Level.FINEST,
+        "Requesting input in a dialog, with message {0}, title {1}, message type {2}, icon {3}, selection values {4} and initial value {5}",
+        new Object[] {message, title, messageType, icon, Arrays.toString(selectionValues),
+            initialSelectedValue});
+    Component parentFrame = viewManager.getRootFrame();
+    return viewManager.showInputDialog(parentFrame, message, title, messageType, icon,
+        selectionValues, initialSelectedValue);
   }
 
   /**
