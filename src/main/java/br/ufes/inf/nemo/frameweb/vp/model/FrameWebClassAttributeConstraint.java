@@ -11,22 +11,22 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  */
 public enum FrameWebClassAttributeConstraint {
   /* Constraints for attributes of Entity Model classes: */
-  PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "Persistent Class attribute: nullable",
+  PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "nullable",
       "nullable", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
-  PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "Persistent Class attribute: not null",
+  PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "not null",
       "not null", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_DATE("entity.persistent.precision.date",
-      "Persistent Class attribute: precision = date", "precision = date", false,
+      "precision = date", "precision = date", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_TIME("entity.persistent.precision.time",
-      "Persistent Class attribute: precision = time", "precision = time", false,
+      "precision = time", "precision = time", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_TIMESTAMP("entity.persistent.precision.timestamp",
-      "Persistent Class attribute: precision = timestamp", "precision = timestamp", false,
+      "precision = timestamp", "precision = timestamp", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   /* Not a FrameWeb class attribute constraint (default value). */
@@ -36,7 +36,7 @@ public enum FrameWebClassAttributeConstraint {
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.";
 
-  /** The ID of the package in the plugin UI configuration. */
+  /** The ID of the constraint in the plugin UI configuration. */
   private String pluginUIID;
 
   /** The constraint's official name. */
@@ -65,9 +65,9 @@ public enum FrameWebClassAttributeConstraint {
 
   /**
    * Builds the disjoint arrays for the constraints that have disjoint sets. This method is called
-   * lazily from {@code getDefaultClassType()} as setting it in the constructor doesn't work because
-   * of the circular reference and having it in a {@code static} block was sometimes not working
-   * either and I don't know why.
+   * lazily from {@code getDisjoints()} as setting it in the constructor doesn't work because of the
+   * circular reference and having it in a {@code static} block was sometimes not working either and
+   * I don't know why.
    */
   private static void initDisjoints() {
     Logger.log(Level.CONFIG,
@@ -76,14 +76,16 @@ public enum FrameWebClassAttributeConstraint {
     // Entity Model > Persistent Class > {null | not null}.
     FrameWebClassAttributeConstraint[] nullableDisjoints =
         {PERSISTENT_CLASS_NULLABLE, PERSISTENT_CLASS_NOT_NULL};
-    for (FrameWebClassAttributeConstraint constraint : nullableDisjoints)
+    for (FrameWebClassAttributeConstraint constraint : nullableDisjoints) {
       constraint.disjoints = nullableDisjoints;
+    }
 
     // Entity Model > Persistent Class > precision = {date | time | timestamp}.
     FrameWebClassAttributeConstraint[] precisionDisjoints = {PERSISTENT_CLASS_PRECISION_DATE,
         PERSISTENT_CLASS_PRECISION_TIME, PERSISTENT_CLASS_PRECISION_TIMESTAMP};
-    for (FrameWebClassAttributeConstraint constraint : precisionDisjoints)
+    for (FrameWebClassAttributeConstraint constraint : precisionDisjoints) {
       constraint.disjoints = precisionDisjoints;
+    }
   }
 
   public String getPluginUIID() {
@@ -120,8 +122,8 @@ public enum FrameWebClassAttributeConstraint {
    * 
    * @param name The name of the FrameWeb class attribute constraint.
    * @return An enum value that represents a FrameWeb class attribute constraint or
-   *         {@code NOT_A_FRAMEWEB_CLASS_CONSTRAINT} if no class attribute constraint with the given
-   *         name exists.
+   *         {@code NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT} if no class attribute constraint with
+   *         the given name exists.
    */
   public static FrameWebClassAttributeConstraint of(String name) {
     FrameWebClassAttributeConstraint constraint = NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
@@ -143,8 +145,8 @@ public enum FrameWebClassAttributeConstraint {
    * @param pluginUIID The ID of the FrameWeb class attribute constraint in the plugin UI
    *        configuration.
    * @return An enum value that represents a FrameWeb class attribute constraint or
-   *         {@code NOT_A_FRAMEWEB_CLASS_CONSTRAINT} if no class attribute constraint with the given
-   *         UI ID exists.
+   *         {@code NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT} if no class attribute constraint with
+   *         the given UI ID exists.
    */
   public static FrameWebClassAttributeConstraint ofPluginUIID(String pluginUIID) {
     FrameWebClassAttributeConstraint constraint = NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;
@@ -167,8 +169,8 @@ public enum FrameWebClassAttributeConstraint {
    * 
    * @param specification The specification used by the class attribute constraint.
    * @return An enum value that represents a FrameWeb class attribute constraint or
-   *         {@code NOT_A_FRAMEWEB_CLASS_CONSTRAINT} if no class attribute constraint with the given
-   *         specification exists.
+   *         {@code NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT} if no class attribute constraint with
+   *         the given specification exists.
    */
   public static FrameWebClassAttributeConstraint ofspecification(String specification) {
     FrameWebClassAttributeConstraint constraint = NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT;

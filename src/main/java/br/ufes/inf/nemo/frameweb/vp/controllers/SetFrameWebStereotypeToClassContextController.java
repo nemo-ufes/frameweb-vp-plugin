@@ -59,34 +59,36 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
     StereotypesManager stereotypesManager =
         StereotypesManager.getInstance(FrameWebStereotypesManager.class);
 
-    // Determines which FrameWeb Model to apply from the menu item that has been selected.
+    // Determines which FrameWeb class it is from the menu item that has been selected.
     FrameWebClass frameWebClass = FrameWebClass.ofPluginUIID(action.getActionId());
 
     // Collects the model elements whose diagram elements are currently selected.
     Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
 
-    // For each model element selected, applies the selected stereotype.
+    // For each class selected, applies the selected stereotype.
+    IStereotype newStereotype = stereotypesManager.getStereotype(frameWebClass.getStereotypeName(),
+        IModelElementFactory.MODEL_TYPE_CLASS);
     for (IModelElement modelElement : selectedModelElements) {
-      Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
-          new Object[] {frameWebClass.getStereotypeName(), modelElement.getName()});
+      if (IModelElementFactory.MODEL_TYPE_CLASS.equals(modelElement.getModelType())) {
+        Logger.log(Level.INFO, "Applying stereotype {0} to {1}",
+            new Object[] {frameWebClass.getStereotypeName(), modelElement.getName()});
 
-      // Removes other FrameWeb stereotypes the class may have, as they are disjoint.
-      IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
-      if (existingStereotypes != null) {
-        for (IStereotype existingStereotype : existingStereotypes) {
-          FrameWebClass clazz = FrameWebClass.ofStereotype(existingStereotype.getName());
-          if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
-            Logger.log(Level.CONFIG, "Removing disjoing stereotype {0} from {1}",
-                new Object[] {existingStereotype, modelElement.getName()});
-            modelElement.removeStereotype(existingStereotype);
+        // Removes other FrameWeb stereotypes the class may have, as they are disjoint.
+        IStereotype[] existingStereotypes = modelElement.toStereotypeModelArray();
+        if (existingStereotypes != null) {
+          for (IStereotype existingStereotype : existingStereotypes) {
+            FrameWebClass clazz = FrameWebClass.ofStereotype(existingStereotype.getName());
+            if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+              Logger.log(Level.CONFIG, "Removing disjoint stereotype {0} from {1}",
+                  new Object[] {existingStereotype, modelElement.getName()});
+              modelElement.removeStereotype(existingStereotype);
+            }
           }
         }
-      }
 
-      // Adds the new FrameWeb class stereotype.
-      IStereotype newStereotype =
-          stereotypesManager.getStereotype(frameWebClass.getStereotypeName());
-      modelElement.addStereotype(newStereotype);
+        // Adds the new FrameWeb class stereotype.
+        modelElement.addStereotype(newStereotype);
+      }
     }
   }
 }
