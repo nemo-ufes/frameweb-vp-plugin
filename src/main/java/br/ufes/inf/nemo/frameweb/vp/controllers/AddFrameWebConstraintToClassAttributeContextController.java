@@ -17,6 +17,7 @@ import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConstraintsManager;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 
 /**
  * Controller that handles the Add FrameWeb Constraint to Class Attribute action, activated by a
@@ -94,15 +95,30 @@ public class AddFrameWebConstraintToClassAttributeContextController
           }
         }
 
+        // If parameterized, complements the specification with a value from the user.
+        String specification = frameWebClassAttributeConstraint.getSpecification();
+        boolean parameterized = frameWebClassAttributeConstraint.isParameterized();
+        if (parameterized) {
+          // Uses a dialog to ask the user for the value of the parameter.
+          String message = "Please provide a value for the constraint to be applied to "
+              + selectedModelElement.getName() + ":\n"
+              + frameWebClassAttributeConstraint.getSpecification() + "=";
+          String value = ViewManagerUtils.showInputDialog(message, "Constraint value",
+              ViewManagerUtils.QUESTION_MESSAGE);
+          specification = specification + "=" + value;
+
+          // If the user actually cancelled or provided no value, move on to the next element.
+          if (value == null || value.trim().isEmpty()) {
+            continue;
+          }
+        }
+
         // Adds the constraint to the selected attribute.
         ConstraintsManager constraintsManager = ConstraintsManager.getInstance();
         IConstraintElement constraintElement =
             constraintsManager.getConstraint(frameWebClassAttributeConstraint.getPluginUIID(),
-                frameWebClassAttributeConstraint.getSpecification(),
-                frameWebClassAttributeConstraint.isParameterized());
+                specification, parameterized);
         constraintElement.addConstrainedElement(selectedModelElement);
-
-        // FIXME: when parameterized, ask for the parameter value.
       }
     }
   }

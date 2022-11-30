@@ -5,7 +5,9 @@
   class="br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin">
 
   <actionSets>
+    <!-- **************** -->
     <!-- Toolbar Actions. -->
+    <!-- **************** -->
     <actionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.main">
       <!-- Main toolbar of the plug-in. -->
       <toolbar
@@ -70,7 +72,9 @@
     </actionSet>
     <!-- -->
 
+    <!-- ***************************************************** -->
     <!-- Context-menus (right-click) for UML Package elements. -->
+    <!-- ***************************************************** -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package">
       <!-- Applies to packages. -->
       <contextTypes all="false" />
@@ -151,7 +155,9 @@
     </contextSensitiveActionSet>
     <!-- -->
 
+    <!-- *************************************************** -->
     <!-- Context-menus (right-click) for UML Class elements. -->
+    <!-- *************************************************** -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class">
       <!-- Applies to classes. -->
       <contextTypes all="false" />
@@ -220,7 +226,9 @@
     </contextSensitiveActionSet>
     <!-- -->
 
+    <!-- ************************************************************* -->
     <!-- Context-menus (right-click) for UML Class attribute elements. -->
+    <!-- ************************************************************* -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute">
       <!-- Applies to classes. -->
       <contextTypes all="false" />
@@ -266,43 +274,55 @@
         menuPath="#"
         icon="icons/frameweb-logo.png" />
 
-      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: precision = timestamp -->
+      <!-- Menu Item: Add FrameWeb Constraint > precision=timestamp -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
         id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.precision.timestamp"
-        label="precision = timestamp"
+        label="precision=timestamp"
         style="normal"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
         icon="icons/letter-e-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
       </action>
 
-      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: precision = time -->
+      <!-- Menu Item: Add FrameWeb Constraint > precision=time -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
         id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.precision.time"
-        label="precision = time"
+        label="precision=time"
         style="normal"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
         icon="icons/letter-e-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
       </action>
 
-      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: precision = date -->
+      <!-- Menu Item: Add FrameWeb Constraint > precision=date -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
         id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.precision.date"
-        label="precision = date"
+        label="precision=date"
         style="normal"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
         icon="icons/letter-e-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
       </action>
 
-      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: not null -->
+      <!-- Menu Item: Add FrameWeb Constraint > nullable -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.nullable"
+        label="nullable"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > not null -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -314,12 +334,12 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
       </action>
 
-      <!-- Menu Item: Add FrameWeb Constraint > Persistent Class: nullable -->
+      <!-- Menu Item: Add FrameWeb Constraint > column = <name> -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
-        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.nullable"
-        label="nullable"
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.column"
+        label="column = &lt;name&gt;"
         style="normal"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
         icon="icons/letter-e-black-block.png">

@@ -11,22 +11,25 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  */
 public enum FrameWebClassAttributeConstraint {
   /* Constraints for attributes of Entity Model classes: */
-  PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "nullable",
-      "nullable", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+  PERSISTENT_CLASS_COLUMN("entity.persistent.column", "column = <name>", "column", true,
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "not null",
       "not null", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
+  PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "nullable", "nullable", false,
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
   PERSISTENT_CLASS_PRECISION_DATE("entity.persistent.precision.date",
-      "precision = date", "precision = date", false,
+      "precision=date", "precision=date", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_TIME("entity.persistent.precision.time",
-      "precision = time", "precision = time", false,
+      "precision=time", "precision=time", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_PRECISION_TIMESTAMP("entity.persistent.precision.timestamp",
-      "precision = timestamp", "precision = timestamp", false,
+      "precision=timestamp", "precision=timestamp", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   /* Not a FrameWeb class attribute constraint (default value). */
@@ -80,7 +83,7 @@ public enum FrameWebClassAttributeConstraint {
       constraint.disjoints = nullableDisjoints;
     }
 
-    // Entity Model > Persistent Class > precision = {date | time | timestamp}.
+    // Entity Model > Persistent Class > precision={date | time | timestamp}.
     FrameWebClassAttributeConstraint[] precisionDisjoints = {PERSISTENT_CLASS_PRECISION_DATE,
         PERSISTENT_CLASS_PRECISION_TIME, PERSISTENT_CLASS_PRECISION_TIMESTAMP};
     for (FrameWebClassAttributeConstraint constraint : precisionDisjoints) {
