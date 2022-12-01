@@ -50,11 +50,13 @@ public final class FrameWebUtils {
     // Looks for a FrameWeb class stereotype in the element, which must be a class.
     if (IModelElementFactory.MODEL_TYPE_CLASS.equals(modelElement.getModelType())) {
       IStereotype[] stereotypes = modelElement.toStereotypeModelArray();
-      for (IStereotype stereotype : stereotypes) {
-        FrameWebClass clazz = FrameWebClass.ofStereotype(stereotype.getName());
-        // If a FrameWeb class stereotype is found, stores it to be returned.
-        if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
-          frameWebClass = clazz;
+      if (stereotypes != null) {
+        for (IStereotype stereotype : stereotypes) {
+          FrameWebClass clazz = FrameWebClass.ofStereotype(stereotype.getName());
+          // If a FrameWeb class stereotype is found, stores it to be returned.
+          if (clazz != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
+            frameWebClass = clazz;
+          }
         }
       }
 
