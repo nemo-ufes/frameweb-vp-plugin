@@ -85,7 +85,7 @@ public class AddFrameWebConstraintToClassAttributeContextController
               for (FrameWebClassAttributeConstraint disjointConstraint : disjoints) {
                 if (disjointConstraint.getPluginUIID()
                     .equals(existingConstraintElement.getName())) {
-                  Logger.log(Level.CONFIG, "Removing disjoing stereotype {0} from {1}",
+                  Logger.log(Level.CONFIG, "Removing disjoint stereotype {0} from {1}",
                       new Object[] {existingConstraintElement.getSpecification(),
                           selectedModelElement.getName()});
                   existingConstraintElement.removeConstrainedElement(selectedModelElement);
