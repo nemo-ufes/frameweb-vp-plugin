@@ -102,6 +102,7 @@ public final class FrameWebUtils {
         roleName = roleName.substring(0, idx - 1);
       }
     }
+    roleName = roleName.trim();
 
     // Builds a comma-separated list of constraints.
     StringBuilder builder = new StringBuilder();
@@ -120,9 +121,10 @@ public final class FrameWebUtils {
       int length = builder.length();
       if (length > 0) {
         builder.delete(length - 2, length);
-        builder.insert(0, " {");
         builder.append('}');
-        roleName = builder.toString() + roleName;
+        builder.insert(0, " {");
+        builder.insert(0, roleName);
+        roleName = builder.toString();
       }
     }
 
