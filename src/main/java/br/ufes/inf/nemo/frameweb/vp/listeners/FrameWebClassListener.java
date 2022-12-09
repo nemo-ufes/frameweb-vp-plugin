@@ -13,7 +13,7 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 
 /**
- * Listener that handles changes in classes that have to do with FrameWeb, e.g., when a c ass
+ * Listener that handles changes in classes that have to do with FrameWeb, e.g., when a class
  * changes its stereotype because it has been set to be used as part of a FrameWeb model.
  * 
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)

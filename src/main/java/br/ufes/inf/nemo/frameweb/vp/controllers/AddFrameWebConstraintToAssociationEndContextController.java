@@ -77,7 +77,7 @@ public class AddFrameWebConstraintToAssociationEndContextController
     if (IModelElementFactory.MODEL_TYPE_ASSOCIATION_END
         .equals(selectedModelElement.getModelType())) {
       IAssociationEnd associationEnd = (IAssociationEnd) selectedModelElement;
-      String description = associationEnd.getOppositeEnd().getName() + " --> "
+      String description = associationEnd.getOppositeEnd().getModelElement().getName() + " --> "
           + associationEnd.getModelElement().getName();
 
       // Determines which FrameWeb Association End Constraint to apply from the menu item.
@@ -129,9 +129,6 @@ public class AddFrameWebConstraintToAssociationEndContextController
       IConstraintElement constraintElement = constraintsManager.getConstraint(
           frameWebAssociationEndConstraint.getPluginUIID(), specification, parameterized);
       constraintElement.addConstrainedElement(selectedModelElement);
-
-      // Visual Paradigm doesn't show association end constraints. Display them as role names.
-      FrameWebUtils.addConstraintsToRoleName(associationEnd);
     }
   }
 }

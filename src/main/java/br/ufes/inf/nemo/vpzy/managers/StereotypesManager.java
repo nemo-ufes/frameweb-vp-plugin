@@ -202,7 +202,8 @@ public class StereotypesManager {
         new Object[] {stereotypeName, baseType, project.getName(), project.getId()});
 
     if (!existingStereotypes.containsKey(makeKey(stereotypeName, baseType))) {
-      Logger.log(Level.FINER, "Stereotype {0} for base type {1} doesn't exist in project {2} ({3})",
+      Logger.log(Level.FINER,
+          "Stereotype {0} for base type {1} does not exist in project {2} ({3})",
           new Object[] {stereotypeName, baseType, project.getName(), project.getId()});
       createStereotype(stereotypeName, baseType);
     }

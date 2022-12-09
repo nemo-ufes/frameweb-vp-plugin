@@ -22,6 +22,18 @@ public class ListenersManager {
   /** Value for property change name that indicates a child has been added. */
   public static final String PROP_CHILD_ADDED = "childAdded";
 
+  /**
+   * Value for property change name that indicates that something that references the element has
+   * been added.
+   */
+  public static final String PROP_REFERENCED_BY_ADDED = "referencedByAdded";
+
+  /**
+   * Value for property change name that indicates that something that references the element has
+   * been removed.
+   */
+  public static final String PROP_REFERENCED_BY_REMOVED = "referencedByRemoved";
+
   /** The project listener to be used with the plug-in. */
   protected IProjectListener projectListener;
 
@@ -128,13 +140,20 @@ public class ListenersManager {
    * @param project The given project.
    */
   public void attachModelListeners(IModelElement modelElement) {
-    Logger.log(Level.FINEST, "Attaching model listeners to model element {0}",
-        modelElement.getName());
     for (ManagedModelListener listener : modelListeners) {
       if (listener.hasModelType()) {
-        if (listener.getModelType().equals(modelElement.getModelType()))
+        if (listener.getModelType().equals(modelElement.getModelType())) {
+          Logger.log(Level.FINEST,
+              "Attaching typed model listener {0} to model element {1} (type: {2})",
+              new Object[] {listener.getClass().getName(), modelElement.getName(),
+                  modelElement.getModelType()});
           modelElement.addPropertyChangeListener(listener);
+        }
       } else {
+        Logger.log(Level.FINEST,
+            "Attaching generic model listener {0} to model element {1} (type: {2})",
+            new Object[] {listener.getClass().getName(), modelElement.getName(),
+                modelElement.getModelType()});
         modelElement.addPropertyChangeListener(listener);
       }
     }

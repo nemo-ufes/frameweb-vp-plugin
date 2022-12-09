@@ -89,7 +89,7 @@ public final class FrameWebUtils {
    * 
    * @param associationEnd The given association end.
    */
-  public static void addConstraintsToRoleName(IAssociationEnd associationEnd) {
+  public static void displayConstraintsWithRoleName(IAssociationEnd associationEnd) {
     // Extracts the role name from the association (it may already have constraints).
     String roleName = associationEnd.getName();
     if (roleName == null) {

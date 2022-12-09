@@ -1,9 +1,11 @@
 package br.ufes.inf.nemo.vpzy.listeners;
 
 import java.util.logging.Level;
+import com.vp.plugin.model.IAssociation;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IProjectListener;
+import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 
 /**
@@ -49,6 +51,13 @@ public class ManagedProjectListener implements IProjectListener {
     for (IModelElement modelElement : project.toAllLevelModelElementArray()) {
       if (modelElement != null) {
         manager.attachModelListeners(modelElement);
+
+        // In case of Association model elements, also attach listeners to their ends.
+        if (IModelElementFactory.MODEL_TYPE_ASSOCIATION.equals(modelElement.getModelType())) {
+          IAssociation association = (IAssociation) modelElement;
+          manager.attachModelListeners(association.getFromEnd());
+          manager.attachModelListeners(association.getToEnd());
+        }
       }
     }
   }
