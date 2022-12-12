@@ -227,7 +227,7 @@
     <!-- -->
 
     <!-- ************************************************************* -->
-    <!-- Context-menus (right-click) for UML Class attribute elements. -->
+    <!-- Context-menus (right-click) for UML Class Attribute elements. -->
     <!-- ************************************************************* -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute">
       <!-- Applies to classes. -->
@@ -350,6 +350,76 @@
       <!-- Should be placed after the last menu in this action set. -->
       <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.separator"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.stereotype" />
+    </contextSensitiveActionSet>
+    <!-- -->
+    <!-- ************************************************************* -->
+    <!-- Context-menus (right-click) for UML Association End elements. -->
+    <!-- ************************************************************* -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end">
+      <!-- Applies to classes. -->
+      <contextTypes all="false" />
+      <include type="AssociationEnd" />
+
+      <!-- Menu: Add FrameWeb Constraint. -->
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint"
+        label="Add FrameWeb Constraint"
+        mnemonic="F"
+        menuPath="#"
+        icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Add FrameWeb Constraint > collection=set -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.collection.set"
+        label="collection=set"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > collection=map -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.collection.map"
+        label="collection=map"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > collection=list -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.collection.list"
+        label="collection=list"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > collection=bag -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.collection.bag"
+        label="collection=bag"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
+      <!-- Should be placed after the last menu in this action set. -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint" />
     </contextSensitiveActionSet>
     <!-- -->
   </actionSets>

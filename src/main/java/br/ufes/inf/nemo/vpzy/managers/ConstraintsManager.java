@@ -145,7 +145,7 @@ public class ConstraintsManager {
           new Object[] {key, project.getName(), project.getId()});
       constraintElement = existingConstraints.get(key);
     } else {
-      Logger.log(Level.FINEST, "Constraint key {0} doesn't exist in project {1} ({2})",
+      Logger.log(Level.FINEST, "Constraint key {0} does not exist in project {1} ({2})",
           new Object[] {key, project.getName(), project.getId()});
       constraintElement = createConstraint(name, specification);
       existingConstraints.put(key, constraintElement);

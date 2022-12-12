@@ -20,7 +20,7 @@ public enum FrameWebClassAttribute {
   /* Not a FrameWeb class attribute (default value). */
   NOT_A_FRAMEWEB_CLASS_ATTRIBUTE("", "", "", FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 
-  /** The prefix used in the ID of context actions to set the package stereotypes. */
+  /** The prefix used in the ID of context actions to set the attribute stereotypes. */
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.stereotype.";
 

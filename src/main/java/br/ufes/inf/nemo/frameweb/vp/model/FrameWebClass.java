@@ -42,7 +42,7 @@ public enum FrameWebClass {
   /* Not a FrameWeb class: */
   NOT_A_FRAMEWEB_CLASS("", "", "", Color.WHITE, FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE);
 
-  /** The prefix used in the ID of context actions to set the package stereotypes. */
+  /** The prefix used in the ID of context actions to set the class stereotypes. */
   private static final String PLUGIN_UI_CONTEXT_ACTION_PREFIX =
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.";
 
