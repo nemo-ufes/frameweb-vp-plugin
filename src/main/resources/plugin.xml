@@ -380,6 +380,30 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
       </action>
 
+      <!-- Menu Item: Add FrameWeb Constraint > collection=map -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.collection.map"
+        label="collection=map"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > collection=list -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.collection.list"
+        label="collection=list"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
       <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.separator"
