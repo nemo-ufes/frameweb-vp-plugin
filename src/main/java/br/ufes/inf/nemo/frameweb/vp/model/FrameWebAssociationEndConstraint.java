@@ -11,6 +11,9 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  */
 public enum FrameWebAssociationEndConstraint {
   /* Constraints for association ends of Entity Model classes: */
+  PERSISTENT_CLASS_COLLECTION_BAG("entity.persistent.collection.bag", "collection=bag",
+      "collection=bag", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
   PERSISTENT_CLASS_COLLECTION_LIST("entity.persistent.collection.list", "collection=list",
       "collection=list", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
@@ -65,7 +68,8 @@ public enum FrameWebAssociationEndConstraint {
         "Initializing disjoint arrays of FrameWeb association end constraints");
 
     // Entity Model > Persistent Class > collection={bag | list | map | set}.
-    FrameWebAssociationEndConstraint[] collectionDisjoints = {PERSISTENT_CLASS_COLLECTION_LIST,
+    FrameWebAssociationEndConstraint[] collectionDisjoints =
+        {PERSISTENT_CLASS_COLLECTION_BAG, PERSISTENT_CLASS_COLLECTION_LIST,
         PERSISTENT_CLASS_COLLECTION_MAP, PERSISTENT_CLASS_COLLECTION_SET};
     for (FrameWebAssociationEndConstraint constraint : collectionDisjoints) {
       constraint.disjoints = collectionDisjoints;
@@ -94,7 +98,7 @@ public enum FrameWebAssociationEndConstraint {
 
   public FrameWebAssociationEndConstraint[] getDisjoints() {
     // Lazily initialize the disjoint sets.
-    if (PERSISTENT_CLASS_COLLECTION_LIST.disjoints == null) {
+    if (PERSISTENT_CLASS_COLLECTION_BAG.disjoints == null) {
       initDisjoints();
     }
     return disjoints;
