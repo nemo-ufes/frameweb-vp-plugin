@@ -352,6 +352,7 @@
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.stereotype" />
     </contextSensitiveActionSet>
     <!-- -->
+
     <!-- ************************************************************* -->
     <!-- Context-menus (right-click) for UML Association End elements. -->
     <!-- ************************************************************* -->
@@ -420,6 +421,65 @@
       <!-- Should be placed after the last menu in this action set. -->
       <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.separator"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint" />
+    </contextSensitiveActionSet>
+    <!-- -->
+
+    <!-- ************************************************************ -->
+    <!-- Context-menus (right-click) for UML Generalization elements. -->
+    <!-- ************************************************************ -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization">
+      <!-- Applies to classes. -->
+      <contextTypes all="false" />
+      <include type="Generalization" />
+
+      <!-- Menu: Add FrameWeb Stereotype. -->
+      <menu
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype"
+        label="Add FrameWeb Stereotype"
+        mnemonic="F"
+        menuPath="#"
+        icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Add FrameWeb Stereotype > join -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype.entity.persistent.join"
+        label="join"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToGeneralizationContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Stereotype > single-table -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype.entity.persistent.singletable"
+        label="single-table"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToGeneralizationContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Stereotype > union -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype.entity.persistent.union"
+        label="union"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToGeneralizationContextController" />
+      </action>
+
+      <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
+      <!-- Should be placed after the last menu in this action set. -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.separator"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.generalization.menu.stereotype" />
     </contextSensitiveActionSet>
     <!-- -->
   </actionSets>
