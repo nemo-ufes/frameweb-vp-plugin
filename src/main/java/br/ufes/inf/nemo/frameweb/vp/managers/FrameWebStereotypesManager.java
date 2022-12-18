@@ -5,6 +5,7 @@ import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassAttribute;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebGeneralization;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
@@ -63,6 +64,18 @@ public class FrameWebStereotypesManager extends StereotypesManager {
           Logger.log(Level.FINE, "Checking existence of FrameWeb class attribute stereotype: {0}",
               stereotypeName);
           checkStereotype(stereotypeName, IModelElementFactory.MODEL_TYPE_ATTRIBUTE);
+        }
+      }
+    }
+
+    // Checks if the project has FrameWeb Generalization stereotypes, create the missing ones.
+    for (FrameWebGeneralization frameWebGeneralization : FrameWebGeneralization.values()) {
+      if (frameWebGeneralization != FrameWebGeneralization.NOT_A_FRAMEWEB_GENERALIZATION) {
+        String stereotypeName = frameWebGeneralization.getStereotypeName();
+        if (stereotypeName != null && !stereotypeName.trim().isEmpty()) {
+          Logger.log(Level.FINE, "Checking existence of FrameWeb generalization stereotype: {0}",
+              stereotypeName);
+          checkStereotype(stereotypeName, IModelElementFactory.MODEL_TYPE_GENERALIZATION);
         }
       }
     }
