@@ -64,7 +64,7 @@ public class OpenPluginSettingsController implements VPActionController {
       pluginSettingsDialog.setTitle(FrameWebPlugin.PLUGIN_NAME + " Settings");
       pluginSettingsDialog.setModal(false);
       pluginSettingsDialog.setResizable(true);
-      pluginSettingsDialog.setSize(400, 200);
+      pluginSettingsDialog.setSize(500, 450);
       pluginSettingsPanel.setContainerDialog(pluginSettingsDialog);
     }
 
