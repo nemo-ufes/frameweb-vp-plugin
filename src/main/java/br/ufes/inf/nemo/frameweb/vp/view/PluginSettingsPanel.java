@@ -34,6 +34,29 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
     loggingPanel = new javax.swing.JPanel();
     logginLevelLabel = new javax.swing.JLabel();
     loggingLevelComboBox = new javax.swing.JComboBox<>();
+    defaultsScrollPane = new javax.swing.JScrollPane();
+    defaultsPanel = new javax.swing.JPanel();
+    entityModelDefaultsPanel = new javax.swing.JPanel();
+    entityModelDefaultsClassStereotypeLabel = new javax.swing.JLabel();
+    entityModelDefaultsClassStereotypeComboBox = new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAttributesLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAttributesStereotypeLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAttributesStereotypeComboBox = new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAttributesNullableLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAttributesNullableComboBox = new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAttributesPrecisionLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAttributesPrecisionComboBox = new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAttributesGenerationLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAttributesGenerationComboBox = new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAssociationsLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeLabel =
+        new javax.swing.JLabel();
+    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox =
+        new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAssociationsCollectionLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAssociationsCollectionComboBox = new javax.swing.JComboBox<>();
+    entityModelDefaultsPersistentAssociationsCascadeLabel = new javax.swing.JLabel();
+    entityModelDefaultsPersistentAssociationsCascadeComboBox = new javax.swing.JComboBox<>();
     buttonsPanel = new javax.swing.JPanel();
     cancelButton = new javax.swing.JButton();
     okButton = new javax.swing.JButton();
@@ -52,7 +75,9 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
             .addGroup(loggingPanelLayout.createSequentialGroup().addContainerGap()
                 .addComponent(logginLevelLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(loggingLevelComboBox, 0, 356, Short.MAX_VALUE).addContainerGap()));
+                .addComponent(loggingLevelComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)
+                .addContainerGap()));
     loggingPanelLayout.setVerticalGroup(loggingPanelLayout
         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(loggingPanelLayout.createSequentialGroup().addContainerGap()
@@ -61,9 +86,215 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
                 .addComponent(logginLevelLabel).addComponent(loggingLevelComboBox,
                     javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addContainerGap(249, Short.MAX_VALUE)));
+            .addContainerGap(316, Short.MAX_VALUE)));
 
     tabbedPane.addTab("Logging", loggingPanel);
+
+    defaultsScrollPane
+        .setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+    entityModelDefaultsPanel
+        .setBorder(javax.swing.BorderFactory.createTitledBorder("Entity Model"));
+
+    entityModelDefaultsClassStereotypeLabel.setText("Default class stereotype:");
+
+    entityModelDefaultsClassStereotypeComboBox.setModel(
+        new javax.swing.DefaultComboBoxModel<>(new String[] {"mapped", "persistent", "transient"}));
+
+    entityModelDefaultsPersistentAttributesLabel
+        .setText("Persistent and mapped classes' attributes:");
+
+    entityModelDefaultsPersistentAttributesStereotypeLabel.setText("Default stereotype:");
+
+    entityModelDefaultsPersistentAttributesStereotypeComboBox
+        .setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"persistent", "transient"}));
+
+    entityModelDefaultsPersistentAttributesNullableLabel.setText("Default nullable constraint:");
+
+    entityModelDefaultsPersistentAttributesNullableComboBox
+        .setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"not null", "nullable"}));
+
+    entityModelDefaultsPersistentAttributesPrecisionLabel.setText("Default precision constraint:");
+
+    entityModelDefaultsPersistentAttributesPrecisionComboBox
+        .setModel(new javax.swing.DefaultComboBoxModel<>(
+            new String[] {"precision=date", "precision=time", "precision=timestamp"}));
+
+    entityModelDefaultsPersistentAttributesGenerationLabel
+        .setText("Default ID generation constraint:");
+
+    entityModelDefaultsPersistentAttributesGenerationComboBox
+        .setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"generation=auto",
+            "generation=identity", "generation=none", "generation=sequence", "generation=table"}));
+
+    entityModelDefaultsPersistentAssociationsLabel
+        .setText("Persistent and mapped classes' associations:");
+
+    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeLabel
+        .setText("Default generalization stereotype:");
+
+    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox.setModel(
+        new javax.swing.DefaultComboBoxModel<>(new String[] {"join", "single-table", "union"}));
+
+    entityModelDefaultsPersistentAssociationsCollectionLabel
+        .setText("Default association end collection constraint:");
+
+    entityModelDefaultsPersistentAssociationsCollectionComboBox
+        .setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"collection=bag",
+            "collection=list", "collection=map", "collection=set"}));
+
+    entityModelDefaultsPersistentAssociationsCascadeLabel
+        .setText("Default association end cascade constraint:");
+
+    entityModelDefaultsPersistentAssociationsCascadeComboBox.setModel(
+        new javax.swing.DefaultComboBoxModel<>(new String[] {"cascade=all", "cascade=merge",
+            "cascade=none", "cascade=persist", "cascade=refresh", "cascade=remove"}));
+
+    javax.swing.GroupLayout entityModelDefaultsPanelLayout =
+        new javax.swing.GroupLayout(entityModelDefaultsPanel);
+    entityModelDefaultsPanel.setLayout(entityModelDefaultsPanelLayout);
+    entityModelDefaultsPanelLayout.setHorizontalGroup(entityModelDefaultsPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup().addContainerGap()
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                    .addComponent(entityModelDefaultsClassStereotypeLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(entityModelDefaultsClassStereotypeComboBox, 0,
+                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                    .addGroup(entityModelDefaultsPanelLayout
+                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(entityModelDefaultsPersistentAttributesLabel)
+                        .addComponent(entityModelDefaultsPersistentAssociationsLabel))
+                    .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup().addGap(6, 6, 6)
+                    .addGroup(entityModelDefaultsPanelLayout
+                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(entityModelDefaultsPersistentAssociationsCascadeLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(entityModelDefaultsPersistentAssociationsCascadeComboBox,
+                                0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(entityModelDefaultsPersistentAssociationsCollectionLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(
+                                entityModelDefaultsPersistentAssociationsCollectionComboBox, 0,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(
+                                entityModelDefaultsPersistentAssociationsGeneralizationStereotypeLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(
+                                entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox,
+                                0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(entityModelDefaultsPersistentAttributesGenerationLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(entityModelDefaultsPersistentAttributesGenerationComboBox,
+                                0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(entityModelDefaultsPersistentAttributesPrecisionLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(entityModelDefaultsPersistentAttributesPrecisionComboBox,
+                                0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(entityModelDefaultsPersistentAttributesNullableLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(entityModelDefaultsPersistentAttributesNullableComboBox,
+                                0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup()
+                            .addComponent(entityModelDefaultsPersistentAttributesStereotypeLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(entityModelDefaultsPersistentAttributesStereotypeComboBox,
+                                0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+            .addContainerGap()));
+    entityModelDefaultsPanelLayout.setVerticalGroup(entityModelDefaultsPanelLayout
+        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(entityModelDefaultsPanelLayout.createSequentialGroup().addContainerGap()
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsClassStereotypeLabel)
+                .addComponent(entityModelDefaultsClassStereotypeComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(entityModelDefaultsPersistentAttributesLabel)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsPersistentAttributesStereotypeLabel)
+                .addComponent(entityModelDefaultsPersistentAttributesStereotypeComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsPersistentAttributesNullableLabel)
+                .addComponent(entityModelDefaultsPersistentAttributesNullableComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsPersistentAttributesPrecisionLabel)
+                .addComponent(entityModelDefaultsPersistentAttributesPrecisionComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsPersistentAttributesGenerationLabel)
+                .addComponent(entityModelDefaultsPersistentAttributesGenerationComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(entityModelDefaultsPersistentAssociationsLabel)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(
+                    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeLabel)
+                .addComponent(
+                    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsPersistentAssociationsCollectionLabel)
+                .addComponent(entityModelDefaultsPersistentAssociationsCollectionComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(entityModelDefaultsPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(entityModelDefaultsPersistentAssociationsCascadeLabel)
+                .addComponent(entityModelDefaultsPersistentAssociationsCascadeComboBox,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+
+    javax.swing.GroupLayout defaultsPanelLayout = new javax.swing.GroupLayout(defaultsPanel);
+    defaultsPanel.setLayout(defaultsPanelLayout);
+    defaultsPanelLayout.setHorizontalGroup(
+        defaultsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(defaultsPanelLayout.createSequentialGroup().addContainerGap()
+                .addComponent(entityModelDefaultsPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()));
+    defaultsPanelLayout.setVerticalGroup(
+        defaultsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(defaultsPanelLayout.createSequentialGroup().addContainerGap()
+                .addComponent(entityModelDefaultsPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(238, Short.MAX_VALUE)));
+
+    defaultsScrollPane.setViewportView(defaultsPanel);
+
+    tabbedPane.addTab("Defaults", defaultsScrollPane);
 
     add(tabbedPane, java.awt.BorderLayout.CENTER);
 
@@ -88,15 +319,14 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
     buttonsPanelLayout.setHorizontalGroup(
         buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
             javax.swing.GroupLayout.Alignment.TRAILING,
-            buttonsPanelLayout.createSequentialGroup().addContainerGap(298, Short.MAX_VALUE)
+            buttonsPanelLayout.createSequentialGroup().addContainerGap(365, Short.MAX_VALUE)
                 .addComponent(okButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cancelButton).addContainerGap()));
     buttonsPanelLayout.setVerticalGroup(
         buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
             javax.swing.GroupLayout.Alignment.TRAILING,
-            buttonsPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            buttonsPanelLayout.createSequentialGroup().addContainerGap(11, Short.MAX_VALUE)
                 .addGroup(buttonsPanelLayout
                     .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton).addComponent(okButton))
@@ -108,22 +338,122 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
   /** Reads the configuration values and sets them as initial value for the form fields. */
   private void readConfig() {
     Logger.log(Level.CONFIG, "Reading current FrameWeb Tools configuration values");
+    String value;
 
-    String value = configManager.getProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL);
-    Logger.log(Level.FINE, "Configuration value read: {0} = {1}",
+    // Reads the logging configuration.
+    value = configManager.getProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
         new Object[] {FrameWebPlugin.CONFIG_LOGGING_LEVEL, value});
     loggingLevelComboBox.setSelectedItem(value);
+
+    // Reads the defaults for the Entity Model configuration.
+    value = configManager.getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_CLASS_STEREOTYPE);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_CLASS_STEREOTYPE, value});
+    entityModelDefaultsClassStereotypeComboBox.setSelectedItem(value);
+
+    value = configManager.getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_STEREOTYPE);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_STEREOTYPE, value});
+    entityModelDefaultsPersistentAttributesStereotypeComboBox.setSelectedItem(value);
+
+    value = configManager
+        .getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_NULLABLE);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_NULLABLE, value});
+    entityModelDefaultsPersistentAttributesNullableComboBox.setSelectedItem(value);
+
+    value = configManager
+        .getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_PRECISION);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_PRECISION, value});
+    entityModelDefaultsPersistentAttributesPrecisionComboBox.setSelectedItem(value);
+
+    value = configManager
+        .getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_GENERATION);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_GENERATION, value});
+    entityModelDefaultsPersistentAttributesGenerationComboBox.setSelectedItem(value);
+
+    value =
+        configManager.getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_GENERALIZATION_STEREOTYPE);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_GENERALIZATION_STEREOTYPE, value});
+    entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox
+        .setSelectedItem(value);
+
+    value = configManager
+        .getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_COLLECTION);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}", new Object[] {
+        FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_COLLECTION, value});
+    entityModelDefaultsPersistentAssociationsCollectionComboBox.setSelectedItem(value);
+
+    value = configManager
+        .getProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_CASCADE);
+    Logger.log(Level.CONFIG, "Configuration value read: {0} = {1}", new Object[] {
+        FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_CASCADE, value});
+    entityModelDefaultsPersistentAssociationsCascadeComboBox.setSelectedItem(value);
   }
 
   private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
     Logger.log(Level.CONFIG, "Saving FrameWeb Tools configuration from dialog");
+    String value;
 
     // Changes the logging configuration.
-    String value = loggingLevelComboBox.getSelectedItem().toString();
-    Logger.log(Level.FINE, "Setting configuration value: {0} = {1}",
+    value = loggingLevelComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
         new Object[] {FrameWebPlugin.CONFIG_LOGGING_LEVEL, value});
     configManager.setProperty(FrameWebPlugin.CONFIG_LOGGING_LEVEL, value);
     Logger.setLevel(Level.parse(value));
+
+    // Changes the defaults for the Entity Model configuration.
+    value = entityModelDefaultsClassStereotypeComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_CLASS_STEREOTYPE, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_CLASS_STEREOTYPE, value);
+
+    value = entityModelDefaultsPersistentAttributesStereotypeComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_STEREOTYPE, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_STEREOTYPE, value);
+
+    value = entityModelDefaultsPersistentAttributesNullableComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_NULLABLE, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_NULLABLE,
+        value);
+
+    value = entityModelDefaultsPersistentAttributesPrecisionComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_PRECISION, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_PRECISION,
+        value);
+
+    value = entityModelDefaultsPersistentAttributesGenerationComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_GENERATION, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_GENERATION,
+        value);
+
+    value = entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox
+        .getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}",
+        new Object[] {FrameWebPlugin.CONFIG_DEFAULT_ENTITY_GENERALIZATION_STEREOTYPE, value});
+    configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_ENTITY_GENERALIZATION_STEREOTYPE,
+        value);
+
+    value =
+        entityModelDefaultsPersistentAssociationsCollectionComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}", new Object[] {
+        FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_COLLECTION, value});
+    configManager.setProperty(
+        FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_COLLECTION, value);
+
+    value = entityModelDefaultsPersistentAssociationsCascadeComboBox.getSelectedItem().toString();
+    Logger.log(Level.FINEST, "Setting configuration value: {0} = {1}", new Object[] {
+        FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_CASCADE, value});
+    configManager.setProperty(
+        FrameWebPlugin.CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_CASCADE, value);
 
     // Saves the configuration.
     configManager.save();
@@ -144,6 +474,27 @@ public class PluginSettingsPanel extends javax.swing.JPanel {
   // Variables declaration - do not modify
   private javax.swing.JPanel buttonsPanel;
   private javax.swing.JButton cancelButton;
+  private javax.swing.JPanel defaultsPanel;
+  private javax.swing.JScrollPane defaultsScrollPane;
+  private javax.swing.JComboBox<String> entityModelDefaultsClassStereotypeComboBox;
+  private javax.swing.JLabel entityModelDefaultsClassStereotypeLabel;
+  private javax.swing.JPanel entityModelDefaultsPanel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAssociationsCascadeComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAssociationsCascadeLabel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAssociationsCollectionComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAssociationsCollectionLabel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAssociationsGeneralizationStereotypeComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAssociationsGeneralizationStereotypeLabel;
+  private javax.swing.JLabel entityModelDefaultsPersistentAssociationsLabel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAttributesGenerationComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAttributesGenerationLabel;
+  private javax.swing.JLabel entityModelDefaultsPersistentAttributesLabel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAttributesNullableComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAttributesNullableLabel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAttributesPrecisionComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAttributesPrecisionLabel;
+  private javax.swing.JComboBox<String> entityModelDefaultsPersistentAttributesStereotypeComboBox;
+  private javax.swing.JLabel entityModelDefaultsPersistentAttributesStereotypeLabel;
   private javax.swing.JLabel logginLevelLabel;
   private javax.swing.JComboBox<String> loggingLevelComboBox;
   private javax.swing.JPanel loggingPanel;

@@ -31,6 +31,22 @@ public class FrameWebPlugin implements VPPlugin {
 
   /* Plug-in configuration keys. */
   public static final String CONFIG_LOGGING_LEVEL = "logging.level";
+  public static final String CONFIG_DEFAULT_ENTITY_CLASS_STEREOTYPE =
+      "default.entity.class.stereotype";
+  public static final String CONFIG_DEFAULT_ENTITY_ATTRIBUTE_STEREOTYPE =
+      "default.entity.attribute.stereotype";
+  public static final String CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_NULLABLE =
+      "default.entity.attribute.constraint.nullable";
+  public static final String CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_PRECISION =
+      "default.entity.attribute.constraint.precision";
+  public static final String CONFIG_DEFAULT_ENTITY_ATTRIBUTE_CONSTRAINT_GENERATION =
+      "default.entity.attribute.constraint.generation";
+  public static final String CONFIG_DEFAULT_ENTITY_GENERALIZATION_STEREOTYPE =
+      "default.entity.generalization.stereotype";
+  public static final String CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_COLLECTION =
+      "default.entity.association.end.constraint.collection";
+  public static final String CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_CASCADE =
+      "default.entity.association.end.constraint.cascade";
 
   /** The active instance of the plug-in. */
   private static FrameWebPlugin activeInstance;
