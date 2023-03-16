@@ -8,6 +8,7 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  * be applied to class attributes in the plug-in.
  *
  * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">...</a>)
  */
 public enum FrameWebClassAttribute {
   /* Stereotypes for attributes of Entity Model classes: */

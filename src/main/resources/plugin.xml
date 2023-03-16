@@ -627,6 +627,42 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
       </action>
 
+      <!-- Menu Item: Add FrameWeb Constraint > order=natural -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.order.natural"
+        label="order=natural"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > order=<columns> (ascending) -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.order.ascending"
+        label="order= &lt;columns&gt; (ascending)"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > order=<columns> (descending) -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.order.descending"
+        label="order= &lt;columns&gt; (descending)"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
 
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
