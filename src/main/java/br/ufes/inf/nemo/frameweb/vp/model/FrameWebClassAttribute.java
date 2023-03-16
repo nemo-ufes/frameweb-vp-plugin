@@ -6,8 +6,8 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 /**
  * Enumeration of FrameWeb class attributes and their respective names, stereotypes, etc., which can
  * be applied to class attributes in the plug-in.
- * 
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ *
+ * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
  */
 public enum FrameWebClassAttribute {
   /* Stereotypes for attributes of Entity Model classes: */
@@ -15,6 +15,18 @@ public enum FrameWebClassAttribute {
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_TRANSIENT("entity.persistent.transient", "transient", "transient",
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_ID("entity.persistent.id", "id", "id",
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_VERSION("entity.persistent.version", "version", "version",
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_EMBEDDED("entity.persistent.embedded", "embedded", "embedded",
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_LOB("entity.persistent.lob", "lob", "lob",
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   /* Not a FrameWeb class attribute (default value). */
@@ -25,18 +37,18 @@ public enum FrameWebClassAttribute {
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.stereotype.";
 
   /** The ID of the package in the plugin UI configuration. */
-  private String pluginUIID;
+  private final String pluginUIID;
 
   /** The attribute's official name. */
-  private String name;
+  private final String name;
 
   /** The name of the stereotype of the class attribute. */
-  private String stereotypeName;
+  private final String stereotypeName;
 
   /** The classes in which this type of attribute can be created. */
-  private FrameWebClass[] frameWebClasses;
+  private final FrameWebClass[] frameWebClasses;
 
-  private FrameWebClassAttribute(String pluginUIID, String name, String stereotypeName,
+  FrameWebClassAttribute(String pluginUIID, String name, String stereotypeName,
       FrameWebClass... frameWebClasses) {
     this.pluginUIID = pluginUIID;
     this.name = name;
@@ -108,7 +120,7 @@ public enum FrameWebClassAttribute {
    * Provides the enum value that refers to a specific FrameWeb class attribute given its stereotype
    * name.
    * 
-   * @param stereotypeName The name of the stereotype.
+   * @param stereotype The name of the stereotype.
    * @return An enum value that represents a FrameWeb class attribute or
    *         {@code NOT_A_FRAMEWEB_CLASS_ATTRIBUTE} if no class attribute with the given stereotype
    *         name exists.
