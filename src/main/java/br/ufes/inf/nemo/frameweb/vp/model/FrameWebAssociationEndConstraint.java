@@ -11,6 +11,8 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  */
 public enum FrameWebAssociationEndConstraint {
   /* Constraints for association ends of Entity Model classes: */
+
+  /* Association Collection */
   PERSISTENT_CLASS_COLLECTION_BAG("entity.persistent.collection.bag", "collection=bag",
       "collection=bag", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
@@ -23,6 +25,34 @@ public enum FrameWebAssociationEndConstraint {
   PERSISTENT_CLASS_COLLECTION_SET("entity.persistent.collection.set", "collection=set",
       "collection=set", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
+  /* Association Cascade */
+  PERSISTENT_CLASS_CASCADE_NONE("entity.persistent.cascade.none", "cascade=none",
+      "cascade=none", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_CASCADE_ALL("entity.persistent.cascade.all", "cascade=all",
+      "cascade=all", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_CASCADE_MERGE("entity.persistent.cascade.merge", "cascade=merge",
+      "cascade=merge", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_CASCADE_PERSIST("entity.persistent.cascade.persist", "cascade=persist",
+  "cascade=persist", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_CASCADE_REFRESH("entity.persistent.cascade.refresh", "cascade=refresh",
+      "cascade=refresh", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_CASCADE_REMOVE("entity.persistent.cascade.remove", "cascade=remove",
+      "cascade=remove", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+
+  /* Fetch Type */
+  PERSISTENT_CLASS_FETCH_EAGER("entity.persistent.fetch.eager", "fetch=eager",
+      "fetch=eager", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_FETCH_LAZY("entity.persistent.fetch.lazy", "fetch=lazy",
+      "fetch=lazy", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+
   /* Not a FrameWeb association end constraint (default value). */
   NOT_A_FRAMEWEB_ASSOCIATION_END_CONSTRAINT("", "", "", false, FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 
@@ -31,24 +61,24 @@ public enum FrameWebAssociationEndConstraint {
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.";
 
   /** The ID of the constraint in the plugin UI configuration. */
-  private String pluginUIID;
+  private final String pluginUIID;
 
   /** The constraint's official name. */
-  private String name;
+  private final String name;
 
   /** The specification of the constraint. */
-  private String specification;
+  private final String specification;
 
   /** Indicates if the constraint takes a value. */
-  private boolean parameterized;
+  private final boolean parameterized;
 
   /** The classes to which the constraint can be applied. */
-  private FrameWebClass[] frameWebClasses;
+  private final FrameWebClass[] frameWebClasses;
 
   /** Array of constraints that are disjoint among themselves. */
   private FrameWebAssociationEndConstraint[] disjoints;
 
-  private FrameWebAssociationEndConstraint(String pluginUIID, String name, String specification,
+  FrameWebAssociationEndConstraint(String pluginUIID, String name, String specification,
       boolean parameterized, FrameWebClass... frameWebClasses) {
     this.pluginUIID = pluginUIID;
     this.name = name;
@@ -73,6 +103,22 @@ public enum FrameWebAssociationEndConstraint {
         PERSISTENT_CLASS_COLLECTION_MAP, PERSISTENT_CLASS_COLLECTION_SET};
     for (FrameWebAssociationEndConstraint constraint : collectionDisjoints) {
       constraint.disjoints = collectionDisjoints;
+    }
+
+    // Entity Model > Persistent Class > cascade={all | merge | persist | refresh | remove}.
+    FrameWebAssociationEndConstraint[] cascadeDisjoints =
+        {PERSISTENT_CLASS_CASCADE_ALL, PERSISTENT_CLASS_CASCADE_MERGE,
+        PERSISTENT_CLASS_CASCADE_PERSIST, PERSISTENT_CLASS_CASCADE_REFRESH,
+        PERSISTENT_CLASS_CASCADE_REMOVE};
+    for (FrameWebAssociationEndConstraint constraint : cascadeDisjoints) {
+      constraint.disjoints = cascadeDisjoints;
+    }
+
+    // Entity Model > Persistent Class > fetch={eager | lazy}.
+    FrameWebAssociationEndConstraint[] fetchDisjoints =
+        {PERSISTENT_CLASS_FETCH_EAGER, PERSISTENT_CLASS_FETCH_LAZY};
+    for (FrameWebAssociationEndConstraint constraint : fetchDisjoints) {
+      constraint.disjoints = fetchDisjoints;
     }
   }
 

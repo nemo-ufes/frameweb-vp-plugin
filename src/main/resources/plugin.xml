@@ -519,6 +519,103 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
       </action>
 
+      <!-- Menu Item: Add FrameWeb Constraint > cascade=none -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.cascade.none"
+        label="cascade=none"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > cascade=all -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.cascade.all"
+        label="cascade=all"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > cascade=merge -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.cascade.merge"
+        label="cascade=merge"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > cascade=persist -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.cascade.persist"
+        label="cascade=persist"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > cascade=remove -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.cascade.remove"
+        label="cascade=remove"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > cascade=refresh -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.cascade.refresh"
+        label="cascade=refresh"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > fetch=eager -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.fetch.eager"
+        label="fetch=eager"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > fetch=lazy -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint.entity.persistent.fetch.lazy"
+        label="fetch=lazy"
+        style="normal"
+        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.constraint/#"
+        icon="icons/letter-e-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToAssociationEndContextController" />
+      </action>
+
+
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
       <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.association.end.menu.separator"
