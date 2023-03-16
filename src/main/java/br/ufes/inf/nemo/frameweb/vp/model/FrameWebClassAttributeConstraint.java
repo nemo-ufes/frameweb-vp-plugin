@@ -6,20 +6,22 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 /**
  * Enumeration of FrameWeb constraint types and their respective names, specifications, class types,
  * etc., which can be applied to class attributes in the plug-in.
- * 
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ *
+ * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
  */
 public enum FrameWebClassAttributeConstraint {
   /* Constraints for attributes of Entity Model classes: */
   PERSISTENT_CLASS_COLUMN("entity.persistent.column", "column = <name>", "column", true,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
+  // Enum values for the nullable attribute.
   PERSISTENT_CLASS_NOT_NULL("entity.persistent.notnull", "not null",
       "not null", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
   PERSISTENT_CLASS_NULLABLE("entity.persistent.nullable", "nullable", "nullable", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
+  // Enum values for the precision attribute.
   PERSISTENT_CLASS_PRECISION_DATE("entity.persistent.precision.date",
       "precision=date", "precision=date", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
@@ -32,6 +34,22 @@ public enum FrameWebClassAttributeConstraint {
       "precision=timestamp", "precision=timestamp", false,
       FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
+  // Enum values for the generation attribute.
+  PERSISTENT_CLASS_GENERATION_AUTO("entity.persistent.generation.auto",
+      "generation=auto", "generation=auto", false,
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+  PERSISTENT_CLASS_GENERATION_IDENTITY(
+      "entity.persistent.generation.identity", "generation=identity",
+      "generation=identity", false, FrameWebClass.PERSISTENT_CLASS,
+      FrameWebClass.MAPPED_SUPERCLASS),
+  PERSISTENT_CLASS_GENERATION_SEQUENCE(
+      "entity.persistent.generation.sequence", "generation=sequence",
+      "generation=sequence", false, FrameWebClass.PERSISTENT_CLASS,
+      FrameWebClass.MAPPED_SUPERCLASS),
+  PERSISTENT_CLASS_GENERATION_NONE("entity.persistent.generation.none",
+      "generation=none", "generation=none", false,
+      FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
   /* Not a FrameWeb class attribute constraint (default value). */
   NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT("", "", "", false, FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 
@@ -40,24 +58,24 @@ public enum FrameWebClassAttributeConstraint {
       "br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.";
 
   /** The ID of the constraint in the plugin UI configuration. */
-  private String pluginUIID;
+  private final String pluginUIID;
 
   /** The constraint's official name. */
-  private String name;
+  private final String name;
 
   /** The specification of the constraint. */
-  private String specification;
+  private final String specification;
 
   /** Indicates if the constraint takes a value. */
-  private boolean parameterized;
+  private final boolean parameterized;
 
   /** The classes to which the constraint can be applied. */
-  private FrameWebClass[] frameWebClasses;
+  private final FrameWebClass[] frameWebClasses;
 
   /** Array of constraints that are disjoint among themselves. */
   private FrameWebClassAttributeConstraint[] disjoints;
 
-  private FrameWebClassAttributeConstraint(String pluginUIID, String name, String specification,
+  FrameWebClassAttributeConstraint(String pluginUIID, String name, String specification,
       boolean parameterized, FrameWebClass... frameWebClasses) {
     this.pluginUIID = pluginUIID;
     this.name = name;
@@ -88,6 +106,15 @@ public enum FrameWebClassAttributeConstraint {
         PERSISTENT_CLASS_PRECISION_TIME, PERSISTENT_CLASS_PRECISION_TIMESTAMP};
     for (FrameWebClassAttributeConstraint constraint : precisionDisjoints) {
       constraint.disjoints = precisionDisjoints;
+    }
+    // Entity Model > Persistent Class > generation={auto | identity | sequence | none}.
+    FrameWebClassAttributeConstraint[] generationDisjoints = {
+        PERSISTENT_CLASS_GENERATION_AUTO,
+        PERSISTENT_CLASS_GENERATION_IDENTITY,
+        PERSISTENT_CLASS_GENERATION_SEQUENCE,
+        PERSISTENT_CLASS_GENERATION_NONE};
+    for (FrameWebClassAttributeConstraint constraint : generationDisjoints) {
+      constraint.disjoints = generationDisjoints;
     }
   }
 
@@ -122,7 +149,7 @@ public enum FrameWebClassAttributeConstraint {
   /**
    * Provides the enum value that refers to a specific FrameWeb class attribute constraint given its
    * name.
-   * 
+   *
    * @param name The name of the FrameWeb class attribute constraint.
    * @return An enum value that represents a FrameWeb class attribute constraint or
    *         {@code NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT} if no class attribute constraint with
@@ -144,7 +171,7 @@ public enum FrameWebClassAttributeConstraint {
   /**
    * Provides the enum value that refers to a specific FrameWeb class attribute constraint given its
    * plugin UI ID.
-   * 
+   *
    * @param pluginUIID The ID of the FrameWeb class attribute constraint in the plugin UI
    *        configuration.
    * @return An enum value that represents a FrameWeb class attribute constraint or
@@ -169,7 +196,7 @@ public enum FrameWebClassAttributeConstraint {
   /**
    * Provides the enum value that refers to a specific FrameWeb class attribute constraint given its
    * specification.
-   * 
+   *
    * @param specification The specification used by the class attribute constraint.
    * @return An enum value that represents a FrameWeb class attribute constraint or
    *         {@code NOT_A_FRAMEWEB_CLASS_ATTRIBUTE_CONSTRAINT} if no class attribute constraint with

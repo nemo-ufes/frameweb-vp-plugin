@@ -334,6 +334,60 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController" />
       </action>
 
+
+      <!-- Menu Item: Add FrameWeb Constraint > generation=sequence -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.generation.sequence"
+              label="generation=sequence"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+              icon="icons/letter-e-black-block.png">
+        <actionController
+                class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController"/>
+      </action>
+
+
+      <!-- Menu Item: Add FrameWeb Constraint > generation=none -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.generation.none"
+              label="generation=none"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+              icon="icons/letter-e-black-block.png">
+        <actionController
+                class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController"/>
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > generation=identity -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.generation.identity"
+              label="generation=identity"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+              icon="icons/letter-e-black-block.png">
+        <actionController
+                class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController"/>
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > generation=auto -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint.entity.persistent.generation.auto"
+              label="generation=auto"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute.menu.constraint/#"
+              icon="icons/letter-e-black-block.png">
+        <actionController
+                class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToClassAttributeContextController"/>
+      </action>
+
       <!-- Menu Item: Add FrameWeb Constraint > column = <name> -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
