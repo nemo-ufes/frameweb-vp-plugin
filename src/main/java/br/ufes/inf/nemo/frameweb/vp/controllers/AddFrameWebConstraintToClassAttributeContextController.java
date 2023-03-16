@@ -107,8 +107,13 @@ public class AddFrameWebConstraintToClassAttributeContextController
               ViewManagerUtils.QUESTION_MESSAGE);
           specification = specification + "=" + value;
 
+          final Class<?> parameterType =
+              frameWebClassAttributeConstraint.getParameterType();
+
+          if (verifyParameterType(value, parameterType)) continue;
+
           // If the user actually cancelled or provided no value, move on to the next element.
-          if (value == null || value.trim().isEmpty()) {
+          if (value.trim().isEmpty()) {
             continue;
           }
         }
@@ -121,5 +126,34 @@ public class AddFrameWebConstraintToClassAttributeContextController
         constraintElement.addConstrainedElement(selectedModelElement);
       }
     }
+  }
+
+  private static boolean verifyParameterType(final String value, final Class<?> parameterType) {
+    if (Integer.class.isAssignableFrom(parameterType)) {
+      try {
+        Integer.parseInt(value);
+      } catch (NumberFormatException e) {
+        ViewManagerUtils.showMessageDialog("The value provided is not a valid integer.",
+            "Invalid value", ViewManagerUtils.ERROR_MESSAGE);
+        return true;
+      }
+    } else if (Double.class.isAssignableFrom(parameterType)) {
+      try {
+        Double.parseDouble(value);
+      } catch (NumberFormatException e) {
+        ViewManagerUtils.showMessageDialog("The value provided is not a valid double.",
+            "Invalid value", ViewManagerUtils.ERROR_MESSAGE);
+        return true;
+      }
+    } else if (Boolean.class.isAssignableFrom(parameterType)) {
+      if (!"true".equalsIgnoreCase(value) && !"false".equalsIgnoreCase(value)) {
+        ViewManagerUtils.showMessageDialog("The value provided is not a valid boolean.",
+            "Invalid value", ViewManagerUtils.ERROR_MESSAGE);
+        return true;
+      }
+    } else {
+      throw new RuntimeException("Unknown parameter type: " + parameterType);
+    }
+    return false;
   }
 }
