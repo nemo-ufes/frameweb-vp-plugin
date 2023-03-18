@@ -23,7 +23,8 @@ import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
  * Controller that handles the Add FrameWeb Constraint to Class Attribute action, activated by a
  * context menu (right-click) for UML Class Attribute elements.
  *
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">...</a>)
  */
 public class AddFrameWebConstraintToClassAttributeContextController
     implements VPContextActionController {

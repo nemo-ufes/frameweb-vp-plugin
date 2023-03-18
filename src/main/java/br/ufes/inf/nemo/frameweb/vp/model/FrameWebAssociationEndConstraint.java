@@ -6,8 +6,9 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
 /**
  * Enumeration of FrameWeb constraint types and their respective names, specifications, class types,
  * etc., which can be applied to association ends in the plug-in.
- * 
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ *
+ * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">...</a>)
  */
 public enum FrameWebAssociationEndConstraint {
   /* Constraints for association ends of Entity Model classes: */
@@ -43,6 +44,16 @@ public enum FrameWebAssociationEndConstraint {
 
   PERSISTENT_CLASS_CASCADE_REMOVE("entity.persistent.cascade.remove", "cascade=remove",
       "cascade=remove", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  /* Association Order By */
+  PERSISTENT_CLASS_ORDER_NATURAL("entity.persistent.order.natural", "order=natural",
+      "order=natural", false, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_ORDER_ASCENDING("entity.persistent.order.ascending", "order=<columns> (ascending)",
+      "order=<columns> (ascending)", true, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
+
+  PERSISTENT_CLASS_ORDER_DESCENDING("entity.persistent.order.descending", "order=<columns> (descending)",
+      "order=<columns> (descending)", true, FrameWebClass.PERSISTENT_CLASS, FrameWebClass.MAPPED_SUPERCLASS),
 
 
   /* Fetch Type */
@@ -119,6 +130,13 @@ public enum FrameWebAssociationEndConstraint {
         {PERSISTENT_CLASS_FETCH_EAGER, PERSISTENT_CLASS_FETCH_LAZY};
     for (FrameWebAssociationEndConstraint constraint : fetchDisjoints) {
       constraint.disjoints = fetchDisjoints;
+    }
+
+    // Entity Model > Persistent Class > order={natural | ascending | descending}.
+    FrameWebAssociationEndConstraint[] orderDisjoints =
+        {PERSISTENT_CLASS_ORDER_NATURAL, PERSISTENT_CLASS_ORDER_ASCENDING, PERSISTENT_CLASS_ORDER_DESCENDING};
+    for (FrameWebAssociationEndConstraint constraint : orderDisjoints) {
+      constraint.disjoints = orderDisjoints;
     }
   }
 

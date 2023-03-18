@@ -22,7 +22,8 @@ import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
  * Controller that handles the Add FrameWeb Constraint to Association End action, activated by a
  * context menu (right-click) for UML Association End elements.
  *
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">...</a>)
  */
 public class AddFrameWebConstraintToAssociationEndContextController
     implements VPContextActionController {
@@ -116,12 +117,13 @@ public class AddFrameWebConstraintToAssociationEndContextController
                 + description + ":\n" + frameWebAssociationEndConstraint.getSpecification() + "=";
         String value = ViewManagerUtils.showInputDialog(message, "Constraint value",
             ViewManagerUtils.QUESTION_MESSAGE);
-        specification = specification + "=" + value;
 
         // If the user actually cancelled or provided no value, don't add the constraint.
         if (value == null || value.trim().isEmpty()) {
           return;
         }
+
+        specification = specification.replaceAll("<[a-zA-Z]*>", value);
       }
 
       // Adds the constraint to the selected association end.
