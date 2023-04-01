@@ -14,6 +14,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
+
     <visualparadigm.app.dir>
       /Applications/Visual Paradigm.app/Contents/Resources/app/
     </visualparadigm.app.dir>
@@ -23,6 +24,23 @@
   </properties>
 
   <dependencies>
+
+    <!-- jtwig dependencies-->
+    <!-- https://mvnrepository.com/artifact/org.jtwig/jtwig-core -->
+<!--    <dependency>-->
+<!--      <groupId>org.jtwig</groupId>-->
+<!--      <artifactId>jtwig-core</artifactId>-->
+<!--      <version>5.87.0.RELEASE</version>-->
+<!--    </dependency>-->
+
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>2.3.31</version>
+    </dependency>
+
+
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -202,4 +220,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

@@ -16,6 +16,7 @@ import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
  * and unloading. This class also centralizes global information on the FrameWeb plug-in.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Igor Sunderhus e Silva (
  */
 public class FrameWebPlugin implements VPPlugin {
   /* Plug-in information. */
@@ -48,6 +49,12 @@ public class FrameWebPlugin implements VPPlugin {
   public static final String CONFIG_DEFAULT_ENTITY_ASSOCIATION_END_CONSTRAINT_CASCADE =
       "default.entity.association.end.constraint.cascade";
 
+  public static final String CONFIG_DEFAULT_GENERATE_CODE_OUTPUT_FOLDER =
+      "default.generate.code.output.folder";
+
+  public static final String CONFIG_DEFAULT_GENERATE_CODE_TEMPLATE_FOLDER =
+      "default.generate.code.template.folder";
+
   /** The active instance of the plug-in. */
   private static FrameWebPlugin activeInstance;
 
@@ -59,6 +66,10 @@ public class FrameWebPlugin implements VPPlugin {
 
   /** Indicates if the Plug-in Settings Dialog is open. */
   private boolean pluginSettingsDialogOpen = false;
+
+
+  /** Indicates if the Generate Code Settings Dialog is open. */
+  private boolean generateCodeSettingsDialogOpen = false;
 
   /** Returns the active instance of the plug-in. */
   public static FrameWebPlugin instance() {
@@ -76,6 +87,14 @@ public class FrameWebPlugin implements VPPlugin {
   public void setPluginSettingsDialogOpen(boolean pluginSettingsDialogOpen) {
     this.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
   }
+
+  public boolean isGenerateCodeSettingsDialogOpen() {
+      return generateCodeSettingsDialogOpen;
+    }
+
+    public void setGenerateCodeSettingsDialogOpen(boolean generateCodeSettingsDialogOpen) {
+      this.generateCodeSettingsDialogOpen = generateCodeSettingsDialogOpen;
+    }
 
   /**
    * Sets up the plug-in (initialization).

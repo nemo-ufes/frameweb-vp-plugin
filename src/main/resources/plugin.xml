@@ -19,6 +19,24 @@
         label="FrameWeb"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/#" />
 
+      <!-- Toolbar Button: Generate Code. -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/coding_711284 -->
+      <!-- Icon author: https://www.flaticon.com/authors/Kiranshastry -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actions.GenerateCodeAction"
+              actionType="generalAction"
+              description="Generates code for the model."
+              style="normal"
+              tooltip="Generates code for the model."
+              icon="icons/coding.png"
+              label="Generate Code for FrameWeb Model"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.GenerateCodeController" />
+      </action>
+      <!-- -->
+
+      <separator id="br.ufes.inf.nemo.frameweb.vp.separator.beforeOpenPluginSettingsAction"
+                 menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#" />
       <!-- Toolbar Button: Check Model. -->
       <!-- Icon source: https://www.flaticon.com/free-icon/correct_4436481 -->
       <!-- Icon author: https://www.flaticon.com/authors/kliwir-art -->
@@ -73,7 +91,7 @@
     <!-- -->
 
     <!-- ***************************************************** -->
-    <!-- Context-menus (right-click) for UML Package elements. -->
+    <!-- Context-menus (right-click) for UML PackageModel elements. -->
     <!-- ***************************************************** -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.package">
       <!-- Applies to packages. -->
@@ -88,7 +106,7 @@
         menuPath="#"
         icon="icons/frameweb-logo.png" />
 
-      <!-- Menu Item: Set FrameWeb Stereotype > View Package -->
+      <!-- Menu Item: Set FrameWeb Stereotype > View PackageModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -100,7 +118,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToPackageContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Persistence Package -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Persistence PackageModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-p_3097071 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -112,7 +130,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToPackageContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Entity Package -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Entity PackageModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -124,7 +142,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToPackageContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Controller Package -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Controller PackageModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-c_3096988 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -136,7 +154,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToPackageContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Application Package -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Application PackageModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -156,7 +174,7 @@
     <!-- -->
 
     <!-- *************************************************** -->
-    <!-- Context-menus (right-click) for UML Class elements. -->
+    <!-- Context-menus (right-click) for UML ClassModel elements. -->
     <!-- *************************************************** -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class">
       <!-- Applies to classes. -->
@@ -183,7 +201,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Transient Class -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Transient ClassModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -195,7 +213,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Persistent Class -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Persistent ClassModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-e_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -207,7 +225,7 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
-      <!-- Menu Item: Set FrameWeb Stereotype > Service Class -->
+      <!-- Menu Item: Set FrameWeb Stereotype > Service ClassModel -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
@@ -227,7 +245,7 @@
     <!-- -->
 
     <!-- ************************************************************* -->
-    <!-- Context-menus (right-click) for UML Class Attribute elements. -->
+    <!-- Context-menus (right-click) for UML ClassModel AttributeModel elements. -->
     <!-- ************************************************************* -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute">
       <!-- Applies to classes. -->
