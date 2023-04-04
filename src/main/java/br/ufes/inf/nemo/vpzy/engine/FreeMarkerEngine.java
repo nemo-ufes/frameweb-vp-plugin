@@ -1,5 +1,7 @@
 package br.ufes.inf.nemo.vpzy.engine;
 
+import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
+import com.vp.plugin.model.IModelElement;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -12,6 +14,7 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class FreeMarkerEngine {
 
@@ -51,7 +54,10 @@ public class FreeMarkerEngine {
         Writer out = new StringWriter();
         template.process(data_Model, out);
         String javaCode = out.toString();
-        System.out.println(javaCode);
+
+        final Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
+        selectedModelElements.forEach(System.out::println);
+
         return javaCode;
     }
 

@@ -1,15 +1,17 @@
 package br.ufes.inf.nemo.frameweb.vp.view;
 
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
+import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
-import com.vp.plugin.view.IDialog;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
+import freemarker.template.TemplateException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.logging.Level;
 
 /**
@@ -17,7 +19,7 @@ import java.util.logging.Level;
  *
  * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
-public class GenerateCodePanel extends JPanel implements ActionListener {
+public class GenerateCodePanel extends JPanel {
     /**
      * Instance of the FrameWeb plug-in running.
      */
@@ -31,11 +33,6 @@ public class GenerateCodePanel extends JPanel implements ActionListener {
     private final JTextField templateFolderField = new JTextField(), outputFolderField = new JTextField();
 
     private final GridBagConstraints c = new GridBagConstraints();
-
-    /**
-     * The dialog to which this panel serves as contents.
-     */
-    private IDialog containerDialog;
 
     public GenerateCodePanel() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException,
             IllegalAccessException {
@@ -59,12 +56,20 @@ public class GenerateCodePanel extends JPanel implements ActionListener {
 
         c.insets = new Insets(10, 5, 5, 5);
         c.gridy = 2;
-        c.gridx = 2;
+        c.gridx = 1;
         c.weightx = 1;
         c.anchor = GridBagConstraints.PAGE_END; //bottom of space
         JButton generateCodeButton = new JButton("Generate Code");
-        generateCodeButton.addActionListener(this);
+        // Call method to generate templates with input and output directories
+        generateCodeButton.addActionListener(e -> generateTemplates(templateFolderField.getText(), outputFolderField.getText()));
         add(generateCodeButton, c);
+
+        c.gridx = 2;
+        c.anchor = GridBagConstraints.PAGE_END; //bottom of space
+        JButton saveConfig = new JButton("Save config Code");
+        saveConfig.addActionListener(e -> saveConfig(templateFolderField.getText(), outputFolderField.getText()));
+        add(saveConfig, c);
+
     }
 
     private void readConfig() {
@@ -118,28 +123,34 @@ public class GenerateCodePanel extends JPanel implements ActionListener {
         add(outputButton, c);
     }
 
-    // convert Icon to Image
-    private static Image iconToImage(Icon icon) {
-        BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
-        icon.paintIcon(null, g, 0, 0);
-        g.dispose();
-        return image;
-    }
+    private void generateTemplates(final String templateDir, final String outputDir) {
 
-    public void setContainerDialog(IDialog containerDialog) {
-        this.containerDialog = containerDialog;
-    }
+        // TODO generate code from templates for the current vp project model using the templates in the input directory and write the generated code to the output directory
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // Call method to generate templates with input and output directories
 
-        saveConfig(templateFolderField.getText(), outputFolderField.getText());
+        FreeMarkerEngine engine = new FreeMarkerEngine(templateDir);
 
-        // Closes the generate code dialog.
-        containerDialog.close();
-        plugin.setGenerateCodeSettingsDialogOpen(false);
+        String sourceCode;
+        try {
+            sourceCode = engine.getCode("EntityClassTemplate.ftl");
+        } catch (IOException | TemplateException e) {
+            Logger.log(Level.SEVERE, "Error while generating code from template");
+            throw new RuntimeException(e);
+        }
+
+        // Write source code to file Test.java in the output directory
+
+        try {
+            FileWriter writer = new FileWriter(outputDir + "/Test.java");
+            writer.write(sourceCode);
+            writer.close();
+            Logger.log(Level.INFO, "Code generated successfully");
+            ViewManagerUtils.showMessage("Code generated successfully");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to file.");
+            e.printStackTrace();
+        }
+
     }
 
     private void saveConfig(final String templateDir, final String outputDir) {
@@ -150,6 +161,15 @@ public class GenerateCodePanel extends JPanel implements ActionListener {
 
         // Saves the configuration.
         configManager.save();
+    }
+
+    // convert Icon to Image
+    private static Image iconToImage(Icon icon) {
+        BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+        return image;
     }
 
 }
