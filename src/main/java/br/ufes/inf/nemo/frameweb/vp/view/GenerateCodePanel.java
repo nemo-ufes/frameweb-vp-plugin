@@ -4,13 +4,10 @@ import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
-import freemarker.template.TemplateException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 
@@ -61,7 +58,8 @@ public class GenerateCodePanel extends JPanel {
         c.anchor = GridBagConstraints.PAGE_END; //bottom of space
         JButton generateCodeButton = new JButton("Generate Code");
         // Call method to generate templates with input and output directories
-        generateCodeButton.addActionListener(e -> generateTemplates(templateFolderField.getText(), outputFolderField.getText()));
+        generateCodeButton.addActionListener(
+                e -> generateTemplates(templateFolderField.getText(), outputFolderField.getText()));
         add(generateCodeButton, c);
 
         c.gridx = 2;
@@ -127,28 +125,12 @@ public class GenerateCodePanel extends JPanel {
 
         // TODO generate code from templates for the current vp project model using the templates in the input directory and write the generated code to the output directory
 
-
         FreeMarkerEngine engine = new FreeMarkerEngine(templateDir);
 
-        String sourceCode;
         try {
-            sourceCode = engine.getCode("EntityClassTemplate.ftl");
-        } catch (IOException | TemplateException e) {
-            Logger.log(Level.SEVERE, "Error while generating code from template");
-            throw new RuntimeException(e);
-        }
-
-        // Write source code to file Test.java in the output directory
-
-        try {
-            FileWriter writer = new FileWriter(outputDir + "/Test.java");
-            writer.write(sourceCode);
-            writer.close();
-            Logger.log(Level.INFO, "Code generated successfully");
-            ViewManagerUtils.showMessage("Code generated successfully");
+            engine.getCode("EntityClassTemplate.ftl", outputDir);
         } catch (IOException e) {
-            System.out.println("An error occurred while writing to file.");
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }

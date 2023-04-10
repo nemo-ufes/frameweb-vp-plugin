@@ -1,30 +1,29 @@
 package br.ufes.inf.nemo.vpzy.engine;
 
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
+import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IModelElement;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class FreeMarkerEngine {
-
-
     private final Configuration cfg;
 
     public FreeMarkerEngine(final String templatePath) {
         cfg = new Configuration(Configuration.VERSION_2_3_31);
 
-        // Set the template loader to load templates from the "templates" folder
         // Set the template loader to load templates from the "templates" folder
         File templateDir = new File(templatePath);
         try {
@@ -34,32 +33,41 @@ public class FreeMarkerEngine {
         }
     }
 
-    public String getCode(final String templateName) throws IOException, TemplateException {
-        Map<String, Object> data_Model = new HashMap<>();
-        data_Model.put("package", new PackageModel("org.example"));
-        data_Model.put("class", new ClassModel("Test"));
+    public void getCode(final String templateName, final String outputDirectory) throws IOException {
 
-        data_Model.put("attributes", Arrays.asList(
-                new AttributeModel("name", new TypeModel("String"), new Visibility("private"), false, 0, null),
-                new AttributeModel("age", new TypeModel("Integer"), new Visibility("private"), false, 0, null),
-                new AttributeModel("birthDate", new TypeModel("Date"), new Visibility("private"), false, 0, "DATE"),
-                new AttributeModel("birthTime", new TypeModel("Date"), new Visibility("private"), false, 0, "TIME"),
-                new AttributeModel("birthDateTime", new TypeModel("Date"), new Visibility("private"), false, 0, "TIMESTAMP"),
-                new AttributeModel("email", new TypeModel("String"), new Visibility("private"), false, 255, null),
-                new AttributeModel("address", new TypeModel("String"), new Visibility("private"), true, 255, null)
-        ));
+        final IModelElement selectedModelElements = ModelElementUtils.getSelectedModelElements()
+                .stream()
+                .findFirst()
+                .orElseThrow();
 
+        Map<String, Object> dataModel = new HashMap<>();
+
+        final IClass classModel = (IClass) selectedModelElements;
+
+        dataModel.put("package", new PackageModel("org.example"));
+        dataModel.put("class", new ClassModel(classModel));
+
+        List<AttributeModel> attributeModels = Arrays.stream(classModel.toAttributeArray())
+                .map(AttributeModel::new)
+                .collect(Collectors.toList());
+
+        dataModel.put("attributes", attributeModels);
 
         Template template = this.cfg.getTemplate(templateName);
-        Writer out = new StringWriter();
-        template.process(data_Model, out);
-        String javaCode = out.toString();
 
-        final Set<IModelElement> selectedModelElements = ModelElementUtils.getSelectedModelElements();
-        selectedModelElements.forEach(System.out::println);
+        try {
+            // Write source code to file Test.java in the output directory.
 
-        return javaCode;
+            FileWriter writer = new FileWriter(outputDirectory + "/Test.java");
+            template.process(dataModel, writer);
+            writer.flush();
+            writer.close();
+            Logger.log(Level.INFO, "Code generated successfully");
+            //ViewManagerUtils.showMessage("Code generated successfully");
+        } catch (IOException | TemplateException e) {
+            System.out.println("An error occurred while writing to file.");
+            e.printStackTrace();
+        }
     }
-
 
 }
