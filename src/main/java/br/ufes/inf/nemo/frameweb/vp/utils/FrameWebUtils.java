@@ -3,13 +3,17 @@ package br.ufes.inf.nemo.frameweb.vp.utils;
 import java.util.Iterator;
 import java.util.logging.Level;
 import com.vp.plugin.model.IAssociationEnd;
+import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IModelElement;
+import com.vp.plugin.model.IPackage;
+import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 
 /**
  * Utility class that provides helper methods regarding FrameWeb model elements.
@@ -130,5 +134,30 @@ public final class FrameWebUtils {
 
     // Finally, sets the role name to the association end.
     associationEnd.setName(roleName);
+  }
+
+  /*
+   * Avaliar:
+   * - Separar listagem de cada elemento em método utilitário separado;
+   * - Separar aquilo que for genérico (listar todos os pacote) no VPZY.
+   */
+  public static void testes() {
+    IProject project = ProjectManagerUtils.getCurrentProject();
+    Iterator iter = project.allLevelModelElementIterator(IModelElementFactory.MODEL_TYPE_PACKAGE);
+    while (iter.hasNext()) {
+      IPackage pack = (IPackage) iter.next();
+      Logger.log(Level.SEVERE,
+          "####### " + pack.getName() + " (" + FrameWebUtils.getFrameWebPackage(pack) + ")");
+
+      Iterator childIter = pack.childIterator(IModelElementFactory.MODEL_TYPE_CLASS);
+      while (childIter.hasNext()) {
+        IClass clazz = (IClass) childIter.next();
+        Logger.log(Level.SEVERE, "################# " + clazz.getName() + " ("
+            + FrameWebUtils.getFrameWebClass(clazz) + ")");
+      }
+
+      // Gerar código...
+
+    }
   }
 }
