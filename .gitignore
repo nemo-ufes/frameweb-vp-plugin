@@ -67,3 +67,8 @@ buildNumber.properties
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+
+# ignore idea project files
+
+.idea/

@@ -1,6 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp.view;
 
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
+import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
@@ -59,7 +60,7 @@ public class GenerateCodePanel extends JPanel {
         JButton generateCodeButton = new JButton("Generate Code");
         // Call method to generate templates with input and output directories
         generateCodeButton.addActionListener(
-                e -> generateTemplates(templateFolderField.getText(), outputFolderField.getText()));
+                e -> FrameWebUtils.generateCode(templateFolderField.getText(), outputFolderField.getText()));
         add(generateCodeButton, c);
 
         c.gridx = 2;
@@ -128,7 +129,7 @@ public class GenerateCodePanel extends JPanel {
         FreeMarkerEngine engine = new FreeMarkerEngine(templateDir);
 
         try {
-            engine.getCode("EntityClassTemplate.ftl", outputDir);
+            engine.generateCode("EntityClassTemplate.ftl", outputDir);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
