@@ -28,7 +28,7 @@ If the installation was successfull, you can learn how to use in [FrameWeb Repos
 - [x] Release a stable FrameWeb Plugin for Visual Paradigm
 - [ ] Automatically install FrameWeb Plugin dependencies with Shell Script.
 
-### Fixing Issues
+### Contributing with us fixing Issues
 
 1. If you're a student at NEMO/UFES working at this project, ask the repository administrators to give you developer access;
 
