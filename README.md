@@ -9,6 +9,7 @@ This plug-in is under development, once it becomes ready for production use (or 
 
 ### Quickstart
 
+
 **Ubuntu/Mac**, open the terminal and type:
 ```
 chmod +x install.sh
@@ -18,15 +19,16 @@ chmod +x install.sh
 ```
 ./install.sh
 ```
+
 ### Testing
 Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
 If the installation was successfull, you can learn how to use in [FrameWeb Repository](https://github.com/nemo-ufes/FrameWeb).
 
-### Contributing and Ways to Improve
+### Releases
 - [x] Release a stable FrameWeb Plugin for Visual Paradigm
 - [ ] Automatically install FrameWeb Plugin dependencies with Shell Script.
 
-### How to contribute
+### Fixing Issues
 
 1. If you're a student at NEMO/UFES working at this project, ask the repository administrators to give you developer access;
 
