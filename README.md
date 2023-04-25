@@ -8,49 +8,25 @@ This plug-in is under development, once it becomes ready for production use (or 
 
 At this point, the project may require some knowledge of software development in Java with Maven to be used. 
 
+### Requirements
+1. JDK (11+): https://www.oracle.com/br/java/technologies/downloads/
+2. Maven: https://maven.apache.org/download.cgi
+3. Visual Paradigm: https://www.visual-paradigm.com/download/
 
-### How to install and test the plug-in
+### Quickstart
 
-1. Have Maven and the Java (11+) Development Kit installed in your computer;
-
-2. Install [Visual Paradigm](https://www.visual-paradigm.com/download/) (the [Community Edition](https://www.visual-paradigm.com/download/community.jsp) is free for non-commercial use);
-
-3. Clone this repository;
-
-4. Open `pom.xml` and set the value of the variables listed below:
-
-    4.1. Set the path to the folder in which the Visual Paradigm application is located, e.g.:
-
-    ```xml
-    <visualparadigm.app.dir>
-       /Applications/Visual Paradigm.app/Contents/Resources/app/
-    </visualparadigm.app.dir>
-    ```
-
-    This path is typically:
-
-    * On Linux: ???
-    * On MacOS: `/Applications/Visual Paradigm.app/Contents/Resources/app/`
-    * On Windows: `C:\Program Files\Visual Paradigm CE 17.0`
-
-   4.2. Set the path to Visual Paradigm's plugin folder, e.g.:
-
-   ```xml
-    <visualparadigm.plugin.dir>
-        /Users/vitor/Library/Application Support/VisualParadigm/plugins
-    </visualparadigm.plugin.dir>
-    ```
-
-    This path is typically:
-
-    * On Linux: `/home/<YOUR_USER_NAME>/.config/VisualParadigm/plugins/`
-    * On MacOS: `/Users/<YOUR_USER_NAME>/Library/Application Support/VisualParadigm/plugins/`
-    * On Windows: `C:\Users\<YOUR_USER_NAME>\AppData\Roaming\VisualParadigm\plugins\`
-
-5. With Visual Paradigm closed, run `mvn install`;
-
-6. Open Visual Paradigm. Check if there is a _Plugin_ tab in the toolbar.
-
+**Ubuntu/Mac**, open the terminal and type:
+```
+chmod +x install.sh
+./install.sh
+```
+**Windows**, double click on **install.sh** :
+```
+./install.sh
+```
+### Testing
+Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
+If the installation was successfull, you can learn how to use in [FrameWeb Repository](https://github.com/nemo-ufes/FrameWeb).
 
 ### How to contribute
 

@@ -15,10 +15,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
     <visualparadigm.app.dir>
-      /Applications/Visual Paradigm.app/Contents/Resources/app/
+      <!-- APP_PATH -->
     </visualparadigm.app.dir>
     <visualparadigm.plugin.dir>
-      /Users/vitor/Library/Application Support/VisualParadigm/plugins
+      <!-- PLUGIN_PATH -->
     </visualparadigm.plugin.dir>
   </properties>
 
