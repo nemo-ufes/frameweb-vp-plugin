@@ -2,12 +2,6 @@
 
 This plug-in is under development, once it becomes ready for production use (or almost) a better README file should be provided.
 
-
-
-## Instructions for developers
-
-At this point, the project may require some knowledge of software development in Java with Maven to be used. 
-
 ### Requirements
 1. JDK (11+): https://www.oracle.com/br/java/technologies/downloads/
 2. Maven: https://maven.apache.org/download.cgi
@@ -27,6 +21,10 @@ chmod +x install.sh
 ### Testing
 Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
 If the installation was successfull, you can learn how to use in [FrameWeb Repository](https://github.com/nemo-ufes/FrameWeb).
+
+### Contributing and Ways to Improve
+- [x] Release a stable FrameWeb Plugin for Visual Paradigm
+- [ ] Automatically install FrameWeb Plugin dependencies with Shell Script.
 
 ### How to contribute
 
