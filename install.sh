@@ -1,11 +1,9 @@
 #!/bin/bash 
 
 function defineVPPath(){
-    #Windows path
+    #App Default Path
     local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
-    #MacOS path
     local VISUAL_PARADIGM_APP_DIR_MAC= "/Applications/Visual Paradigm.app"
-    #Linux path
     local VISUAL_PARADIGM_APP_DIR_DEBIAN= ""
     if [[ "$OSTYPE" == "darwin"* ]]; then
         return $VISUAL_PARADIGM_APP_DIR_MAC
@@ -13,14 +11,15 @@ function defineVPPath(){
         return $VISUAL_PARADIGM_APP_DIR_LINUX
     elif [[ "$OSTYPE" == "cygwin" ]]; then
         return $VISUAL_PARADIGM_APP_DIR_WINDOWS
+    else
+        return 0 # Operating System not supported
+    fi
 }
 
 function definePluginPath(){
-    #Windows path
+    #Plugin Default Path
     local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS= "C:\\Users\\%USERNAME%\\AppData\\Roaming\\VisualParadigm\\plugins\\"
-    #MacOS path
     local VISUAL_PARADIGM_PLUGIN_DIR_MAC= "/Users/$USER/Library/Application Support/VisualParadigm/plugins/"
-    #Linux path
     local VISUAL_PARADIGM_PLUGIN_DIR_DEBIAN= "/home/$USER/.config/VisualParadigm/plugins/"
     if [[ "$OSTYPE" == "darwin"* ]]; then
         return $VISUAL_PARADIGM_PLUGIN_DIR_MAC
@@ -28,8 +27,10 @@ function definePluginPath(){
         return $VISUAL_PARADIGM_PLUGIN_DIR_LINUX
     elif [[ "$OSTYPE" == "cygwin" ]]; then
         return $VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS
+    else
+        return 0 # Operating System not supported
+    fi
 }
-
 
 # If the install fails, then print an error and exit.
 function install_fail() {
@@ -47,7 +48,6 @@ function Help(){
 function install_maven(){
     if command -v mvn &> /dev/null; then
         echo "Maven already installed."
-        exit 1
     else
         # Instalação de dependências
         if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -59,6 +59,7 @@ function install_maven(){
         elif [[ "$OSTYPE" == "cygwin" ]]; then
             # Instalação no Windows usando Cygwin
             echo "Not supported yet"
+            exit 1
         else
             echo "Sistema operacional não suportado"
             exit 1
@@ -69,7 +70,6 @@ function install_maven(){
 function install_jdk(){
     if command -v javac &> /dev/null; then
         echo "JDK already installed."
-        exit 1
     else
         # Instalação de dependências
         if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -77,28 +77,15 @@ function install_jdk(){
             brew install java
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
             # Instalação no Linux
-            sudo apt-get install maven
+            sudo apt-get install default-jdk
         elif [[ "$OSTYPE" == "cygwin" ]]; then
             # Instalação no Windows
             echo "Not supported yet"
+            exit 1
         else
             echo "Sistema operacional não suportado"
             exit 1
         fi
-    fi
-}
-
-function install_jdk(){
-    echo "Instalando JDK ..."
-    if command -v javac &> /dev/null; then
-        echo "JDK already installed."
-    else
-        brew install openjdk
-        if ! command -v javac &> /dev/null; then
-            echo "O JDK não foi instalado corretamente. Verifique se há erros acima."
-            exit 1
-        fi
-        echo "O JDK foi instalado com sucesso."
     fi
 }
 
@@ -118,6 +105,7 @@ function install_frameweb_vp_plugin(){
         install_brew
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Instalação no Linux
+        echo ""
     fi
 }
 
@@ -150,6 +138,7 @@ function install_shell_deps(){
         install_brew
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Instalação no Linux
+        echo "No shell required dependencies on linux"
     fi
 } 
 
@@ -159,13 +148,13 @@ function install_main(){
 
     echo "=== Frameweb-vp-plugin Installer ==="
     echo "Installing shell dependencies ..."
-    install_shell_deps
+    install_shell_deps || install_fail
     echo "Installing plugin dependencies ..."
-    install_jdk
-    install_maven
-    install_visual_paradigm
+    install_jdk || install_fail
+    install_maven || install_fail
+    #install_visual_paradigm || install_fail
     echo "Installing frameweb-vp-plugin..."
-    install_frameweb_vp_plugin 
+    #install_frameweb_vp_plugin || install_fail
 }
 
 # Run the main function
