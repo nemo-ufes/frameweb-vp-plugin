@@ -1,32 +1,32 @@
-#!/bin/bash 
+#!/bin/bash
 
-function defineVPPath(){
+function get_VP_App_Path(){
     #App Default Path
     local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
-    local VISUAL_PARADIGM_APP_DIR_MAC= "/Applications/Visual Paradigm.app"
-    local VISUAL_PARADIGM_APP_DIR_DEBIAN= ""
+    local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app"
+    local VISUAL_PARADIGM_APP_DIR_LINUX=""
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        return $VISUAL_PARADIGM_APP_DIR_MAC
+        echo $VISUAL_PARADIGM_APP_DIR_MAC
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        return $VISUAL_PARADIGM_APP_DIR_LINUX
+        echo $VISUAL_PARADIGM_APP_DIR_LINUX
     elif [[ "$OSTYPE" == "cygwin" ]]; then
-        return $VISUAL_PARADIGM_APP_DIR_WINDOWS
+        echo $VISUAL_PARADIGM_APP_DIR_WINDOWS
     else
         return 0 # Operating System not supported
     fi
 }
 
-function definePluginPath(){
+function get_VP_Plugin_Path(){
     #Plugin Default Path
-    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS= "C:\\Users\\%USERNAME%\\AppData\\Roaming\\VisualParadigm\\plugins\\"
-    local VISUAL_PARADIGM_PLUGIN_DIR_MAC= "/Users/$USER/Library/Application Support/VisualParadigm/plugins/"
-    local VISUAL_PARADIGM_PLUGIN_DIR_DEBIAN= "/home/$USER/.config/VisualParadigm/plugins/"
+    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\%USERNAME%\\AppData\\Roaming\\VisualParadigm\\plugins\\"
+    local VISUAL_PARADIGM_PLUGIN_DIR_MAC="/Users/$USER/Library/Application Support/VisualParadigm/plugins/"
+    local VISUAL_PARADIGM_PLUGIN_DIR_LINUX="/home/$USER/.config/VisualParadigm/plugins/"
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        return $VISUAL_PARADIGM_PLUGIN_DIR_MAC
+        echo $VISUAL_PARADIGM_PLUGIN_DIR_MAC
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        return $VISUAL_PARADIGM_PLUGIN_DIR_LINUX
+        echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX
     elif [[ "$OSTYPE" == "cygwin" ]]; then
-        return $VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS
+        echo $VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS
     else
         return 0 # Operating System not supported
     fi
@@ -145,7 +145,9 @@ function install_shell_deps(){
 # Main function
 function install_main(){ 
     #Defining the path
-
+    echo "=== DEBUG MODE ==="
+    get_VP_App_Path
+    get_VP_Plugin_Path
     echo "=== Frameweb-vp-plugin Installer ==="
     echo "Installing shell dependencies ..."
     install_shell_deps || install_fail
@@ -153,7 +155,7 @@ function install_main(){
     install_jdk || install_fail
     install_maven || install_fail
     #install_visual_paradigm || install_fail
-    echo "Installing frameweb-vp-plugin..."
+    #echo "Installing frameweb-vp-plugin..."
     #install_frameweb_vp_plugin || install_fail
 }
 

@@ -15,10 +15,10 @@ This plug-in is under development, once it becomes ready for production use (or 
 chmod +x install.sh
 ./install.sh
 ```
-**Windows**, double click on **install.sh** :
-```
-./install.sh
-```
+**Windows**:
+1. Right Click on `install.sh`
+2. Click on `properties`
+3. Allow your execution and save
 
 ### Testing
 Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
