@@ -1,35 +1,113 @@
 #!/bin/bash
 
+os=$(uname -s) # Gather OS Name
+
+function readPath(){ #UNDER DEVELOPMENT
+    while true; do
+        if [[ -d "$1" ]]; then
+            break
+        else
+            printf "<FOLDER NOT FOUND> Type a valid path!\n"
+            read -p "The path to your Visual Paradigm $2: " VISUAL_PARADIGM_APP_DIR_LINUX
+        fi
+    done
+    echo $1
+}
+
 function get_VP_App_Path(){
     #App Default Path
-    local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
+    local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\Program Files\Visual Paradigm CE 17.0"
     local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app"
-    local VISUAL_PARADIGM_APP_DIR_LINUX=""
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo $VISUAL_PARADIGM_APP_DIR_MAC
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        echo $VISUAL_PARADIGM_APP_DIR_LINUX
-    elif [[ "$OSTYPE" == "cygwin" ]]; then
-        echo $VISUAL_PARADIGM_APP_DIR_WINDOWS
-    else
-        return 0 # Operating System not supported
-    fi
+    local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual Paradigm CE 17.0"
+    case "$os" in
+        Linux*)  
+            while true; do
+                if [[ -d $VISUAL_PARADIGM_APP_DIR_LINUX ]]; then
+                    break
+                else
+                    printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                    read -p "The path to your Visual Paradigm file is: " VISUAL_PARADIGM_APP_DIR_LINUX
+                fi
+            done
+            echo $VISUAL_PARADIGM_APP_DIR_LINUX
+        ;;
+        Darwin*)
+            while true; do
+                if [[ -d $VISUAL_PARADIGM_APP_DIR_MAC ]]; then
+                    break
+                else
+                    printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                    read -p "The path to your Visual Paradigm file is: " VISUAL_PARADIGM_APP_DIR_MAC
+                fi
+            done
+            echo $VISUAL_PARADIGM_APP_DIR_MAC
+        ;;
+        CYGWIN*)
+            while true; do
+                if [[ -d $VISUAL_PARADIGM_APP_DIR_WINDOWS ]]; then
+                    break
+                else
+                    printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                    read -p "The path to your Visual Paradigm file is: " VISUAL_PARADIGM_APP_DIR_WINDOWS
+                fi
+            done
+            echo $VISUAL_PARADIGM_APP_DIR_MAC
+        ;;
+        *)
+            echo "Operating System not Supported"
+            exit 1
+    esac
 }
 
 function get_VP_Plugin_Path(){
     #Plugin Default Path
-    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\%USERNAME%\\AppData\\Roaming\\VisualParadigm\\plugins\\"
-    local VISUAL_PARADIGM_PLUGIN_DIR_MAC="/Users/$USER/Library/Application Support/VisualParadigm/plugins/"
-    local VISUAL_PARADIGM_PLUGIN_DIR_LINUX="/home/$USER/.config/VisualParadigm/plugins/"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo $VISUAL_PARADIGM_PLUGIN_DIR_MAC
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX
-    elif [[ "$OSTYPE" == "cygwin" ]]; then
-        echo $VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS
-    else
-        return 0 # Operating System not supported
-    fi
+    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\%USERNAME%\\AppData\\Roaming\\VisualParadigm\\plugins\\" #Windows
+    local VISUAL_PARADIGM_PLUGIN_DIR_MAC="/Users/$USER/Library/Application Support/VisualParadigm/plugins/" #UNIX
+    local VISUAL_PARADIGM_PLUGIN_DIR_LINUX="/home/$USER/.config/VisualParadigm/plugins/" #UNIX
+    case "$os" in
+        Linux*)  
+            while true; do
+                #echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX"
+                read -p "Confirm (y/n)?" choice
+                case "$choice" in
+                    y|Y ) break;;
+                    n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_LINUX ;;
+                    * ) printf "Invalid input\n";;
+                esac
+            done
+            echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX # Return Value
+        ;;
+        Darwin*)
+            while true; do
+                echo "Visual Paradigm Plugin Path: $(VISUAL_PARADIGM_PLUGIN_DIR_LINUX)" 
+                read -p "Confirm (y/n)?" choice
+                case "$choice" in
+                    y|Y ) break;;
+                    n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_LINUX ;;
+                    * ) printf "Invalid input\n";;
+                esac
+            done
+            echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX # Return Value
+        ;;
+        CYGWIN*)
+            while true; do
+                echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX" 
+                read -p "Confirm (y/n)?" $answer
+                if [ "$answer" == "y" ]; then
+                    break
+                else
+                    if [[ ! -d $VISUAL_PARADIGM_PLUGIN_DIR_LINUX ]]; then
+                        printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                        read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_LINUX
+                    fi
+                fi
+            done
+            echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX # Return Value
+        ;;
+        *)
+            echo "Operating System not Supported"
+            exit 1
+    esac
 }
 
 # If the install fails, then print an error and exit.
@@ -144,10 +222,6 @@ function install_shell_deps(){
 
 # Main function
 function install_main(){ 
-    #Defining the path
-    echo "=== DEBUG MODE ==="
-    get_VP_App_Path
-    get_VP_Plugin_Path
     echo "=== Frameweb-vp-plugin Installer ==="
     echo "Installing shell dependencies ..."
     install_shell_deps || install_fail
@@ -157,6 +231,12 @@ function install_main(){
     #install_visual_paradigm || install_fail
     #echo "Installing frameweb-vp-plugin..."
     #install_frameweb_vp_plugin || install_fail
+
+
+    app_dir=$(get_VP_App_Path)
+    plugin_dir=$(get_VP_Plugin_Path)
+    echo "$app_dir"
+    echo "$plugin_dir"
 }
 
 # Run the main function
