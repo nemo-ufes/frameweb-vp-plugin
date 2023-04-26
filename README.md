@@ -12,13 +12,9 @@ This plug-in is under development, once it becomes ready for production use (or 
 
 **Ubuntu/Mac**, open the terminal and type:
 ```
-chmod +x install.sh
-./install.sh
+chmod +x install.sh && ./install.sh
 ```
-**Windows**:
-1. Right Click on `install.sh`
-2. Click on `properties`
-3. Allow your execution and save
+**Windows**: Under development
 
 ### Testing
 Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
