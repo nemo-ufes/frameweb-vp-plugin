@@ -1,6 +1,7 @@
 #!/bin/bash
 
-os=$(uname -s) # Gather OS Name
+OS=$(uname -s) # Gather OS Name
+USER=$(whoami) # Gather USER Name
 
 function readPath(){ #UNDER DEVELOPMENT
     while true; do
@@ -19,7 +20,7 @@ function get_VP_App_Path(){
     local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
     local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app/Contents/Resources/app/"
     local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual_Paradigm_17.0/"
-    case "$os" in
+    case "$OS" in
         Linux*)  
             while true; do
                 echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_LINUX"
@@ -59,7 +60,7 @@ function get_VP_App_Path(){
         MINGW64*)
             while true; do
                 echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_WINDOWS"
-                read -p "Confirm (y/n)?" choice
+                read -r -p "Confirm (y/n)?" choice
                 case "$choice" in
                     y|Y ) 
                         if [[ -d $VISUAL_PARADIGM_APP_DIR_WINDOWS ]]; then
@@ -68,7 +69,7 @@ function get_VP_App_Path(){
                             printf "<FOLDER NOT FOUND> Type a valid path!\n"
                         fi
                     ;;
-                    n|N ) read -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_WINDOWS ;;
+                    n|N ) read -r -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_WINDOWS ;;
                     * ) printf "Invalid input\n";;
                 esac
             done
@@ -82,10 +83,10 @@ function get_VP_App_Path(){
 
 function get_VP_Plugin_Path(){
     #Plugin Default Path
-    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\%USERNAME%\\AppData\\Roaming\\VisualParadigm\\plugins\\" #Windows
+    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\$USER\\AppData\\Roaming\\VisualParadigm\\plugins\\" #Windows
     local VISUAL_PARADIGM_PLUGIN_DIR_MAC="/Users/$USER/Library/Application Support/VisualParadigm/plugins/" #UNIX
     local VISUAL_PARADIGM_PLUGIN_DIR_LINUX="/home/$USER/.config/VisualParadigm/plugins/" #UNIX
-    case "$os" in
+    case "$OS" in
         Linux*)  
             while true; do
                 echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX"
@@ -116,7 +117,7 @@ function get_VP_Plugin_Path(){
                 read -p "Confirm (y/n)?" choice
                 case "$choice" in
                     y|Y ) break;;
-                    n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS ;;
+                    n|N ) read -r -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS ;;
                     * ) printf "Invalid input\n";;
                 esac
             done
@@ -145,21 +146,21 @@ function install_maven(){
     if command -v mvn &> /dev/null; then
         echo "Maven already installed."
     else
-        # Instalação de dependências
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            # Instalação no Mac
-            brew install maven
-        elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            # Instalação no Linux
-            sudo apt-get install maven
-        elif [[ "$OSTYPE" == "MINGW64" ]]; then
-            # Instalação no Windows
-            echo "Not supported yet"
+        case "$OS" in
+            Linux*)
+                sudo apt-get install maven
+            ;;
+            Darwin*)
+                # Instalação no Mac
+                brew install maven
+            ;;
+            MINGW64*)
+                echo "Installing Maven in Windows ..."
+            ;;
+        *)
+            echo "Operating System not Supported"
             exit 1
-        else
-            echo "Sistema operacional não suportado"
-            exit 1
-        fi
+        esac
     fi
 }
 
@@ -167,21 +168,21 @@ function install_jdk(){
     if command -v javac &> /dev/null; then
         echo "JDK already installed."
     else
-        # Instalação de dependências
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            # Instalação no Mac
-            brew install java
-        elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            # Instalação no Linux
-            sudo apt-get install default-jdk
-        elif [[ "$OSTYPE" == "MINGW64" ]]; then
-            # Instalação no Windows
-            echo "Not supported yet"
+        case "$OS" in
+            Linux*)
+                sudo apt-get install default-jdk 
+            ;;
+            Darwin*)
+                # Instalação no Mac
+                brew install java
+            ;;
+            MINGW64*)
+                echo "Installing Maven in Windows ..."
+            ;;
+        *)
+            echo "Operating System not Supported"
             exit 1
-        else
-            echo "Sistema operacional não suportado"
-            exit 1
-        fi
+        esac
     fi
 }
 
@@ -228,7 +229,7 @@ function install_brew(){
     fi
 }
 
-# Function to install for debian based distros (and ubuntu)
+# Function to install for debian based distrOS (and ubuntu)
 function install_shell_deps(){ 
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # Instalação no Mac
