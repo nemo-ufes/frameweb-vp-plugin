@@ -18,7 +18,7 @@ function get_VP_App_Path(){
     #App Default Path
     local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
     local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app/Contents/Resources/app/"
-    local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual_Paradigm_CE_17.0/"
+    local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual_Paradigm_17.0/"
     case "$os" in
         Linux*)  
             while true; do
@@ -187,22 +187,23 @@ function install_jdk(){
 }
 
 function install_frameweb_vp_plugin(){
-    # Instala o plugin com o maven
-    mvn install
-    # Verificar se o plugin foi instalado com sucesso
-    if [ -d "/Users/$USER/Library/Application Support/VisualParadigm/plugins" ]; then
-        echo "O plugin foi instalado com sucesso."
+    # Name of frameweb plugin
+    local frameweb_plugin_path="frameweb-vp-plugin-0.1/" #Change this line
+    # Get the paths to write on pom.xml
+    get_VP_App_Path
+    get_VP_Plugin_Path
+    if [ -d  $plugin_dir$frameweb_plugin_path ]; then
+        echo "<WARNING> FRAMEWEB PLUGIN INSTALLED!"
+        install_fail
     else
-        echo "A instalação do plugin falhou."
-        exit 1
-    fi
 
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # Instalação no Mac
-        install_brew
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        # Instalação no Linux
-        echo ""
+        # Config pom.xml with gathered paths
+        sed -i "s|<!-- APP_PATH -->|$app_dir|g" pom.xml
+        sed -i "s|<!-- PLUGIN_PATH -->|$plugin_dir|g" pom.xml
+        #sed -i "s|<visualparadigm.app.dir>.*</visualparadigm.app.dir>|<visualparadigm.app.dir>$app_dir</visualparadigm.app.dir>|g" pom.xml
+
+        # Install plugin with maven
+        mvn install
     fi
 }
 
@@ -248,11 +249,8 @@ function install_main(){
     install_jdk || install_fail
     install_maven || install_fail
     #install_visual_paradigm || install_fail
-    #echo "Installing frameweb-vp-plugin..."
-    #install_frameweb_vp_plugin || install_fail
-
-    get_VP_App_Path
-    get_VP_Plugin_Path
+    echo "Installing frameweb-vp-plugin..."
+    install_frameweb_vp_plugin || install_fail
     echo "Your app dir: $app_dir"
     echo "Your plugin dir: $plugin_dir"
 }
