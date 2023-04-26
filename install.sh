@@ -16,42 +16,61 @@ function readPath(){ #UNDER DEVELOPMENT
 
 function get_VP_App_Path(){
     #App Default Path
-    local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\Program Files\Visual Paradigm CE 17.0"
-    local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app"
-    local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual Paradigm CE 17.0"
+    local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
+    local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app/Contents/Resources/app/"
+    local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual_Paradigm_CE_17.0/"
     case "$os" in
         Linux*)  
             while true; do
-                if [[ -d $VISUAL_PARADIGM_APP_DIR_LINUX ]]; then
-                    break
-                else
-                    printf "<FOLDER NOT FOUND> Type a valid path!\n"
-                    read -p "The path to your Visual Paradigm file is: " VISUAL_PARADIGM_APP_DIR_LINUX
-                fi
+                echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_LINUX"
+                read -p "Confirm (y/n)?" choice
+                case "$choice" in
+                    y|Y ) 
+                        if [[ -d $VISUAL_PARADIGM_APP_DIR_LINUX ]]; then
+                            break
+                        else
+                            printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                        fi
+                    ;;
+                    n|N ) read -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_LINUX ;;
+                    * ) printf "Invalid input\n";;
+                esac
             done
-            echo $VISUAL_PARADIGM_APP_DIR_LINUX
+            app_dir=$VISUAL_PARADIGM_APP_DIR_LINUX
         ;;
         Darwin*)
             while true; do
+                echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_MAC"
+                read -p "Confirm (y/n)?" choice
+                case "$choice" in
+                    y|Y ) break;;
+                    n|N ) read -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_MAC ;;
+                    * ) printf "Invalid input\n";;
+                esac
                 if [[ -d $VISUAL_PARADIGM_APP_DIR_MAC ]]; then
                     break
                 else
                     printf "<FOLDER NOT FOUND> Type a valid path!\n"
-                    read -p "The path to your Visual Paradigm file is: " VISUAL_PARADIGM_APP_DIR_MAC
                 fi
             done
             echo $VISUAL_PARADIGM_APP_DIR_MAC
         ;;
         CYGWIN*)
             while true; do
+                echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_WINDOWS"
+                read -p "Confirm (y/n)?" choice
+                case "$choice" in
+                    y|Y ) break;;
+                    n|N ) read -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_WINDOWS ;;
+                    * ) printf "Invalid input\n";;
+                esac
                 if [[ -d $VISUAL_PARADIGM_APP_DIR_WINDOWS ]]; then
                     break
                 else
                     printf "<FOLDER NOT FOUND> Type a valid path!\n"
-                    read -p "The path to your Visual Paradigm file is: " VISUAL_PARADIGM_APP_DIR_WINDOWS
                 fi
             done
-            echo $VISUAL_PARADIGM_APP_DIR_MAC
+            echo $VISUAL_PARADIGM_APP_DIR_WINDOWS
         ;;
         *)
             echo "Operating System not Supported"
@@ -67,7 +86,7 @@ function get_VP_Plugin_Path(){
     case "$os" in
         Linux*)  
             while true; do
-                #echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX"
+                echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX"
                 read -p "Confirm (y/n)?" choice
                 case "$choice" in
                     y|Y ) break;;
@@ -75,7 +94,7 @@ function get_VP_Plugin_Path(){
                     * ) printf "Invalid input\n";;
                 esac
             done
-            echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX # Return Value
+            plugin_dir=$VISUAL_PARADIGM_PLUGIN_DIR_LINUX
         ;;
         Darwin*)
             while true; do
@@ -232,11 +251,10 @@ function install_main(){
     #echo "Installing frameweb-vp-plugin..."
     #install_frameweb_vp_plugin || install_fail
 
-
-    app_dir=$(get_VP_App_Path)
-    plugin_dir=$(get_VP_Plugin_Path)
-    echo "$app_dir"
-    echo "$plugin_dir"
+    get_VP_App_Path
+    get_VP_Plugin_Path
+    echo "Your app dir: $app_dir"
+    echo "Your plugin dir: $plugin_dir"
 }
 
 # Run the main function
