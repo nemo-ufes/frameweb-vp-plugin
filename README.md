@@ -2,7 +2,7 @@
 
 This plug-in is under development, once it becomes ready for production use (or almost) a better README file should be provided.
 
-### Requirements:
+## Requirements
 1. JDK (11+): https://www.oracle.com/br/java/technologies/downloads/
 2. Maven: https://maven.apache.org/download.cgi
 3. Visual Paradigm: https://www.visual-paradigm.com/download/
@@ -10,27 +10,29 @@ This plug-in is under development, once it becomes ready for production use (or 
 **Only for Windows Users**:
 - Git Bash: https://git-scm.com/downloads
 
-### Quickstart:
+## Installing
 
-
-**Ubuntu/Mac**, open the `Terminal` and type:
+- **Ubuntu/Mac**, open the `Terminal` and type:
 ```
 chmod +x install.sh && ./install.sh
 ```
-**Windows**, open the `Git Bash` and type:
+- **Windows**, open the `Git Bash` and type:
 ```
 chmod +x install.sh && ./install.sh
 ```
 
-### Testing
-Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
+## Quickstart
+Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar. <br>
 If the installation was successfull, you can learn how to use in [FrameWeb Repository](https://github.com/nemo-ufes/FrameWeb).
 
-### Releases
+## Releases
 - [x] Release a stable FrameWeb Plugin for Visual Paradigm
-- [ ] Automatically install FrameWeb Plugin dependencies with Shell Script.
+- [x] Automatically install FrameWeb Plugin and your dependencies with Shell Script.
+- [ ] Allow the designer to add new templates for code generation
+- [ ] Allow the designer to choose the templates to use in code generation
+- [ ] Generate code for the Entity Model
 
-### Contributing with us fixing Issues
+## Contributing with us fixing Issues
 
 1. If you're a student at NEMO/UFES working at this project, ask the repository administrators to give you developer access;
 
