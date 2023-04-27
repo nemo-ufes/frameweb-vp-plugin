@@ -11,7 +11,6 @@ This plug-in is under development, once it becomes ready for production use (or 
 - Git Bash: https://git-scm.com/downloads
 
 ## Installing
-
 - **Ubuntu/Mac**, open the `Terminal` and type:
 ```
 chmod +x install.sh && ./install.sh
@@ -19,6 +18,10 @@ chmod +x install.sh && ./install.sh
 - **Windows**, open the `Git Bash` and type:
 ```
 chmod +x install.sh && ./install.sh
+```
+- **EXPERIMENTAL**, one installation with one command:
+```
+bash <(curl -sL https://raw.githubusercontent.com/propilideno/frameweb-vp-plugin/main/install.sh)
 ```
 
 ## Quickstart
