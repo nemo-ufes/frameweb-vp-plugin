@@ -131,6 +131,23 @@ function get_VP_Plugin_Path(){
     esac
 }
 
+function download_plugin(){
+    local repo_name="frameweb-vp-plugin"
+    local repo_url="https://github.com/propilideno/frameweb-vp-plugin/archive/refs/heads/main.zip"
+    #repo_name_2="frameweb-vp-plugin-main"
+    echo "Downloading FrameWeb VP Plugin Repository ..."
+    if [[ "$(basename $(pwd))" == "$repo_name" ]] ; then
+        echo "FrameWeb Repository already downloaded, running the script ..."
+    else
+        echo "Downloading the FrameWeb Repository ..." 
+        rm -rf $repo_name-main
+        curl -sL $repo_url -o main.zip
+        unzip main.zip
+        rm -rf main.zip
+        cd $repo_name-main
+    fi
+}
+
 # If the install fails, then print an error and exit.
 function install_fail() {
     echo "Installation failed" 
@@ -251,6 +268,8 @@ function install_main(){
     install_jdk || install_fail
     install_maven || install_fail
     #install_visual_paradigm || install_fail
+    # Download the frameweb-vp-plugin repository
+    download_plugin
     echo "Installing frameweb-vp-plugin..."
     install_frameweb_vp_plugin || install_fail
     echo "Your app dir: $app_dir"
