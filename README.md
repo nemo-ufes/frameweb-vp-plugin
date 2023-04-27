@@ -19,7 +19,7 @@ chmod +x install.sh && ./install.sh
 ```
 chmod +x install.sh && ./install.sh
 ```
-- **EXPERIMENTAL**, one installation with one command:
+- **EXPERIMENTAL**, full installation with one command:
 ```
 bash <(curl -sL https://raw.githubusercontent.com/propilideno/frameweb-vp-plugin/main/install.sh)
 ```
