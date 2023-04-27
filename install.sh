@@ -74,6 +74,7 @@ function get_VP_App_Path(){
                 esac
             done
             app_dir=$VISUAL_PARADIGM_APP_DIR_WINDOWS
+            app_dir=$(echo "$app_dir" | sed 's/\\/\\\\/g')
         ;;
         *)
             echo "Operating System not Supported"
@@ -122,6 +123,7 @@ function get_VP_Plugin_Path(){
                 esac
             done
             plugin_dir=$VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS
+            plugin_dir=$(echo "$plugin_dir" | sed 's/\\/\\\\/g')
         ;;
         *)
             echo "Operating System not Supported"

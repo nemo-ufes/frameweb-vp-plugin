@@ -2,19 +2,25 @@
 
 This plug-in is under development, once it becomes ready for production use (or almost) a better README file should be provided.
 
-### Requirements
+### Requirements:
 1. JDK (11+): https://www.oracle.com/br/java/technologies/downloads/
 2. Maven: https://maven.apache.org/download.cgi
 3. Visual Paradigm: https://www.visual-paradigm.com/download/
 
-### Quickstart
+**Only for Windows Users**:
+- Git Bash: https://git-scm.com/downloads
+
+### Quickstart:
 
 
-**Ubuntu/Mac**, open the terminal and type:
+**Ubuntu/Mac**, open the `Terminal` and type:
 ```
 chmod +x install.sh && ./install.sh
 ```
-**Windows**: Under development
+**Windows**, open the `Git Bash` and type:
+```
+chmod +x install.sh && ./install.sh
+```
 
 ### Testing
 Open Visual Paradigm and check if there is a _Plugin_ tab in the toolbar.
