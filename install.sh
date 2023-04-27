@@ -144,6 +144,7 @@ function download_plugin(){
         curl -sL $repo_url -o main.zip
         unzip main.zip
         rm -rf main.zip
+        rm -rf $repo_name-main.zip
         cd $repo_name-main
     fi
 }
