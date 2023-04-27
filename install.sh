@@ -43,34 +43,36 @@ function get_VP_App_Path(){
                 echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_MAC"
                 read -p "Confirm (y/n)?" choice
                 case "$choice" in
-                    y|Y ) break;;
+                    y|Y ) 
+                        if [[ -d $VISUAL_PARADIGM_APP_DIR_MAC ]]; then
+                            break
+                        else
+                            printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                        fi
+                    ;;
                     n|N ) read -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_MAC ;;
                     * ) printf "Invalid input\n";;
                 esac
-                if [[ -d $VISUAL_PARADIGM_APP_DIR_MAC ]]; then
-                    break
-                else
-                    printf "<FOLDER NOT FOUND> Type a valid path!\n"
-                fi
             done
-            echo $VISUAL_PARADIGM_APP_DIR_MAC
+            app_dir=$VISUAL_PARADIGM_APP_DIR_MAC
         ;;
-        CYGWIN*)
+        MINGW64*)
             while true; do
                 echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_WINDOWS"
                 read -p "Confirm (y/n)?" choice
                 case "$choice" in
-                    y|Y ) break;;
+                    y|Y ) 
+                        if [[ -d $VISUAL_PARADIGM_APP_DIR_WINDOWS ]]; then
+                            break
+                        else
+                            printf "<FOLDER NOT FOUND> Type a valid path!\n"
+                        fi
+                    ;;
                     n|N ) read -p "The path to your Visual Paradigm (APP FOLDER) is: " VISUAL_PARADIGM_APP_DIR_WINDOWS ;;
                     * ) printf "Invalid input\n";;
                 esac
-                if [[ -d $VISUAL_PARADIGM_APP_DIR_WINDOWS ]]; then
-                    break
-                else
-                    printf "<FOLDER NOT FOUND> Type a valid path!\n"
-                fi
             done
-            echo $VISUAL_PARADIGM_APP_DIR_WINDOWS
+            app_dir=$VISUAL_PARADIGM_APP_DIR_WINDOWS
         ;;
         *)
             echo "Operating System not Supported"
@@ -98,30 +100,27 @@ function get_VP_Plugin_Path(){
         ;;
         Darwin*)
             while true; do
-                echo "Visual Paradigm Plugin Path: $(VISUAL_PARADIGM_PLUGIN_DIR_LINUX)" 
+                echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_MAC"
                 read -p "Confirm (y/n)?" choice
                 case "$choice" in
                     y|Y ) break;;
-                    n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_LINUX ;;
+                    n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_MAC ;;
                     * ) printf "Invalid input\n";;
                 esac
             done
-            echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX # Return Value
+            plugin_dir=$VISUAL_PARADIGM_PLUGIN_DIR_MAC
         ;;
-        CYGWIN*)
+        MINGW64*)
             while true; do
-                echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX" 
-                read -p "Confirm (y/n)?" $answer
-                if [ "$answer" == "y" ]; then
-                    break
-                else
-                    if [[ ! -d $VISUAL_PARADIGM_PLUGIN_DIR_LINUX ]]; then
-                        printf "<FOLDER NOT FOUND> Type a valid path!\n"
-                        read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_LINUX
-                    fi
-                fi
+                echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS"
+                read -p "Confirm (y/n)?" choice
+                case "$choice" in
+                    y|Y ) break;;
+                    n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS ;;
+                    * ) printf "Invalid input\n";;
+                esac
             done
-            echo $VISUAL_PARADIGM_PLUGIN_DIR_LINUX # Return Value
+            plugin_dir=$VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS
         ;;
         *)
             echo "Operating System not Supported"
@@ -153,8 +152,8 @@ function install_maven(){
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
             # Instalação no Linux
             sudo apt-get install maven
-        elif [[ "$OSTYPE" == "cygwin" ]]; then
-            # Instalação no Windows usando Cygwin
+        elif [[ "$OSTYPE" == "MINGW64" ]]; then
+            # Instalação no Windows
             echo "Not supported yet"
             exit 1
         else
@@ -175,7 +174,7 @@ function install_jdk(){
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
             # Instalação no Linux
             sudo apt-get install default-jdk
-        elif [[ "$OSTYPE" == "cygwin" ]]; then
+        elif [[ "$OSTYPE" == "MINGW64" ]]; then
             # Instalação no Windows
             echo "Not supported yet"
             exit 1
