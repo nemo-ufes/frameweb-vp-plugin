@@ -1,7 +1,12 @@
 #!/bin/bash
-
+# OS Defaults
 OS=$(uname -s) # Gather OS Name
 USER=$(whoami) # Gather USER Name
+
+#FrameWeb Defaults
+repo_name="frameweb-vp-plugin"
+repo_url="https://github.com/propilideno/frameweb-vp-plugin/archive/refs/heads/main.zip"
+
 
 function readPath(){ #UNDER DEVELOPMENT
     while true; do
@@ -24,7 +29,7 @@ function get_VP_App_Path(){
         Linux*)  
             while true; do
                 echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_LINUX"
-                read -p "Confirm (y/n)?" choice
+                read -p "Confirm (y/n)?: " choice
                 case "$choice" in
                     y|Y ) 
                         if [[ -d $VISUAL_PARADIGM_APP_DIR_LINUX ]]; then
@@ -60,7 +65,7 @@ function get_VP_App_Path(){
         MINGW64*)
             while true; do
                 echo "Visual Paradigm Path: $VISUAL_PARADIGM_APP_DIR_WINDOWS"
-                read -r -p "Confirm (y/n)?" choice
+                read -r -p "Confirm (y/n)?: " choice
                 case "$choice" in
                     y|Y ) 
                         if [[ -d $VISUAL_PARADIGM_APP_DIR_WINDOWS ]]; then
@@ -91,7 +96,7 @@ function get_VP_Plugin_Path(){
         Linux*)  
             while true; do
                 echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_LINUX"
-                read -p "Confirm (y/n)?" choice
+                read -p "Confirm (y/n)?: " choice
                 case "$choice" in
                     y|Y ) break;;
                     n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_LINUX ;;
@@ -103,7 +108,7 @@ function get_VP_Plugin_Path(){
         Darwin*)
             while true; do
                 echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_MAC"
-                read -p "Confirm (y/n)?" choice
+                read -p "Confirm (y/n)?: " choice
                 case "$choice" in
                     y|Y ) break;;
                     n|N ) read -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_MAC ;;
@@ -115,7 +120,7 @@ function get_VP_Plugin_Path(){
         MINGW64*)
             while true; do
                 echo "Visual Paradigm Plugin Path: $VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS"
-                read -p "Confirm (y/n)?" choice
+                read -p "Confirm (y/n)?: " choice
                 case "$choice" in
                     y|Y ) break;;
                     n|N ) read -r -p "The path to your Visual Paradigm (PLUGIN FOLDER) is: " VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS ;;
@@ -132,21 +137,19 @@ function get_VP_Plugin_Path(){
 }
 
 function download_plugin(){
-    local repo_name="frameweb-vp-plugin"
-    local repo_url="https://github.com/propilideno/frameweb-vp-plugin/archive/refs/heads/main.zip"
-    #repo_name_2="frameweb-vp-plugin-main"
     echo "Downloading FrameWeb VP Plugin Repository ..."
-    if [[ "$(basename $(pwd))" == "$repo_name" ]] ; then
-        echo "FrameWeb Repository already downloaded, running the script ..."
-    else
-        echo "Downloading the FrameWeb Repository ..." 
-        rm -rf $repo_name-main
-        curl -sL $repo_url -o main.zip
-        unzip main.zip
-        rm -rf main.zip
-        rm -rf $repo_name-main.zip
-        cd $repo_name-main
-    fi
+    case "$(basename $(pwd))" in
+        $repo_name*) # Case frameweb-vp-plugin or frameweb-vp-plugin-main
+            echo "FrameWeb Repository already downloaded, running the script ..."
+        ;;
+        *)
+            echo "Downloading the FrameWeb Repository ..." 
+            rm -rf $repo_name-main
+            curl -sL $repo_url -o main-frameweb-temp.zip
+            unzip main-frameweb-temp.zip
+            rm -rf main-frameweb-temp.zip
+            cd $repo_name-main
+    esac
 }
 
 # If the install fails, then print an error and exit.
@@ -212,24 +215,36 @@ function install_frameweb_vp_plugin(){
     # Get the paths to write on pom.xml
     get_VP_App_Path
     get_VP_Plugin_Path
-    if [ -d  $plugin_dir$frameweb_plugin_path ]; then
+    if [ -d  "$plugin_dir$frameweb_plugin_path" ]; then
         echo "<WARNING> FRAMEWEB PLUGIN INSTALLED!"
-        install_fail
-    else
-
-        # Config pom.xml with gathered paths
-        sed -i "s|<!-- APP_PATH -->|$app_dir|g" pom.xml
-        sed -i "s|<!-- PLUGIN_PATH -->|$plugin_dir|g" pom.xml
-        #sed -i "s|<visualparadigm.app.dir>.*</visualparadigm.app.dir>|<visualparadigm.app.dir>$app_dir</visualparadigm.app.dir>|g" pom.xml
-
-        # Install plugin with maven
-        mvn install
+        while true; do
+            read -p "Do you want proceed installation (y/n)?: " choice
+            case "$choice" in
+                y|Y ) break;;
+                n|N ) greetings ;;
+                * ) printf "Invalid input\n";;
+            esac
+        done
     fi
+    # Config pom.xml with gathered paths
+    case "$os" in 
+        Darwin*) 
+            sed -i '' "s|<!-- APP_PATH -->|$app_dir|g" pom.xml # '' Before the regex is to prevent ISSUE on MacOS.
+            sed -i '' "s|<!-- PLUGIN_PATH -->|$plugin_dir|g" pom.xml # '' Before the regex is to prevent ISSUE on MacOS
+            ;;
+        *)
+            sed -i "s|<!-- APP_PATH -->|$app_dir|g" pom.xml
+            sed -i "s|<!-- PLUGIN_PATH -->|$plugin_dir|g" pom.xml
+            #sed -i "s|<visualparadigm.app.dir>.*</visualparadigm.app.dir>|<visualparadigm.app.dir>$app_dir</visualparadigm.app.dir>|g" pom.xml
+    esac
+    # Install plugin with maven
+    mvn install
 }
 
 function install_visual_paradigm(){
     echo "Opening Visual Paradigm WebSite"
     open https://www.visual-paradigm.com/download/
+    # https://www.visual-paradigm.com/download/?platform=linux&arch=64bit #Linux -> Visual_Paradigm_17_0_20230401_Linux64.sh
 }
 
 function install_brew(){
@@ -256,9 +271,38 @@ function install_shell_deps(){
         install_brew
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Instalação no Linux
-        echo "No shell required dependencies on linux"
+        sudo apt-get install unzip
     fi
-} 
+}
+
+function clean_installation(){
+    printf "\nDo you want to clean installation files?\n"
+    read -p "Confirm (y/n)?: " choice
+    case "$choice" in
+        y|Y )
+            case "$(basename $(pwd))" in
+                $repo_name*) # Case frameweb-vp-plugin or frameweb-vp-plugin-main
+                    echo "Cleaning temporary files, downloads, zips and frameweb-vp-plugin installation ..."
+                    cd ..
+                    rm -rf $repo_name-main
+                ;;
+            esac
+        ;;
+        n|N ) ;;
+        * ) printf "Invalid input\n"
+    esac
+    
+}
+
+function greetings(){
+    printf "\n\n==> FrameWeb was installed with SUCCESS !!!\n"
+    echo "==> Contribute with us giving this repo a Star ⭐"
+    echo "Contributors:"
+    printf "\t - Vitor E. Silva Souza     |  @vitorsouza\n"
+    printf "\t - Igor Sunderhus e Silva,  |  @igorssilva\n"
+    printf "\t - Lucas R. de Almeida,     |  @propilideno\n"
+    exit 1
+}
 
 # Main function
 function install_main(){ 
@@ -275,6 +319,10 @@ function install_main(){
     install_frameweb_vp_plugin || install_fail
     echo "Your app dir: $app_dir"
     echo "Your plugin dir: $plugin_dir"
+    # Cleaning installation
+    clean_installation
+    # Run the greetings by using FrameWeb
+    greetings
 }
 
 # Run the main function
