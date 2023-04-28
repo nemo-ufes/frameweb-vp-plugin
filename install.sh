@@ -227,7 +227,7 @@ function install_frameweb_vp_plugin(){
         done
     fi
     # Config pom.xml with gathered paths
-    case "$os" in 
+    case "$OS" in 
         Darwin*) 
             sed -i '' "s|<!-- APP_PATH -->|$app_dir|g" pom.xml # '' Before the regex is to prevent ISSUE on MacOS.
             sed -i '' "s|<!-- PLUGIN_PATH -->|$plugin_dir|g" pom.xml # '' Before the regex is to prevent ISSUE on MacOS
