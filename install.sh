@@ -3,10 +3,20 @@
 OS=$(uname -s) # Gather OS Name
 USER=$(whoami) # Gather USER Name
 
-#FrameWeb Defaults
+#FrameWeb-Vp-Plugin Defaults
 repo_name="frameweb-vp-plugin"
 repo_url="https://github.com/propilideno/frameweb-vp-plugin/archive/refs/heads/main.zip"
+frameweb_plugin_path="frameweb-vp-plugin-0.1/"
 
+# =========== Visual Paradigm Defaults ===========
+#App Default Path
+VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\" #Windows
+VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app/Contents/Resources/app/" #MacOS
+VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual_Paradigm_17.0/" #Linux
+#Plugin Default Path
+VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\$USER\\AppData\\Roaming\\VisualParadigm\\plugins\\" #Windows
+VISUAL_PARADIGM_PLUGIN_DIR_MAC="/Users/$USER/Library/Application Support/VisualParadigm/plugins/" #MacOS
+VISUAL_PARADIGM_PLUGIN_DIR_LINUX="/home/$USER/.config/VisualParadigm/plugins/" #Linux
 
 function readPath(){ #UNDER DEVELOPMENT
     while true; do
@@ -21,10 +31,6 @@ function readPath(){ #UNDER DEVELOPMENT
 }
 
 function get_VP_App_Path(){
-    #App Default Path
-    local VISUAL_PARADIGM_APP_DIR_WINDOWS="C:\\Program Files\\Visual Paradigm CE 17.0\\"
-    local VISUAL_PARADIGM_APP_DIR_MAC="/Applications/Visual Paradigm.app/Contents/Resources/app/"
-    local VISUAL_PARADIGM_APP_DIR_LINUX="/home/$USER/Visual_Paradigm_17.0/"
     case "$OS" in
         Linux*)  
             while true; do
@@ -88,10 +94,6 @@ function get_VP_App_Path(){
 }
 
 function get_VP_Plugin_Path(){
-    #Plugin Default Path
-    local VISUAL_PARADIGM_PLUGIN_DIR_WINDOWS="C:\\Users\\$USER\\AppData\\Roaming\\VisualParadigm\\plugins\\" #Windows
-    local VISUAL_PARADIGM_PLUGIN_DIR_MAC="/Users/$USER/Library/Application Support/VisualParadigm/plugins/" #UNIX
-    local VISUAL_PARADIGM_PLUGIN_DIR_LINUX="/home/$USER/.config/VisualParadigm/plugins/" #UNIX
     case "$OS" in
         Linux*)  
             while true; do
@@ -178,7 +180,10 @@ function install_maven(){
                 brew install maven
             ;;
             MINGW64*)
-                echo "Installing Maven in Windows ..."
+                echo "Maven automatic installion is not supported by Windows yet."
+                echo "Follow this tutorial and try it again ..."
+                open https://phoenixnap.com/kb/install-maven-windows
+                exit 1
             ;;
         *)
             echo "Operating System not Supported"
@@ -200,7 +205,10 @@ function install_jdk(){
                 brew install java
             ;;
             MINGW64*)
-                echo "Installing Maven in Windows ..."
+                echo "Maven automatic installion is not supported by Windows yet."
+                echo "Follow this tutorial and try it again ..."
+                open https://phoenixnap.com/kb/install-java-windows
+                exit 1
             ;;
         *)
             echo "Operating System not Supported"
@@ -210,8 +218,6 @@ function install_jdk(){
 }
 
 function install_frameweb_vp_plugin(){
-    # Name of frameweb plugin
-    local frameweb_plugin_path="frameweb-vp-plugin-0.1/" #Change this line
     # Get the paths to write on pom.xml
     get_VP_App_Path
     get_VP_Plugin_Path
@@ -252,11 +258,11 @@ function install_brew(){
     if [ ! command -v brew &> /dev/null ]; then
         echo "Installing Homebrew ..."
         # if it's is not installed, then install it.
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)" 
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         # Check for what arcitecture, so you can place path.
-        if [[ "uname -m" == "x86_64" ]]; then
-            echo "export PATH=/usr/local/bin:$PATH" >> ~/.bash_profile && source ~/.bash_profile
-        fi
+        #if [[ "uname -m" == "x86_64" ]]; then
+        #    echo "export PATH=/usr/local/bin:$PATH" >> ~/.bash_profile && source ~/.bash_profile
+        #fi
     # If not
     else
         # Print that it's already installed
