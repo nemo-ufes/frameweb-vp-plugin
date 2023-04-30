@@ -19,8 +19,8 @@ bash <(curl -sL https://raw.githubusercontent.com/propilideno/frameweb-vp-plugin
 ```
 ### Manual:
 Open `pom.xml`, and:
-- Edit: `<!-- APP_PATH -->` to the **PATH** to your Visual Paradigm's **Application Folder**.
-- Edit: `<!-- PLUGIN_PATH -->` to the **PATH** to your Visual Paradigm's **Plugin Folder**.
+- Edit: `<!-- APP_PATH -->` to the **PATH** of your Visual Paradigm's **Application Folder**.
+- Edit: `<!-- PLUGIN_PATH -->` to the **PATH** of your Visual Paradigm's **Plugin Folder**.
 ```
     <visualparadigm.app.dir>
       <!-- APP_PATH -->
@@ -43,4 +43,5 @@ This plug-in is under development, improvements can always be made!
 - [ ] Generate code for the Entity Model
 - [x] Release a stable FrameWeb Plugin for Visual Paradigm
 - [x] Automatically install FrameWeb Plugin and your dependencies with Shell Script.
+
 Please read our [contributing guidelines](CONTRIBUTING.md) for more detailed information.
