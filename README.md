@@ -1,6 +1,5 @@
 # FrameWeb Plugin for Visual Paradigm
-
-This plug-in is under development, once it becomes ready for production use (or almost) a better README file should be provided.
+Our team is currently developing a plugin that will enable integration between [The FrameWeb Method](https://github.com/nemo-ufes/FrameWeb/wiki) and Visual Paradigm. With our easy-to-install plugin, you can quickly create FrameWeb models within the Visual Paradigm environment allowing code generation for web applications that comply with FrameWeb's conventions and best practices.
 
 ## Requirements
 1. JDK (11+): https://www.oracle.com/br/java/technologies/downloads/
