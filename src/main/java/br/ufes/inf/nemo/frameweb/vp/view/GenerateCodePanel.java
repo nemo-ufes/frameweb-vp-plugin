@@ -2,14 +2,12 @@ package br.ufes.inf.nemo.frameweb.vp.view;
 
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
-import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 
 /**
@@ -120,20 +118,6 @@ public class GenerateCodePanel extends JPanel {
         c.weightx = 0;
         c.fill = GridBagConstraints.NONE;
         add(outputButton, c);
-    }
-
-    private void generateTemplates(final String templateDir, final String outputDir) {
-
-        // TODO generate code from templates for the current vp project model using the templates in the input directory and write the generated code to the output directory
-
-        FreeMarkerEngine engine = new FreeMarkerEngine(templateDir);
-
-        try {
-            engine.generateCode("EntityClassTemplate.ftl", outputDir);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     private void saveConfig(final String templateDir, final String outputDir) {

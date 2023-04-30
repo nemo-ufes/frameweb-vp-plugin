@@ -2,6 +2,8 @@ package br.ufes.inf.nemo.frameweb.vp.utils;
 
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
+import br.ufes.inf.nemo.vpzy.engine.AttributeModel;
+import br.ufes.inf.nemo.vpzy.engine.ClassModel;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
@@ -26,6 +28,11 @@ import java.util.logging.Level;
  * Utility class that provides helper methods regarding FrameWeb model elements.
  */
 public final class FrameWebUtils {
+
+    private FrameWebUtils() {
+        // Prevents instantiation.
+    }
+
     /**
      * Checks if the given association end has constraints and, if so, append them to the association end name to be
      * shown in the diagram, as Visual Paradigm doesn't show constraints that are added to association ends.
@@ -164,89 +171,143 @@ public final class FrameWebUtils {
     }
 
     /**
-     * Transforma pacotes com qualquer separador além de "/" para um caminho no sistema de arquivos
-     *
-     * @param packageName
-     * @return packagePath
-     */
-    public static String packageNameToPath(String packageName) {
-        // Por alguma razao a Workbench do Eclipse as vezes nao se da muito bem com diretorios contendo
-        // letras maiusculas, caso isso venha a ocorrer, descomente o metodo abaixo.
-        return packageName.replaceAll("[^A-Za-z0-9]", "/"); // .toLowerCase();
-    }
-
-
-    /**
      * Generates the code for the FrameWeb project.
-     * @param templateDir
-     * @param outputDir
+     *
+     * @param templateDir The directory containing templates.
+     * @param outputDir The directory for the generated code.
      */
     public static void generateCode(final String templateDir, final String outputDir) {
         final IProject project = ProjectManagerUtils.getCurrentProject();
 
         final FreeMarkerEngine engine = new FreeMarkerEngine(templateDir, outputDir);
 
-        Iterator iter = project.allLevelModelElementIterator(IModelElementFactory.MODEL_TYPE_PACKAGE);
+        @SuppressWarnings("unchecked")
+        Iterator<IPackage> iter = project.allLevelModelElementIterator(IModelElementFactory.MODEL_TYPE_PACKAGE);
 
-        // process entity model
-        while (iter.hasNext()) {
-            IPackage pack = (IPackage) iter.next();
-            processPackage(pack, engine);
-        }
+        // process packages
+        iter.forEachRemaining(pack -> processPackage(pack, engine));
 
     }
 
     private static void processPackage(final IPackage pack, final FreeMarkerEngine engine) {
 
-        if (getFrameWebPackage(pack) == FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
-            Logger.log(Level.SEVERE,
-                    "####### skipping " + pack.getName() + " (" + FrameWebUtils.getFrameWebPackage(pack) + ")");
+        final FrameWebPackage frameWebPackage = getFrameWebPackage(pack);
+        if (frameWebPackage == FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+            Logger.log(Level.FINE,
+                    "####### skipping " + pack.getName() + " (" + frameWebPackage + ")");
             return;
         }
 
-        Logger.log(Level.SEVERE, "####### " + pack.getName() + " (" + FrameWebUtils.getFrameWebPackage(pack) + ")");
+        Logger.log(Level.FINE, "####### " + pack.getName() + " (" + frameWebPackage + ")");
 
-        Iterator classIter = pack.childIterator(IModelElementFactory.MODEL_TYPE_CLASS);
-        while (classIter.hasNext()) {
-            IClass child = (IClass) classIter.next();
+        @SuppressWarnings("unchecked") Iterator<IClass> classIter = pack.childIterator(
+                IModelElementFactory.MODEL_TYPE_CLASS);
 
-            processClass(child, engine);
+        switch (frameWebPackage) {
+            case ENTITY_PACKAGE:
+                classIter.forEachRemaining(clazz -> processClass(clazz, engine));
+                break;
+            case APPLICATION_PACKAGE:
+                // TODO: process application package
+                break;
+            case CONTROLLER_PACKAGE:
+                // TODO: process controller package
+                break;
 
+            case PERSISTENCE_PACKAGE:
+                // TODO: process persistence package
+                break;
+
+            default:
+                break;
         }
+
 
     }
 
     private static void processClass(IClass clazz, final FreeMarkerEngine engine) {
 
-        if (getFrameWebClass(clazz) == FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
-            Logger.log(Level.SEVERE,
-                    "################# skipping " + clazz.getName() + " (" + FrameWebUtils.getFrameWebClass(clazz)
-                            + ")");
+        final FrameWebClass frameWebClass = getFrameWebClass(clazz);
+
+        Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + frameWebClass + ")");
+
+        switch (frameWebClass) {
+            case PERSISTENT_CLASS:
+                processEntity(clazz, engine);
+                break;
+
+            case CONTROLLER_CLASS:
+                processController(clazz, engine);
+                break;
+
+            case SERVICE_CLASS:
+                processService(clazz, engine);
+                break;
+
+            case DAO_CLASS:
+                processDao(clazz, engine);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    private static void processEntity(final IClass clazz, final FreeMarkerEngine engine) {
+
+        if (clazz.hasStereotypes("enumeration")) {
+            // TODO: process enumeration
             return;
         }
 
         final Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("package", clazz.getParent());
-        dataModel.put("class", clazz);
+        dataModel.put("class", new ClassModel(clazz));
         dataModel.put("path", packageNameToPath(clazz.getParent().getName()));
 
-        List<IAttribute> attributeModels = new ArrayList<>();
+        final List<AttributeModel> attributeModels = new ArrayList<>();
 
-        Iterator attributeIter = clazz.childIterator(IModelElementFactory.MODEL_TYPE_ATTRIBUTE);
-        while (attributeIter.hasNext()) {
-            IAttribute child = (IAttribute) attributeIter.next();
-            attributeModels.add(child);
-        }
+        @SuppressWarnings("unchecked") Iterator<IAttribute> attributeIter = clazz.childIterator(
+                IModelElementFactory.MODEL_TYPE_ATTRIBUTE);
+
+        attributeIter.forEachRemaining(attribute -> {
+            Logger.log(Level.FINE,
+                    "################# " + attribute.getName() + " (" + attribute.getTypeAsString() + ")");
+
+            attributeModels.add(new AttributeModel(attribute));
+        });
 
         dataModel.put("attributes", attributeModels);
+
+        Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + dataModel + ")");
 
         try {
             engine.generateCode("EntityClassTemplate.ftl", dataModel);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    private static void processController(final IClass clazz, final FreeMarkerEngine engine) {
+        // TODO: process controller
+    }
+
+    private static void processService(final IClass clazz, final FreeMarkerEngine engine) {
+        // TODO: process service
+    }
+
+    private static void processDao(final IClass clazz, final FreeMarkerEngine engine) {
+        // TODO: process dao
+    }
+
+    /**
+     * Transforma o nome do pacote java com separador "." para um caminho no sistema de arquivos
+     *
+     * @param packageName nome do pacote
+     * @return packagePath
+     */
+    public static String packageNameToPath(String packageName) {
+        return packageName.replaceAll("[^A-Za-z0-9]", "/");
+    }
 
 }
