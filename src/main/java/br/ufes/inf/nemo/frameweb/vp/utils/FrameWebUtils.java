@@ -2,9 +2,10 @@ package br.ufes.inf.nemo.frameweb.vp.utils;
 
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
-import br.ufes.inf.nemo.vpzy.engine.AttributeModel;
-import br.ufes.inf.nemo.vpzy.engine.ClassModel;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
+import br.ufes.inf.nemo.vpzy.engine.models.entity.AttributeModel;
+import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
+import br.ufes.inf.nemo.vpzy.engine.models.entity.RelationshipModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import com.vp.plugin.model.IAssociationEnd;
@@ -14,6 +15,7 @@ import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IPackage;
 import com.vp.plugin.model.IProject;
+import com.vp.plugin.model.IRelationshipEnd;
 import com.vp.plugin.model.IStereotype;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import java.io.IOException;
@@ -28,7 +30,6 @@ import java.util.logging.Level;
  * Utility class that provides helper methods regarding FrameWeb model elements.
  */
 public final class FrameWebUtils {
-
     private FrameWebUtils() {
         // Prevents instantiation.
     }
@@ -174,15 +175,15 @@ public final class FrameWebUtils {
      * Generates the code for the FrameWeb project.
      *
      * @param templateDir The directory containing templates.
-     * @param outputDir The directory for the generated code.
+     * @param outputDir   The directory for the generated code.
      */
     public static void generateCode(final String templateDir, final String outputDir) {
         final IProject project = ProjectManagerUtils.getCurrentProject();
 
         final FreeMarkerEngine engine = new FreeMarkerEngine(templateDir, outputDir);
 
-        @SuppressWarnings("unchecked")
-        Iterator<IPackage> iter = project.allLevelModelElementIterator(IModelElementFactory.MODEL_TYPE_PACKAGE);
+        @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
+                IModelElementFactory.MODEL_TYPE_PACKAGE);
 
         // process packages
         iter.forEachRemaining(pack -> processPackage(pack, engine));
@@ -193,8 +194,7 @@ public final class FrameWebUtils {
 
         final FrameWebPackage frameWebPackage = getFrameWebPackage(pack);
         if (frameWebPackage == FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
-            Logger.log(Level.FINE,
-                    "####### skipping " + pack.getName() + " (" + frameWebPackage + ")");
+            Logger.log(Level.FINE, "####### skipping " + pack.getName() + " (" + frameWebPackage + ")");
             return;
         }
 
@@ -222,14 +222,13 @@ public final class FrameWebUtils {
                 break;
         }
 
-
     }
 
     private static void processClass(IClass clazz, final FreeMarkerEngine engine) {
 
         final FrameWebClass frameWebClass = getFrameWebClass(clazz);
 
-        Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + frameWebClass + ")");
+        Logger.log(Level.INFO, "################# " + clazz.getName() + " (" + frameWebClass + ")");
 
         switch (frameWebClass) {
             case PERSISTENT_CLASS:
@@ -265,19 +264,13 @@ public final class FrameWebUtils {
         dataModel.put("class", new ClassModel(clazz));
         dataModel.put("path", packageNameToPath(clazz.getParent().getName()));
 
-        final List<AttributeModel> attributeModels = new ArrayList<>();
-
-        @SuppressWarnings("unchecked") Iterator<IAttribute> attributeIter = clazz.childIterator(
-                IModelElementFactory.MODEL_TYPE_ATTRIBUTE);
-
-        attributeIter.forEachRemaining(attribute -> {
-            Logger.log(Level.FINE,
-                    "################# " + attribute.getName() + " (" + attribute.getTypeAsString() + ")");
-
-            attributeModels.add(new AttributeModel(attribute));
-        });
+        final List<AttributeModel> attributeModels = processAttribute(clazz);
 
         dataModel.put("attributes", attributeModels);
+
+        final List<RelationshipModel> relationshipModels = processAssociation(clazz);
+
+        dataModel.put("associations", relationshipModels);
 
         Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + dataModel + ")");
 
@@ -308,6 +301,38 @@ public final class FrameWebUtils {
      */
     public static String packageNameToPath(String packageName) {
         return packageName.replaceAll("[^A-Za-z0-9]", "/");
+    }
+
+    private static List<AttributeModel> processAttribute(final IClass clazz) {
+        final List<AttributeModel> attributeModels = new ArrayList<>();
+
+        @SuppressWarnings("unchecked") Iterator<IAttribute> attributeIter = clazz.attributeIterator();
+
+        attributeIter.forEachRemaining(attribute -> {
+            Logger.log(Level.FINE,
+                    "################# Attribute" + attribute.getName() + " (" + attribute.getTypeAsString() + ")");
+
+            attributeModels.add(new AttributeModel(attribute));
+        });
+        return attributeModels;
+    }
+
+    private static List<RelationshipModel> processAssociation(final IClass clazz) {
+
+        final List<RelationshipModel> relationshipModels = new ArrayList<>();
+
+        @SuppressWarnings("unchecked") final Iterator<IRelationshipEnd> iterator = clazz.fromRelationshipEndIterator();
+        iterator.forEachRemaining(relationship -> {
+
+            Logger.log(Level.FINE,
+                    "################# From relationship " + relationship.getName() + " (" + relationship.getModelType()
+                            + ")");
+
+            relationshipModels.add(new RelationshipModel(relationship));
+
+        });
+
+        return relationshipModels;
     }
 
 }

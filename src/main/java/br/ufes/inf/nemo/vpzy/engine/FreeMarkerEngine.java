@@ -1,5 +1,6 @@
 package br.ufes.inf.nemo.vpzy.engine;
 
+import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;

@@ -1,12 +1,12 @@
-package br.ufes.inf.nemo.vpzy.engine;
+package br.ufes.inf.nemo.vpzy.engine.models.base;
 
 import com.teamdev.jxbrowser.deps.org.checkerframework.checker.nullness.qual.NonNull;
 import com.vp.plugin.model.IClass;
 
-public class ClassModel {
+public abstract class AbstractClassModel {
     private final String name;
 
-    public ClassModel(@NonNull IClass clazz) {
+    protected AbstractClassModel(@NonNull final IClass clazz) {
         this.name = clazz.getName();
 
     }
@@ -14,5 +14,4 @@ public class ClassModel {
     public String getName() {
         return name;
     }
-
 }
