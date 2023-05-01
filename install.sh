@@ -270,13 +270,18 @@ function install_brew(){
 
 # Function to install for debian based distrOS (and ubuntu)
 function install_shell_deps(){ 
-    if [[ "$OS" == "Darwin*" ]]; then
-        # Instalação no Mac
-        install_brew
-    elif [[ "$OS" == "Linux*" ]]; then
-        # Instalação no Linux
-        sudo apt-get install unzip
-    fi
+    case "$OS" in 
+        Darwin*) 
+			# Mac Installation
+			install_brew
+            ;;
+        Linux*)
+			# Linux Installation
+			sudo apt-get install unzip	
+			;;
+		*)
+			echo "No shell requirements for your SO"
+    esac
 }
 
 function clean_installation(){
