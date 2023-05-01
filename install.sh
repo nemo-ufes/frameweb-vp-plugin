@@ -255,7 +255,9 @@ function install_visual_paradigm(){
 
 function install_brew(){
     # Check if homebrew is installed
-    if [ ! command -v brew &> /dev/null ]; then
+    if command -v brew &> /dev/null; then
+        echo "Homebrew is already installed"
+    else  
         echo "Installing Homebrew ..."
         # if it's is not installed, then install it.
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -263,19 +265,15 @@ function install_brew(){
         #if [[ "uname -m" == "x86_64" ]]; then
         #    echo "export PATH=/usr/local/bin:$PATH" >> ~/.bash_profile && source ~/.bash_profile
         #fi
-    # If not
-    else
-        # Print that it's already installed
-        echo "Homebrew is already installed"
     fi
 }
 
 # Function to install for debian based distrOS (and ubuntu)
 function install_shell_deps(){ 
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$OS" == "Darwin*" ]]; then
         # Instalação no Mac
         install_brew
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    elif [[ "$OS" == "Linux*" ]]; then
         # Instalação no Linux
         sudo apt-get install unzip
     fi
