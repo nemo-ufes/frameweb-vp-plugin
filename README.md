@@ -55,3 +55,8 @@ Some features on which we are currently working or planning for the future (see 
 - Validate the models according to FrameWeb rules and suggest fixes.
 
 Please read our [contributing guidelines](CONTRIBUTING.md) for more detailed information on how to contribute.
+
+### Contribution history:
+- [@vitorsouza](https://github.com/vitorsouza): initial structure of the plug-in, partial support for Entity Models;
+- [@igorssilva](https://github.com/igorssilva): support for Entity Models, code generation;
+- [@propilideno](https://github.com/propilideno): installation script and improvements in the README.
