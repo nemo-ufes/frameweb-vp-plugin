@@ -5,7 +5,7 @@ USER=$(whoami) # Gather USER Name
 
 #FrameWeb-Vp-Plugin Defaults
 repo_name="frameweb-vp-plugin"
-repo_url="https://github.com/propilideno/frameweb-vp-plugin/archive/refs/heads/main.zip"
+repo_url="https://github.com/nemo-ufes/frameweb-vp-plugin/archive/refs/heads/main.zip"
 frameweb_plugin_path="frameweb-vp-plugin-0.1/"
 
 # =========== Visual Paradigm Defaults ===========
