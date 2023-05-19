@@ -275,7 +275,7 @@ public final class FrameWebUtils {
         Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + dataModel + ")");
 
         try {
-            engine.generateCode("EntityClassTemplate.ftl", dataModel);
+            engine.generateCode("jbutler/EntityClassTemplate.ftl", dataModel);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -309,8 +309,9 @@ public final class FrameWebUtils {
         @SuppressWarnings("unchecked") Iterator<IAttribute> attributeIter = clazz.attributeIterator();
 
         attributeIter.forEachRemaining(attribute -> {
-            Logger.log(Level.FINE,
-                    "################# Attribute" + attribute.getName() + " (" + attribute.getTypeAsString() + ")");
+            attribute.getType();
+            Logger.log(Level.INFO,
+                    "################# Attribute " + attribute.getName() + " (" + attribute.getType() + ")");
 
             attributeModels.add(new AttributeModel(attribute));
         });
@@ -326,6 +327,17 @@ public final class FrameWebUtils {
 
             Logger.log(Level.FINE,
                     "################# From relationship " + relationship.getName() + " (" + relationship.getModelType()
+                            + ")");
+
+            relationshipModels.add(new RelationshipModel(relationship));
+
+        });
+
+        @SuppressWarnings("unchecked") final Iterator<IRelationshipEnd> iterator2 = clazz.toRelationshipEndIterator();
+        iterator2.forEachRemaining(relationship -> {
+
+            Logger.log(Level.FINE,
+                    "################# To relationship " + relationship.getName() + " (" + relationship.getModelType()
                             + ")");
 
             relationshipModels.add(new RelationshipModel(relationship));

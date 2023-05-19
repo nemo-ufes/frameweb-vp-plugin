@@ -1,40 +1,49 @@
 package br.ufes.inf.nemo.vpzy.engine.models.entity;
 
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
+import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import com.teamdev.jxbrowser.deps.org.checkerframework.checker.nullness.qual.NonNull;
+import com.vp.plugin.model.IAssociationEnd;
+import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IRelationshipEnd;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 
 public class RelationshipModel {
-    public static final String TYPE_MODIFIER = "typeModifier";
+    public static final String ONE_TO_MANY = "OneToMany";
 
-    public static final String NAVIGABLE = "navigable";
+    public static final String ONE_TO_ONE = "OneToOne";
 
-    public static final String MULTIPLICITY = "multiplicity";
-
-    public static final String TYPE = "type";
-
-    public static final String NAME = "name";
+    public static final String MANY_TO_ONE = "ManyToOne";
 
     private static final Map<String, String> CARDINALITY_MAP = new HashMap<>();
 
+    public static final String COLLECTION = "collection";
+
+    public static final String FETCH = "fetch";
+
+    public static final String CASCADE = "cascade";
+
     static {
-        CARDINALITY_MAP.put("0..1", "ManyToOne");
-        CARDINALITY_MAP.put("1", "ManyToOne");
-        CARDINALITY_MAP.put("0..*", "OneToMany");
-        CARDINALITY_MAP.put("1..*", "OneToMany");
-        CARDINALITY_MAP.put("*", "OneToMany");
+        CARDINALITY_MAP.put("0..1", ONE_TO_ONE);
+        CARDINALITY_MAP.put("1", MANY_TO_ONE);
+        CARDINALITY_MAP.put("0..*", ONE_TO_MANY);
+        CARDINALITY_MAP.put("1..*", ONE_TO_MANY);
+        CARDINALITY_MAP.put("*", ONE_TO_MANY);
     }
 
     private final String sourceToTargetCardinality;
 
     private final String targetToSourceCardinality;
 
-    private final boolean sourceToTargetNavigability;
+    private final boolean sourceTransient;
 
-    private final boolean targetToSourceNavigability;
+    private final boolean targetTransient;
 
     private final String sourceTypeName;
 
@@ -48,86 +57,110 @@ public class RelationshipModel {
 
     private final String sourceCollection;
 
-    public RelationshipModel(@NonNull final IRelationshipEnd from) {
-        IRelationshipEnd to = from.getOppositeEnd();
+    private final String targetFetch;
 
-        Map<String, Object> fromProperties = convertSemicolonStringToMap(from.toPropertiesString());
+    private final String sourceFetch;
 
-        Logger.log(Level.INFO, "from Properties: " + fromProperties);
+    private final String targetCascade;
 
-        Map<String, Object> toProperties = convertSemicolonStringToMap(to.toPropertiesString());
+    private final String sourceCascade;
 
-        Logger.log(Level.INFO, "to Properties: " + toProperties);
+    public RelationshipModel(@NonNull final IRelationshipEnd source) {
 
-        this.sourceToTargetCardinality = fromProperties.get(MULTIPLICITY) != null
-                ? CARDINALITY_MAP.get(fromProperties.get(MULTIPLICITY))
-                : "ManyToOne";
-        this.targetToSourceCardinality = toProperties.get(MULTIPLICITY) != null
-                ? CARDINALITY_MAP.get(toProperties.get(MULTIPLICITY))
-                : "OneToMany";
-        this.sourceTypeName = fromProperties.get(TYPE) != null ? (String) fromProperties.get(TYPE) : "Object";
-        this.targetTypeName = toProperties.get(TYPE) != null ? (String) toProperties.get(TYPE) : "Object";
-        this.sourceName = fromProperties.get(NAME) != null ? (String) fromProperties.get(NAME) : this.sourceTypeName;
-        this.targetName = toProperties.get(NAME) != null ? (String) toProperties.get(NAME) : this.targetTypeName;
-        this.targetCollection =
-                fromProperties.get(TYPE_MODIFIER) != null ? (String) fromProperties.get(TYPE_MODIFIER) : "List";
-        this.sourceCollection =
-                toProperties.get(TYPE_MODIFIER) != null ? (String) toProperties.get(TYPE_MODIFIER) : "List";
-        this.sourceToTargetNavigability =
-                fromProperties.get(NAVIGABLE) != null && fromProperties.get(NAVIGABLE).equals("1");
-        this.targetToSourceNavigability =
-                toProperties.get(NAVIGABLE) != null && toProperties.get(NAVIGABLE).equals("1");
+        final Map<String, String> sourceConstraints = getDefaultConstraints();
 
-        Logger.log(Level.INFO, "RelationshipModel: " + this);
+        @SuppressWarnings("unchecked") final Iterator<IConstraintElement> constraintsSource = source.constraintsIterator();
+
+        constraintsSource.forEachRemaining(constraint -> {
+
+            final String[] constraintType = constraint.getName().replace("entity.persistent.", "").split("\\.");
+            sourceConstraints.put(constraintType[0], constraintType[1]);
+        });
+
+        IRelationshipEnd target = source.getOppositeEnd();
+
+        final Map<String, String> targetConstraints = getDefaultConstraints();
+
+        @SuppressWarnings("unchecked") final Iterator<IConstraintElement> constraintsTarget = source.constraintsIterator();
+
+        constraintsTarget.forEachRemaining(constraint -> {
+
+            final String[] constraintType = constraint.getName().replace("entity.persistent.", "").split("\\.");
+            targetConstraints.put(constraintType[0], constraintType[1]);
+        });
+
+        IAssociationEnd fromAssociation = (IAssociationEnd) source;
+        Logger.log(Level.FINE,
+                String.format("fromAssociation >>>>> Name: %s, Multiplicity: %s, Type: %s", fromAssociation.getName(),
+                        fromAssociation.getMultiplicity(), fromAssociation.getTypeAsString()));
+
+        IAssociationEnd toAssociation = (IAssociationEnd) target;
+        Logger.log(Level.FINE,
+                String.format("toAssociation >>>>> Name: %s, Multiplicity: %s, Type: %s", toAssociation.getName(),
+                        toAssociation.getMultiplicity(), toAssociation.getTypeAsString()));
+
+        // Cardinalities for the relationship
+        this.sourceToTargetCardinality = CARDINALITY_MAP.get(toAssociation.getMultiplicity());
+        this.targetToSourceCardinality = CARDINALITY_MAP.get(fromAssociation.getMultiplicity());
+
+        // Transient for the relationship
+        this.sourceTransient = FrameWebUtils.getFrameWebClass(source.getModelElement())
+                .equals(FrameWebClass.TRANSIENT_CLASS);
+
+        this.targetTransient = FrameWebUtils.getFrameWebClass(target.getModelElement())
+                .equals(FrameWebClass.TRANSIENT_CLASS);
+
+        // Names for the classes in the relationship
+        this.sourceTypeName = fromAssociation.getTypeAsString();
+        this.targetTypeName = toAssociation.getTypeAsString();
+
+        // Replace between curly braces because the constraints show in the name.
+        final String sourceNameFromAssociation =
+                fromAssociation.getName() != null ? fromAssociation.getName().replaceAll("\\{.*}", "") : null;
+
+        // Name for the property in the relationship
+        this.sourceName = !StringUtils.isBlank(sourceNameFromAssociation)
+                ? sourceNameFromAssociation
+                : Character.toLowerCase(this.sourceTypeName.charAt(0)) + this.sourceTypeName.substring(1);
+
+        final String targetNameFromAssociation =
+                toAssociation.getName() != null ? toAssociation.getName().replaceAll("\\{.*}", "") : null;
+        this.targetName = !StringUtils.isBlank(targetNameFromAssociation)
+                ? targetNameFromAssociation
+                : Character.toLowerCase(this.targetTypeName.charAt(0)) + this.targetTypeName.substring(1);
+
+        // Collection type in the relationship
+        this.targetCollection = targetConstraints.get(COLLECTION);
+        this.sourceCollection = sourceConstraints.get(COLLECTION);
+
+        // Fetch type in the relationship
+        this.targetFetch = targetConstraints.get(FETCH);
+        this.sourceFetch = sourceConstraints.get(FETCH);
+
+        // Cascade type in the relationship
+        this.targetCascade = targetConstraints.get(CASCADE);
+        this.sourceCascade = sourceConstraints.get(CASCADE);
+
+        Logger.log(Level.FINE, "RelationshipModel: " + this);
 
     }
 
-    public static Map<String, Object> convertSemicolonStringToMap(String semicolonString) {
-        Map<String, Object> map = new HashMap<>();
-        String[] pairs = semicolonString.split(";");
-        for (String pair : pairs) {
-            String[] keyValue = pair.split("=", 2);
-            String key = keyValue[0].trim();
-            Object value = keyValue.length > 1 ? keyValue[1] : null;
-            map.put(key, value);
-        }
-        return map;
+    private Map<String, String> getDefaultConstraints() {
+        final Map<String, String> defaultConstraints = new HashMap<>();
+
+        defaultConstraints.put(FETCH, "lazy");
+        defaultConstraints.put(CASCADE, "none");
+        defaultConstraints.put(COLLECTION, "list");
+        return defaultConstraints;
     }
 
-    @Override
-    public String toString() {
-        return "RelationshipModel{" + "sourceToTargetCardinality='" + sourceToTargetCardinality + '\''
-                + ", targetToSourceCardinality='" + targetToSourceCardinality + '\'' + ", sourceToTargetNavigability="
-                + sourceToTargetNavigability + ", targetToSourceNavigability=" + targetToSourceNavigability
-                + ", sourceTypeName='" + sourceTypeName + '\'' + ", targetTypeName='" + targetTypeName + '\''
-                + ", sourceName='" + sourceName + '\'' + ", targetName='" + targetName + '\'' + ", targetCollection='"
-                + targetCollection + '\'' + ", sourceCollection='" + sourceCollection + '\'' + '}';
-    }
-
-    private String getConstraintValue(String value) {
-        // Remove everything before the equals sign in the string
-        // Example: "not null = true" becomes "true"
-        final int index = value.indexOf("=");
-        if (index != -1) {
-            value = value.substring(index + 1).trim();
-        }
-        return value;
-    }
-
+    //<editor-fold desc="Boilerplate" default="folded">
     public String getSourceToTargetCardinality() {
         return sourceToTargetCardinality;
     }
 
     public String getTargetToSourceCardinality() {
         return targetToSourceCardinality;
-    }
-
-    public boolean isSourceToTargetNavigability() {
-        return sourceToTargetNavigability;
-    }
-
-    public boolean isTargetToSourceNavigability() {
-        return targetToSourceNavigability;
     }
 
     public String getSourceTypeName() {
@@ -153,4 +186,48 @@ public class RelationshipModel {
     public String getSourceCollection() {
         return sourceCollection;
     }
+
+    public String getTargetFetch() {
+        return targetFetch;
+    }
+
+    public String getSourceFetch() {
+        return sourceFetch;
+    }
+
+    public String getTargetCascade() {
+        return targetCascade;
+    }
+
+    public String getSourceCascade() {
+        return sourceCascade;
+    }
+
+    public boolean isSourceTransient() {
+        return sourceTransient;
+    }
+
+    public boolean isTargetTransient() {
+        return targetTransient;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("sourceToTargetCardinality", sourceToTargetCardinality)
+                .append("targetToSourceCardinality", targetToSourceCardinality)
+                .append("sourceTransient", sourceTransient)
+                .append("targetTransient", targetTransient)
+                .append("sourceTypeName", sourceTypeName)
+                .append("targetTypeName", targetTypeName)
+                .append("sourceName", sourceName)
+                .append("targetName", targetName)
+                .append("targetCollection", targetCollection)
+                .append("sourceCollection", sourceCollection)
+                .append("targetFetch", targetFetch)
+                .append("sourceFetch", sourceFetch)
+                .append("targetCascade", targetCascade)
+                .append("sourceCascade", sourceCascade)
+                .toString();
+    }
+    //</editor-fold>
 }
