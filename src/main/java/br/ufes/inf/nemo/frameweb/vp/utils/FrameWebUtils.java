@@ -5,6 +5,7 @@ import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.AttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
+import br.ufes.inf.nemo.vpzy.engine.models.entity.MethodModel;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.RelationshipModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
@@ -13,6 +14,7 @@ import com.vp.plugin.model.IAttribute;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IModelElement;
+import com.vp.plugin.model.IOperation;
 import com.vp.plugin.model.IPackage;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IRelationshipEnd;
@@ -233,6 +235,10 @@ public final class FrameWebUtils {
         switch (frameWebClass) {
             case PERSISTENT_CLASS:
                 processEntity(clazz, engine);
+                break;               
+                
+            case TRANSIENT_CLASS:
+                processDomainClass(clazz, engine, "utils/PojoTemplate.ftl");
                 break;
 
             case CONTROLLER_CLASS:
@@ -252,12 +258,7 @@ public final class FrameWebUtils {
 
     }
 
-    private static void processEntity(final IClass clazz, final FreeMarkerEngine engine) {
-
-        if (clazz.hasStereotypes("enumeration")) {
-            // TODO: process enumeration
-            return;
-        }
+    private static void processDomainClass(final IClass clazz, final FreeMarkerEngine engine, final String templateName) {
 
         final Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("package", clazz.getParent());
@@ -274,11 +275,43 @@ public final class FrameWebUtils {
 
         Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + dataModel + ")");
 
+        final List<MethodModel> methodModels = processMethod(clazz);
+
+        dataModel.put("methods", methodModels);
+
         try {
-            engine.generateCode("jbutler/EntityClassTemplate.ftl", dataModel);
+            engine.generateCode(templateName, dataModel);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static List<MethodModel> processMethod(final IClass clazz) {
+        final List<MethodModel> methodModels = new ArrayList<>();
+
+        @SuppressWarnings("unchecked")
+        Iterator<IOperation> operationIterator = clazz.operationIterator();
+
+        operationIterator.forEachRemaining(operation -> {
+            Logger.log(Level.INFO,
+                    "################# Attribute " + operation.getName() + " (" + operation.getReturnTypeAsString() + ")");
+            final MethodModel methodModel = new MethodModel(operation);
+            methodModels.add(methodModel);
+        });
+
+        return methodModels;
+    }
+
+    private static void processEntity(final IClass clazz, final FreeMarkerEngine engine) {
+
+        final String templateName;
+        if (clazz.hasStereotypes("enumeration")) {
+            templateName = "utils/EnumerationTemplate.ftl";
+        } else {
+            templateName = "jbutler/EntityClassTemplate.ftl";
+        }
+
+        processDomainClass(clazz, engine, templateName);
     }
 
     private static void processController(final IClass clazz, final FreeMarkerEngine engine) {
@@ -309,7 +342,6 @@ public final class FrameWebUtils {
         @SuppressWarnings("unchecked") Iterator<IAttribute> attributeIter = clazz.attributeIterator();
 
         attributeIter.forEachRemaining(attribute -> {
-            attribute.getType();
             Logger.log(Level.INFO,
                     "################# Attribute " + attribute.getName() + " (" + attribute.getType() + ")");
 

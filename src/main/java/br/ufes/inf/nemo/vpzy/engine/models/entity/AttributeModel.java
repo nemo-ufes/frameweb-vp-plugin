@@ -40,6 +40,7 @@ public class AttributeModel extends AbstractAttributeModel {
         this.lob = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_LOB.getStereotypeName());
         this.id = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_ID.getStereotypeName());
         this.version = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_VERSION.getStereotypeName());
+        this.isTransient = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_TRANSIENT.getStereotypeName()) || attribute.hasStereotype("transient");
 
         // Create a map with the default values for the attribute stereotypes.
         final Map<String, Object> attributeConstraints = generateConstraintsMap(attribute);
@@ -50,7 +51,6 @@ public class AttributeModel extends AbstractAttributeModel {
                 FrameWebClassAttributeConstraint.PERSISTENT_CLASS_SIZE.getPluginUIID()));
         this.dateTimePrecision = ((String) attributeConstraints.get(
                 FrameWebClassAttributeConstraint.PERSISTENT_CLASS_PRECISION_TIME.getPluginUIID()));
-        this.isTransient = attributeConstraints.containsKey("transient");
         this.column = (String) attributeConstraints.get(
                 FrameWebClassAttributeConstraint.PERSISTENT_CLASS_COLUMN.getPluginUIID());
 
@@ -69,8 +69,7 @@ public class AttributeModel extends AbstractAttributeModel {
         attributeConstraints.put(FrameWebClassAttributeConstraint.PERSISTENT_CLASS_SIZE.getPluginUIID(), "0");
         attributeConstraints.put(FrameWebClassAttributeConstraint.PERSISTENT_CLASS_PRECISION_TIME.getPluginUIID(),
                 null);
-        attributeConstraints.put(FrameWebClassAttributeConstraint.PERSISTENT_CLASS_COLUMN.getPluginUIID(),
-                this.getName());
+        attributeConstraints.put(FrameWebClassAttributeConstraint.PERSISTENT_CLASS_COLUMN.getPluginUIID(), "");
 
         @SuppressWarnings("unchecked") final Iterator<IConstraintElement> iterator = attribute.constraintsIterator();
 

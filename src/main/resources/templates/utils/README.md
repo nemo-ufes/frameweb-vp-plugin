@@ -3,12 +3,11 @@
 |package                |✓|✓|✓|✓|✓|✓|✓| |
 |class                  |✓|✓|✓| |✓| |✓| |
 |interface              | | | |✓| |✓| | |
-|attributes             |✓| |✓| |✓| |✓| |
+|attributes             |✓|✓|✓| |✓| |✓| |
 |methods                |✓| |✓|✓|✓|✓|✓| |
 |associations           |✓| |✓| | | |✓| |
 |generalizations        |✓| |✓| |✓| |✓| |
 |realizations           | | |✓| |✓| | | |
-|literals               | |✓| | | | | | |
 |resultDependency       | | | | | | | | |
 |navigationAssociation  | | | | | | | |✓|
 |page                   | | | | | | | |✓|

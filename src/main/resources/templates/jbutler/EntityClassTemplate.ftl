@@ -3,6 +3,7 @@
 <#import "../utils/AttributeGetterSetterTemplate.ftl" as attrgs>
 <#import "../utils/AssociationTemplate.ftl" as assoc>
 <#import "../utils/AssociationGetterSetterTemplate.ftl" as assocgs>
+<#import "../utils/MethodTemplate.ftl" as method>
 
 
 package ${package.name};
@@ -27,11 +28,17 @@ public class ${class.name} extends PersistentObjectSupport implements Comparable
 <#-- ATTRIBUTES -->
 <@attr.generate_attributes attributes=attributes/>
 
+
+<#-- METHODS -->
+<@method.generate_methods methods=methods/>
+
+// region Boilerplate Code
 <#-- GETTERS AND SETTERS ASSOCIATIONS -->
 <@assocgs.generate_getter_setter_associations associations=associations className=class.name/>
 
 <#-- GETTERS AND SETTERS ATTRIBUTES -->
 <@attrgs.generate_getter_setter_attributes attributes=attributes/>
+// endregion
 
 
 <#--end of class-->

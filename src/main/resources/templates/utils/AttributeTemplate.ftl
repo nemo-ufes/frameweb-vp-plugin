@@ -11,7 +11,7 @@
         <#if (attribute.size > 0)>@Size(max = ${attribute.size})</#if>
         <#if attribute.dateTimePrecision?has_content>@Temporal(TemporalType.${attribute.dateTimePrecision?upper_case})</#if>
         <#if attribute.transient>@Transient</#if>
-        @Column(name = "${attribute.column}")
+        <#if attribute.column?has_content>@Column(name = "${attribute.column}")</#if>
         ${attribute.visibility} ${attribute.type} ${attribute.name};
     </#list>
 </#macro>
