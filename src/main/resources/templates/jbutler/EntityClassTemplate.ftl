@@ -1,6 +1,8 @@
 <#ftl strip_whitespace=true>
-<#import "utils/AttributeTemplate.ftl" as attr>
-<#import "utils/BidirectionalMapping.ftl" as assoc>
+<#import "../utils/AttributeTemplate.ftl" as attr>
+<#import "../utils/AttributeGetterSetterTemplate.ftl" as attrgs>
+<#import "../utils/AssociationTemplate.ftl" as assoc>
+<#import "../utils/AssociationGetterSetterTemplate.ftl" as assocgs>
 
 
 package ${package.name};
@@ -19,13 +21,18 @@ public class ${class.name} extends PersistentObjectSupport implements Comparable
     /** Serialization id. */
     private static final long serialVersionUID = 1L;
 
-<#-- ATTRIBUTES FOR THE CLASS -->
-/** Attributes for the class. */
-<@attr.generate_attributes attributes=attributes/>
 <#-- ASSOCIATIONS -->
-/** Associations for the class. */
-
 <@assoc.generate_associations associations=associations className=class.name/>
+
+<#-- ATTRIBUTES -->
+<@attr.generate_attributes attributes=attributes/>
+
+<#-- GETTERS AND SETTERS ASSOCIATIONS -->
+<@assocgs.generate_getter_setter_associations associations=associations className=class.name/>
+
+<#-- GETTERS AND SETTERS ATTRIBUTES -->
+<@attrgs.generate_getter_setter_attributes attributes=attributes/>
+
 
 <#--end of class-->
 }

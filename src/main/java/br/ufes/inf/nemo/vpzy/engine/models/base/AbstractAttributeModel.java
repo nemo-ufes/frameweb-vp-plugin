@@ -12,7 +12,7 @@ public abstract class AbstractAttributeModel {
 
     protected AbstractAttributeModel(@NonNull final IAttribute attribute) {
         this.name = attribute.getName();
-        this.type = attribute.getTypeAsString();
+        this.type = attribute.getTypeAsString() + (attribute.getTypeModifier() != null ? attribute.getTypeModifier() : "");
         this.visibility = attribute.getVisibility();
     }
 
