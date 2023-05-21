@@ -1,5 +1,6 @@
 package br.ufes.inf.nemo.vpzy.engine.models.entity;
 
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebAssociationEndConstraint;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
@@ -15,19 +16,21 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class RelationshipModel {
-    public static final String ONE_TO_MANY = "OneToMany";
+    private static final String ONE_TO_MANY = "OneToMany";
 
-    public static final String ONE_TO_ONE = "OneToOne";
+    private static final String ONE_TO_ONE = "OneToOne";
 
-    public static final String MANY_TO_ONE = "ManyToOne";
+    private static final String MANY_TO_ONE = "ManyToOne";
 
     private static final Map<String, String> CARDINALITY_MAP = new HashMap<>();
 
-    public static final String COLLECTION = "collection";
+    private static final String COLLECTION = "collection";
 
-    public static final String FETCH = "fetch";
+    private static final String FETCH = "fetch";
 
-    public static final String CASCADE = "cascade";
+    private static final String CASCADE = "cascade";
+
+    private static final String ORDER = "order";
 
     static {
         CARDINALITY_MAP.put("0..1", ONE_TO_ONE);
@@ -65,29 +68,17 @@ public class RelationshipModel {
 
     private final String sourceCascade;
 
+    private final String targetOrder;
+
+    private final String sourceOrder;
+
     public RelationshipModel(@NonNull final IRelationshipEnd source) {
 
-        final Map<String, String> sourceConstraints = getDefaultConstraints();
-
-        @SuppressWarnings("unchecked") final Iterator<IConstraintElement> constraintsSource = source.constraintsIterator();
-
-        constraintsSource.forEachRemaining(constraint -> {
-
-            final String[] constraintType = constraint.getName().replace("entity.persistent.", "").split("\\.");
-            sourceConstraints.put(constraintType[0], constraintType[1]);
-        });
+        final Map<String, String> sourceConstraints = getConstraints(source);
 
         IRelationshipEnd target = source.getOppositeEnd();
 
-        final Map<String, String> targetConstraints = getDefaultConstraints();
-
-        @SuppressWarnings("unchecked") final Iterator<IConstraintElement> constraintsTarget = source.constraintsIterator();
-
-        constraintsTarget.forEachRemaining(constraint -> {
-
-            final String[] constraintType = constraint.getName().replace("entity.persistent.", "").split("\\.");
-            targetConstraints.put(constraintType[0], constraintType[1]);
-        });
+        final Map<String, String> targetConstraints = getConstraints(target);
 
         IAssociationEnd fromAssociation = (IAssociationEnd) source;
         Logger.log(Level.FINE,
@@ -141,8 +132,61 @@ public class RelationshipModel {
         this.targetCascade = targetConstraints.get(CASCADE);
         this.sourceCascade = sourceConstraints.get(CASCADE);
 
-        Logger.log(Level.FINE, "RelationshipModel: " + this);
+        // Order type in the relationship
+        this.targetOrder = targetConstraints.get(ORDER);
+        this.sourceOrder = sourceConstraints.get(ORDER);
 
+        Logger.log(Level.FINE, this.toString());
+
+    }
+
+    private Map<String, String> getConstraints(final IRelationshipEnd relationshipEnd) {
+        final Map<String, String> constraints = getDefaultConstraints();
+
+        @SuppressWarnings("unchecked") final Iterator<IConstraintElement> constraintsSource = relationshipEnd.constraintsIterator();
+
+        constraintsSource.forEachRemaining(constraint -> {
+
+            final String[] constraintType = constraint.getName().replace("entity.persistent.", "").split("\\.");
+            final FrameWebAssociationEndConstraint frameWebAssociationEndConstraint = FrameWebAssociationEndConstraint.ofPluginUIIDWithoutActionPrefix(
+                    constraint.getName());
+            if (frameWebAssociationEndConstraint != null) {
+                Logger.log(Level.FINE,
+                        "Constraint: " + constraint.getName() + " - " + constraint.getSpecification().getValueAsString()
+                                + " - " + frameWebAssociationEndConstraint.isParameterized());
+                if (!frameWebAssociationEndConstraint.isParameterized()) {
+                    constraints.put(constraintType[0], constraintType[1]);
+                } else {
+                    final String valueConstraint = constraint.getSpecification()
+                            .getValueAsString()
+                            .replace(constraintType[0] + "=", "");
+
+                    constraints.put(constraintType[0], valueConstraint);
+                }
+            }
+        });
+        return constraints;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("sourceToTargetCardinality", sourceToTargetCardinality)
+                .append("targetToSourceCardinality", targetToSourceCardinality)
+                .append("sourceTransient", sourceTransient)
+                .append("targetTransient", targetTransient)
+                .append("sourceTypeName", sourceTypeName)
+                .append("targetTypeName", targetTypeName)
+                .append("sourceName", sourceName)
+                .append("targetName", targetName)
+                .append("targetCollection", targetCollection)
+                .append("sourceCollection", sourceCollection)
+                .append("targetFetch", targetFetch)
+                .append("sourceFetch", sourceFetch)
+                .append("targetCascade", targetCascade)
+                .append("sourceCascade", sourceCascade)
+                .append("targetOrder", targetOrder)
+                .append("sourceOrder", sourceOrder)
+                .toString();
     }
 
     private Map<String, String> getDefaultConstraints() {
@@ -151,6 +195,7 @@ public class RelationshipModel {
         defaultConstraints.put(FETCH, "lazy");
         defaultConstraints.put(CASCADE, "none");
         defaultConstraints.put(COLLECTION, "list");
+        defaultConstraints.put(ORDER, "natural");
         return defaultConstraints;
     }
 
@@ -211,23 +256,12 @@ public class RelationshipModel {
         return targetTransient;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this).append("sourceToTargetCardinality", sourceToTargetCardinality)
-                .append("targetToSourceCardinality", targetToSourceCardinality)
-                .append("sourceTransient", sourceTransient)
-                .append("targetTransient", targetTransient)
-                .append("sourceTypeName", sourceTypeName)
-                .append("targetTypeName", targetTypeName)
-                .append("sourceName", sourceName)
-                .append("targetName", targetName)
-                .append("targetCollection", targetCollection)
-                .append("sourceCollection", sourceCollection)
-                .append("targetFetch", targetFetch)
-                .append("sourceFetch", sourceFetch)
-                .append("targetCascade", targetCascade)
-                .append("sourceCascade", sourceCascade)
-                .toString();
+    public String getTargetOrder() {
+        return targetOrder;
+    }
+
+    public String getSourceOrder() {
+        return sourceOrder;
     }
     //</editor-fold>
 }

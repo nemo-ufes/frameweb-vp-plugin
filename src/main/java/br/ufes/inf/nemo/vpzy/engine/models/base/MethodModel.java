@@ -28,7 +28,7 @@ public class MethodModel {
         for (int i = 0; i < operation.parameterCount(); i++) {
             final IParameter parameter = iterator.next();
             this.parameters[i] = new ParameterModel(parameter.getName(), parameter.getTypeAsString());
-            Logger.log(Level.INFO, "ParameterModel: " +  this.parameters[i].getName() + " - " +  this.parameters[i].getType());
+            Logger.log(Level.FINE, "ParameterModel: " +  this.parameters[i].getName() + " - " +  this.parameters[i].getType());
         }
 
     }
