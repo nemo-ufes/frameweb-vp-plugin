@@ -1,4 +1,4 @@
-package br.ufes.inf.nemo.vpzy.engine.models.entity;
+package br.ufes.inf.nemo.vpzy.engine.models.base;
 
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import com.vp.plugin.model.IOperation;

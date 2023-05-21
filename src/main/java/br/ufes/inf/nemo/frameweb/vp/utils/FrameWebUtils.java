@@ -5,7 +5,7 @@ import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.AttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.MethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.base.MethodModel;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.RelationshipModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
@@ -235,7 +235,11 @@ public final class FrameWebUtils {
         switch (frameWebClass) {
             case PERSISTENT_CLASS:
                 processEntity(clazz, engine);
-                break;               
+                break;
+
+            case MAPPED_SUPERCLASS:
+                processDomainClass(clazz, engine, "jbutler/MappedSuperClassTemplate.ftl");
+                break;
                 
             case TRANSIENT_CLASS:
                 processDomainClass(clazz, engine, "utils/PojoTemplate.ftl");

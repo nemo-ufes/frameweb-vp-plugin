@@ -1,6 +1,6 @@
-package br.ufes.inf.nemo.vpzy.engine.models.entity;
+package br.ufes.inf.nemo.vpzy.engine.models.base;
 
-class ParameterModel {
+public class ParameterModel {
     private final String name;
 
     private final String type;
