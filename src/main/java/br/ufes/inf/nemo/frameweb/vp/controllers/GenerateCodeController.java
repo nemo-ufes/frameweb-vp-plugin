@@ -15,7 +15,6 @@ import java.util.logging.Level;
 /**
  * Controller that handles the Generate Code action, activated by a toolbar button.
  *
- * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
  * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  * @version 1.0
  */
