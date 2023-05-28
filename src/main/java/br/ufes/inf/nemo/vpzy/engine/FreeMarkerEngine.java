@@ -18,7 +18,7 @@ import java.util.logging.Level;
 public class FreeMarkerEngine {
     private final Configuration cfg;
 
-    private String outputDirectory = "/src/main/java";
+    private final String outputDirectory;
 
     public FreeMarkerEngine(final String templatePath, final String outputDirectory) {
         cfg = new Configuration(Configuration.VERSION_2_3_31);
@@ -26,7 +26,7 @@ public class FreeMarkerEngine {
         // Set the template loader to load templates from the "templates" folder
         File templateDir = new File(templatePath);
 
-        this.outputDirectory = outputDirectory + this.outputDirectory;
+        this.outputDirectory = outputDirectory;
         try {
             cfg.clearTemplateCache();
             cfg.setTemplateLoader(new FileTemplateLoader(templateDir));
@@ -39,7 +39,7 @@ public class FreeMarkerEngine {
         Template template = this.cfg.getTemplate(templateName);
 
         try {
-
+            // TODO: need to find a way to find the extension to use in different languages.
             // Define the file path
             final String pathString = String.format("%s/%s/%s.java", outputDirectory, dataModel.get("path"),
                     ((ClassModel) dataModel.get("class")).getName());
