@@ -19,6 +19,24 @@
         label="FrameWeb"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/#" />
 
+      <!-- Toolbar Button: Generate Code. -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/coding_711284 -->
+      <!-- Icon author: https://www.flaticon.com/authors/Kiranshastry -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actions.GenerateCodeAction"
+              actionType="generalAction"
+              description="Generates code for the model."
+              style="normal"
+              tooltip="Generates code for the model."
+              icon="icons/coding.png"
+              label="Generate Code for FrameWeb Model"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.GenerateCodeController" />
+      </action>
+      <!-- -->
+
+      <separator id="br.ufes.inf.nemo.frameweb.vp.separator.beforeOpenPluginSettingsAction"
+                 menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#" />
       <!-- Toolbar Button: Check Model. -->
       <!-- Icon source: https://www.flaticon.com/free-icon/correct_4436481 -->
       <!-- Icon author: https://www.flaticon.com/authors/kliwir-art -->
@@ -227,7 +245,7 @@
     <!-- -->
 
     <!-- ************************************************************* -->
-    <!-- Context-menus (right-click) for UML Class Attribute elements. -->
+    <!-- Context-menus (right-click) for UML Clas Attribute elements. -->
     <!-- ************************************************************* -->
     <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.attribute">
       <!-- Applies to classes. -->

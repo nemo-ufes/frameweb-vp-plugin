@@ -192,7 +192,7 @@ public enum FrameWebAssociationEndConstraint {
 
   /**
    * Provides the enum value that refers to a specific FrameWeb association end constraint given its
-   * plugin UI ID.
+   * plugin UI ID. With the PLUGIN_UI_CONTEXT_ACTION_PREFIX
    * 
    * @param pluginUIID The ID of the FrameWeb association end constraint in the plugin UI
    *        configuration.
@@ -217,6 +217,30 @@ public enum FrameWebAssociationEndConstraint {
 
   /**
    * Provides the enum value that refers to a specific FrameWeb association end constraint given its
+   * plugin UI ID.
+   *
+   * @param pluginUIID The ID of the FrameWeb association end constraint in the plugin UI
+   *        configuration.
+   * @return An enum value that represents a FrameWeb association end constraint or
+   *         {@code NOT_A_FRAMEWEB_ASSOCIATION_END_CONSTRAINT} if no association end constraint with
+   *         the given UI ID exists.
+   */
+  public static FrameWebAssociationEndConstraint ofPluginUIIDWithoutActionPrefix(String pluginUIID) {
+    FrameWebAssociationEndConstraint constraint = NOT_A_FRAMEWEB_ASSOCIATION_END_CONSTRAINT;
+    for (FrameWebAssociationEndConstraint obj : FrameWebAssociationEndConstraint.values()) {
+      if (obj.pluginUIID.equalsIgnoreCase(pluginUIID)) {
+        constraint = obj;
+      }
+    }
+
+    Logger.log(Level.INFO,
+            "Providing FrameWeb association end constraint for plug-in UI ID {0}: {1}",
+            new Object[] {pluginUIID, constraint});
+    return constraint;
+  }
+
+  /**
+   * Provides the enum value that refers to a specific FrameWeb association end constraint given its
    * specification.
    * 
    * @param specification The specification used by the association end constraint.
@@ -224,7 +248,7 @@ public enum FrameWebAssociationEndConstraint {
    *         {@code NOT_A_FRAMEWEB_ASSOCIATION_END_CONSTRAINT} if no association end constraint with
    *         the given specification exists.
    */
-  public static FrameWebAssociationEndConstraint ofspecification(String specification) {
+  public static FrameWebAssociationEndConstraint ofSpecification(String specification) {
     FrameWebAssociationEndConstraint constraint = NOT_A_FRAMEWEB_ASSOCIATION_END_CONSTRAINT;
     for (FrameWebAssociationEndConstraint obj : FrameWebAssociationEndConstraint.values()) {
       if (obj.specification.equalsIgnoreCase(specification)) {
