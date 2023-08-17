@@ -1,0 +1,26 @@
+## Properties for JButler templates
+map:
+  jbutler:
+    description: Default Template for JButler
+    path: /templates/jbutler
+    entity:
+      template: EntityClassTemplate.ftl
+      extension: .java
+    mappedSuperclass:
+      template: MappedSuperclassTemplate.ftl
+      extension: .java
+    transientClass:
+      template: TransientTemplate.ftl
+      extension: .java
+    embeddable:
+      template: EmbeddableTemplate.ftl
+      extension: .java
+    dao:
+      template: DaoTemplate.ftl
+      extension: .java
+    service:
+      template: ServiceTemplate.ftl
+      extension: .java
+    controller:
+      template: ControllerTemplate.ftl
+

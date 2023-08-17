@@ -1,9 +1,11 @@
 package br.ufes.inf.nemo.frameweb.vp.view;
 
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
-import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
+import br.ufes.inf.nemo.frameweb.vp.utils.TemplateUtils;
+import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConfigurationManager;
+import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,9 +26,10 @@ public class GenerateCodePanel extends JPanel {
     /**
      * Provides the configuration values and lets us change them.
      */
-    private final ConfigurationManager configManager = plugin.getConfigManager();
+    private final YamlConfigurationManager<TemplateOption> configManager = plugin.getGenerateCodeConfigManager();
 
-    private final JTextField templateFolderField = new JTextField(), outputFolderField = new JTextField();
+    private final JTextField templateFolderField = new JTextField();
+    private final JTextField outputFolderField = new JTextField();
 
     private final GridBagConstraints c = new GridBagConstraints();
 
@@ -58,7 +61,7 @@ public class GenerateCodePanel extends JPanel {
         JButton generateCodeButton = new JButton("Generate Code");
         // Call method to generate templates with input and output directories
         generateCodeButton.addActionListener(
-                e -> FrameWebUtils.generateCode(templateFolderField.getText(), outputFolderField.getText()));
+                e -> TemplateUtils.generateCode(templateFolderField.getText(), outputFolderField.getText()));
         add(generateCodeButton, c);
 
         c.gridx = 2;
@@ -73,12 +76,15 @@ public class GenerateCodePanel extends JPanel {
         Logger.log(Level.CONFIG, "Reading current FrameWeb Tools Code Generation configuration values");
         String value;
 
-        value = configManager.getProperty(FrameWebPlugin.CONFIG_DEFAULT_GENERATE_CODE_TEMPLATE_FOLDER);
+        // read the correct configuration
+        final TemplateOption templateOption = configManager.getProperty("jbutler");
+
+        value = templateOption.getTemplatePath();
         if (value != null) {
             templateFolderField.setText(value);
         }
 
-        value = configManager.getProperty(FrameWebPlugin.CONFIG_DEFAULT_GENERATE_CODE_OUTPUT_FOLDER);
+        value = templateOption.getOutputPath();
         if (value != null) {
             outputFolderField.setText(value);
         }
@@ -123,8 +129,9 @@ public class GenerateCodePanel extends JPanel {
     private void saveConfig(final String templateDir, final String outputDir) {
 
         Logger.log(Level.CONFIG, "Saving FrameWeb Tools Code Generation configuration values");
-        configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_GENERATE_CODE_OUTPUT_FOLDER, outputDir);
-        configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_GENERATE_CODE_TEMPLATE_FOLDER, templateDir);
+        // TODO: add options for a new template and saving.
+        configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_GENERATE_CODE_OUTPUT_FOLDER, new TemplateOption());
+        configManager.setProperty(FrameWebPlugin.CONFIG_DEFAULT_GENERATE_CODE_TEMPLATE_FOLDER, new TemplateOption());
 
         // Saves the configuration.
         configManager.save();

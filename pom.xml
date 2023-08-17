@@ -134,6 +134,15 @@
       <scope>system</scope>
       <systemPath>${visualparadigm.app.dir}${file.separator}ormlib${file.separator}orm.jar</systemPath>
     </dependency>
+
+
+    <!--    Reading yaml files -->
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>2.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>

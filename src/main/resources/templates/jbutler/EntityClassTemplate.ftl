@@ -1,9 +1,9 @@
 <#ftl strip_whitespace=true>
-<#import "../utils/AttributeTemplate.ftl" as attr>
-<#import "../utils/AttributeGetterSetterTemplate.ftl" as attrgs>
-<#import "../utils/AssociationTemplate.ftl" as assoc>
-<#import "../utils/AssociationGetterSetterTemplate.ftl" as assocgs>
-<#import "../utils/MethodTemplate.ftl" as method>
+<#import "AttributeTemplate.ftl" as attr>
+<#import "AttributeGetterSetterTemplate.ftl" as attrgs>
+<#import "AssociationTemplate.ftl" as assoc>
+<#import "AssociationGetterSetterTemplate.ftl" as assocgs>
+<#import "MethodTemplate.ftl" as method>
 
 
 package ${package.name};
