@@ -59,8 +59,33 @@ public final class TemplateUtils {
 
     }
 
+    /**
+     * Generates the code for the FrameWeb project.
+     *
+     * @param templateOption The template option used.
+     */
+    public static void generateCode( final TemplateOption templateOption) {
+        final IProject project = ProjectManagerUtils.getCurrentProject();
+
+        final FreeMarkerEngine engine = new FreeMarkerEngine(templateOption.getTemplatePath(), templateOption.getOutputPath());
+
+        @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
+                IModelElementFactory.MODEL_TYPE_PACKAGE);
+
+        // process packages
+        iter.forEachRemaining(pack -> processPackage(pack, engine, templateOption));
+
+    }
+
+    /**
+     * Gets the template option for the given template name. The template should be defined in the configuration file.
+     *
+     * @param templateName The name of the template.
+     * @return The configurations for the template.
+     * @throws IllegalArgumentException if the template option is not found or is invalid.
+     */
     public static TemplateOption getTemplateOption(final String templateName) {
-        final YamlConfigurationManager<TemplateOption> configurationManager = FrameWebPlugin.instance()
+        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance()
                 .getGenerateCodeConfigManager();
 
         final TemplateOption templateOption = configurationManager.getProperty(templateName);
@@ -299,5 +324,25 @@ public final class TemplateUtils {
         });
 
         return methodModels;
+    }
+
+    /**
+     * Gets the template options defined in the configuration file.
+     *
+     * @return The configurations for the templates.
+     * @throws IllegalArgumentException if the template options are not found or are invalid.
+     */
+    public static Map<String, TemplateOption> getTemplateOptions() {
+        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance()
+                .getGenerateCodeConfigManager();
+
+        final Map<String, TemplateOption> templateOptions = configurationManager.getOptions();
+
+        if (templateOptions == null) {
+            throw new IllegalArgumentException("Template options not found");
+        }
+
+        return templateOptions;
+
     }
 }

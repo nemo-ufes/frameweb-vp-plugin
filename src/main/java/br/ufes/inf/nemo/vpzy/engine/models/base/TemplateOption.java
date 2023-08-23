@@ -1,41 +1,70 @@
 package br.ufes.inf.nemo.vpzy.engine.models.base;
 
+import java.io.Serializable;
+
 /**
  * Holds and validates all the properties that a template option must have.
  *
  * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
-public class TemplateOption {
-    private String description;
+public class TemplateOption implements Serializable {
+    private static final String EXTENSION = ".java";
 
-    private String templatePath;
+    private String name = "Template Name";
 
-    private String outputPath;
+    private String description = "Template Description";
 
-    private FileTypes entity;
+    private String templatePath = "templates";
 
-    private FileTypes enumeration;
+    private String outputPath = "output";
 
-    private FileTypes mappedSuperclass;
+    private FileTypes entity = new FileTypes("EntityClassTemplate.ftl", EXTENSION);
 
-    private FileTypes transientClass;
+    private FileTypes enumeration = new FileTypes("EnumerationTemplate.ftl", EXTENSION);
 
-    private FileTypes embeddable;
+    private FileTypes mappedSuperclass = new FileTypes("MappedSuperclassTemplate.ftl", EXTENSION);
 
-    private FileTypes dao;
+    private FileTypes transientClass = new FileTypes("TransientClassTemplate.ftl", EXTENSION);
 
-    private FileTypes service;
+    private FileTypes embeddable = new FileTypes("EmbeddableClassTemplate.ftl", EXTENSION);
 
-    private FileTypes controller;
+    private FileTypes dao = new FileTypes("DaoClassTemplate.ftl", EXTENSION);
+
+    private FileTypes service = new FileTypes("ServiceClassTemplate.ftl", EXTENSION);
+
+    private FileTypes controller = new FileTypes("ControllerClassTemplate.ftl", EXTENSION);
+
+    public TemplateOption() {
+        // Default Constructor for Yaml
+    }
+
+    public TemplateOption(final String name, final String description, final String templatePath,
+            final String outputPath, final FileTypes entity, final FileTypes enumeration,
+            final FileTypes mappedSuperclass, final FileTypes transientClass, final FileTypes embeddable,
+            final FileTypes dao, final FileTypes service, final FileTypes controller) {
+        this.name = name;
+        this.description = description;
+        this.templatePath = templatePath;
+        this.outputPath = outputPath;
+        this.entity = entity;
+        this.enumeration = enumeration;
+        this.mappedSuperclass = mappedSuperclass;
+        this.transientClass = transientClass;
+        this.embeddable = embeddable;
+        this.dao = dao;
+        this.service = service;
+        this.controller = controller;
+    }
 
     /**
      * Validates the template option. If any of the required properties is null, throws an
      * {@link IllegalArgumentException}.
      */
     public void validate() {
-        if (outputPath == null || entity == null || description == null || templatePath == null || enumeration == null
-            || mappedSuperclass == null || transientClass == null || embeddable == null || dao == null
-            || service == null || controller == null) {
+        if (name == null || name.trim().isEmpty() || outputPath == null || outputPath.trim().isEmpty()
+            || description == null || description.trim().isEmpty() || templatePath == null || templatePath.trim()
+                    .isEmpty() || entity == null || enumeration == null || mappedSuperclass == null
+            || transientClass == null || embeddable == null || dao == null || service == null || controller == null) {
             throw new IllegalArgumentException("Missing required properties for template");
         }
 
@@ -48,6 +77,14 @@ public class TemplateOption {
         service.validate();
         controller.validate();
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -136,5 +173,10 @@ public class TemplateOption {
 
     public void setController(final FileTypes controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public String toString() {
+        return this.description;
     }
 }

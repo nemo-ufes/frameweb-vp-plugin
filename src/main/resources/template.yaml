@@ -1,26 +1,58 @@
-## Properties for JButler templates
-map:
-  jbutler:
-    description: Default Template for JButler
-    path: /templates/jbutler
-    entity:
-      template: EntityClassTemplate.ftl
-      extension: .java
-    mappedSuperclass:
-      template: MappedSuperclassTemplate.ftl
-      extension: .java
-    transientClass:
-      template: TransientTemplate.ftl
-      extension: .java
-    embeddable:
-      template: EmbeddableTemplate.ftl
-      extension: .java
-    dao:
-      template: DaoTemplate.ftl
-      extension: .java
-    service:
-      template: ServiceTemplate.ftl
-      extension: .java
-    controller:
-      template: ControllerTemplate.ftl
-
+spring:
+  controller:
+    extension: .java
+    template: ControllerClassTemplate.ftl
+  dao:
+    extension: .java
+    template: DaoClassTemplate.ftl
+  description: Default Template for Spring projects
+  embeddable:
+    extension: .java
+    template: EmbeddableClassTemplate.ftl
+  entity:
+    extension: .java
+    template: EntityClassTemplate.ftl
+  enumeration:
+    extension: .java
+    template: EnumerationTemplate.ftl
+  mappedSuperclass:
+    extension: .java
+    template: MappedSuperclassTemplate.ftl
+  name: spring
+  outputPath: /projets/{projectName}
+  service:
+    extension: .java
+    template: ServiceClassTemplate.ftl
+  templatePath: templates/spring
+  transientClass:
+    extension: .java
+    template: TransientClassTemplate.ftl
+jbutler:
+  controller:
+    extension: .java
+    template: ControllerTemplate.ftl
+  dao:
+    extension: .java
+    template: DaoTemplate.ftl
+  description: Default Template for JButler
+  embeddable:
+    extension: .java
+    template: EmbeddableTemplate.ftl
+  entity:
+    extension: .java
+    template: EntityClassTemplate.ftl
+  enumeration:
+    extension: .java
+    template: EnumerationTemplate.ftl
+  mappedSuperclass:
+    extension: .java
+    template: MappedSuperclassTemplate.ftl
+  name: jbutler
+  outputPath: /jbutler/{projectName}
+  service:
+    extension: .java
+    template: ServiceTemplate.ftl
+  templatePath: /templates/jbutler
+  transientClass:
+    extension: .java
+    template: TransientTemplate.ftl

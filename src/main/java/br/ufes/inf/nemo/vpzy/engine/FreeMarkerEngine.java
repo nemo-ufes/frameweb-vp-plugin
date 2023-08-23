@@ -1,5 +1,6 @@
 package br.ufes.inf.nemo.vpzy.engine;
 
+import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import freemarker.cache.FileTemplateLoader;
@@ -15,6 +16,10 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * Generates code from a template using FreeMarker.
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ */
 public class FreeMarkerEngine {
     private final Configuration cfg;
 
@@ -35,14 +40,13 @@ public class FreeMarkerEngine {
         }
     }
 
-    public void generateCode(final String templateName, final Map<String, Object> dataModel) throws IOException {
-        Template template = this.cfg.getTemplate(templateName);
+    public void generateCode(final FileTypes templateOption, final Map<String, Object> dataModel) throws IOException {
+        Template template = this.cfg.getTemplate(templateOption.getTemplate());
 
         try {
-            // TODO: need to find a way to find the extension to use in different languages.
             // Define the file path
-            final String pathString = String.format("%s/%s/%s.java", outputDirectory, dataModel.get("path"),
-                    ((ClassModel) dataModel.get("class")).getName());
+            final String pathString = String.format("%s/%s/%s%s", outputDirectory, dataModel.get("path"),
+                    ((ClassModel) dataModel.get("class")).getName(), templateOption.getExtension());
             Path path = Paths.get(pathString);
 
             // Create the necessary directories if they don't already exist

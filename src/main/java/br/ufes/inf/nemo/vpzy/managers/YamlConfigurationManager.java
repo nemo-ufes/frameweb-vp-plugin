@@ -1,11 +1,13 @@
 package br.ufes.inf.nemo.vpzy.managers;
 
+import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
+import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
-import br.ufes.inf.nemo.vpzy.utils.ReflectionUtil;
-import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -20,11 +22,11 @@ import java.util.logging.Level;
  *
  * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
-public class YamlConfigurationManager<T> {
+public class YamlConfigurationManager {
     /** The contents of the configuration. */
     private final Yaml yaml;
 
-    private final Map<String, T> options = new HashMap<>();
+    private final Map<String, TemplateOption> options = new HashMap<>();
 
     /** Name of the plug-in. */
     private final String pluginName;
@@ -36,7 +38,7 @@ public class YamlConfigurationManager<T> {
     private final File configFile;
 
     /** Constructor loads the configuration items from the config file. */
-    public YamlConfigurationManager(String pluginName, String configFileName) {
+    public YamlConfigurationManager(final String pluginName, final String configFileName) {
         this.pluginName = pluginName;
         this.configFileName = configFileName;
 
@@ -44,8 +46,13 @@ public class YamlConfigurationManager<T> {
         final File workspace = ApplicationManagerUtils.getWorkspaceLocation();
         configFile = new File(workspace, configFileName);
 
-        final Class<?> domainClass = ReflectionUtil.determineTypeArgument(this.getClass());
-        this.yaml = new Yaml(new Constructor(new TypeDescription(domainClass)));
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+        Representer representer = new Representer();
+        representer.addClassTag(TemplateOption.class, Tag.MAP);
+
+        this.yaml = new Yaml(representer, dumperOptions);
         load();
     }
 
@@ -62,6 +69,7 @@ public class YamlConfigurationManager<T> {
         if (configFile.exists()) {
 
             try (final InputStream inputStream = new FileInputStream(configFile)) {
+
                 loadProperties(inputStream);
                 return;
             } catch (IOException e) {
@@ -85,15 +93,52 @@ public class YamlConfigurationManager<T> {
         }
     }
 
+    /**
+     * Loads the configuration items from a properties file (see {@code CONFIG_FILE_NAME}) in Visual Paradigm's
+     *
+     * @param inputStream The input stream from which to read the properties.
+     */
     private void loadProperties(final InputStream inputStream) {
-        final Props data = yaml.loadAs(inputStream, Props.class);
 
-        if (data != null) {
-            options.clear();
-            options.putAll(data.map);
+        final Map<String, Object> data2 = (Map<String, Object>) yaml.load(inputStream);
+
+        for (Map.Entry<String, Object> entry : data2.entrySet()) {
+
+            final String key = entry.getKey();
+
+            final Map<String, Object> templateInfo = (Map<String, Object>) entry.getValue();
+
+            final String templatePath = (String) templateInfo.get("templatePath");
+            final String outputPath = (String) templateInfo.get("outputPath");
+            final String description = (String) templateInfo.get("description");
+
+            final FileTypes entity = extractFileType(templateInfo.get("entity"));
+
+            final FileTypes enumeration = extractFileType(templateInfo.get("enumeration"));
+
+            final FileTypes mappedSuperclass = extractFileType(templateInfo.get("mappedSuperclass"));
+
+            final FileTypes transientClass = extractFileType(templateInfo.get("transientClass"));
+
+            final FileTypes embeddable = extractFileType(templateInfo.get("embeddable"));
+
+            final FileTypes dao = extractFileType(templateInfo.get("dao"));
+
+            final FileTypes service = extractFileType(templateInfo.get("service"));
+
+            final FileTypes controller = extractFileType(templateInfo.get("controller"));
+
+            final TemplateOption templateOption = new TemplateOption(key, description, templatePath, outputPath, entity,
+                    enumeration, mappedSuperclass, transientClass, embeddable, dao, service, controller);
+
+            templateOption.validate();
+
+            options.put(key, templateOption);
         }
+
         Logger.log(Level.FINEST, "Configuration successfully loaded for plug-in {0}, saved to {1}.",
                 new Object[] { pluginName, configFile.getAbsolutePath() });
+
     }
 
     /**
@@ -107,14 +152,21 @@ public class YamlConfigurationManager<T> {
         // Stores the properties in the file.
         try (final FileWriter outputStream = new FileWriter(configFile)) {
 
-            final Props data = new Props();
-            data.map = options;
-            yaml.dump(data, outputStream);
+            yaml.dump(options, outputStream);
             Logger.log(Level.FINEST, "Configuration successfully saved for plug-in {0}.", pluginName);
         } catch (IOException e) {
             Logger.log(Level.SEVERE, "Cannot save {0} configurations. Plug-in will not remember configuration changes.",
                     pluginName);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private FileTypes extractFileType(final Object fileType) {
+        final Map<String, Object> entity = (Map<String, Object>) fileType;
+        final String entityTemplate = (String) entity.get("template");
+        final String entityExtension = (String) entity.get("extension");
+
+        return new FileTypes(entityTemplate, entityExtension);
     }
 
     /**
@@ -124,8 +176,8 @@ public class YamlConfigurationManager<T> {
      * @return The value of the configuration item, or {@code null} if no configuration item with the given key is
      * found.
      */
-    public T getProperty(String key) {
-        final T value = options.get(key);
+    public TemplateOption getProperty(String key) {
+        final TemplateOption value = options.get(key);
         Logger.log(Level.FINEST, "Retrieving configuration for key {0}: {1}.", new Object[] { key, value });
         return value;
     }
@@ -136,13 +188,13 @@ public class YamlConfigurationManager<T> {
      * @param key   The given key.
      * @param value The new value to set.
      */
-    public void setProperty(String key, T value) {
+    public void setProperty(String key, TemplateOption value) {
         Logger.log(Level.FINEST, "Changing configuration for key {0}: {1}.", new Object[] { key, value });
         options.put(key, value);
     }
 
-    private class Props {
-        Map<String, T> map;
+    public Map<String, TemplateOption> getOptions() {
+        return options;
     }
 
 }

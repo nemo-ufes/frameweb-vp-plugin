@@ -8,7 +8,6 @@ import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPActionController;
 import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
-import javax.swing.*;
 import java.awt.*;
 import java.util.logging.Level;
 
@@ -22,7 +21,6 @@ public class GenerateCodeController implements VPActionController {
     public static final int WIDTH = 800;
 
     public static final int HEIGHT = 200;
-
 
     /**
      * Called when the button is pressed. Performs code generation.
@@ -48,7 +46,7 @@ public class GenerateCodeController implements VPActionController {
      */
     @Override
     public void update(VPAction vpAction) {
-
+        // No action.
     }
 
     /**
@@ -60,16 +58,14 @@ public class GenerateCodeController implements VPActionController {
          */
         @Override
         public Component getComponent() {
-            GenerateCodePanel generateCodePanel;
+            GenerateCodePanel generateCodePanelOld;
             try {
-                generateCodePanel = new GenerateCodePanel();
-            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-                    IllegalAccessException e) {
-                e.printStackTrace();
+                generateCodePanelOld = new GenerateCodePanel();
+            } catch (Exception e) {
                 Logger.log(Level.SEVERE, "Error while creating Generate Code Settings dialog", e);
                 throw new RuntimeException(e);
             }
-            return generateCodePanel;
+            return generateCodePanelOld;
         }
 
         /**
@@ -88,6 +84,7 @@ public class GenerateCodeController implements VPActionController {
          */
         @Override
         public void shown() {
+            // no action
         }
 
         /**
