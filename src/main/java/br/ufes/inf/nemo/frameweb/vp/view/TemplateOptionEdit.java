@@ -7,6 +7,7 @@ package br.ufes.inf.nemo.frameweb.vp.view;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -267,10 +268,10 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             // Saves the configuration.
             configManager.save();
 
-            JOptionPane.showMessageDialog(this, "Template Option saved successfully", "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
+            ViewManagerUtils.showMessageDialog("Template Option saved successfully", "Success",
+                    ViewManagerUtils.INFORMATION_MESSAGE);
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ViewManagerUtils.showMessageDialog(e.getMessage(), "Error", ViewManagerUtils.ERROR_MESSAGE);
         }
 
     }

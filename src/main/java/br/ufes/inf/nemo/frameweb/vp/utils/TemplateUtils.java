@@ -20,6 +20,7 @@ import com.vp.plugin.model.IPackage;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.IRelationshipEnd;
 import com.vp.plugin.model.factory.IModelElementFactory;
+import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -222,7 +223,7 @@ public final class TemplateUtils {
 
         try {
             engine.generateCode(fileTypes, dataModel);
-        } catch (IOException e) {
+        } catch (IOException | TemplateException e) {
             throw new RuntimeException(e);
         }
     }

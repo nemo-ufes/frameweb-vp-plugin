@@ -112,7 +112,10 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         final Map<String, TemplateOption> options = TemplateUtils.getTemplateOptions();
         final Collection<TemplateOption> values = options.values();
-        return new DefaultComboBoxModel<>(values.toArray(new TemplateOption[0]));
+        final TemplateOption defaultItem = new TemplateOption();
+        defaultItem.setDescription("Select a template");
+        final TemplateOption[] a = new TemplateOption[] { defaultItem };
+        return new DefaultComboBoxModel<>(values.toArray(a));
     }
     // End of variables declaration//GEN-END:variables
 
@@ -130,12 +133,20 @@ public class GenerateCodePanel extends javax.swing.JPanel {
     private void generateCodeButtonMouseClicked() {
         final TemplateOption selectedItem = (TemplateOption) templateComboBox.getSelectedItem();
 
-        if (selectedItem == null) {
-            JOptionPane.showMessageDialog(this, "Please select a template option", "Error", JOptionPane.ERROR_MESSAGE);
+        if (selectedItem == null || selectedItem.getName() == null) {
+            ViewManagerUtils.showMessageDialog("Please select a template option", "Error",
+                    ViewManagerUtils.ERROR_MESSAGE);
             return;
         }
 
-        TemplateUtils.generateCode(selectedItem);
+        try {
+            TemplateUtils.generateCode(selectedItem);
+            ViewManagerUtils.showMessageDialog("Code generated successfully", "Success",
+                    ViewManagerUtils.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            Logger.log(Level.SEVERE, "Error while generating code", e);
+            ViewManagerUtils.showMessageDialog("Error while generating code", "Error", ViewManagerUtils.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -153,14 +164,14 @@ public class GenerateCodePanel extends javax.swing.JPanel {
          */
         @Override
         public Component getComponent() {
-            TemplateOptionEdit generateCodePanelOld;
+            TemplateOptionEdit templateOptionEdit;
             try {
-                generateCodePanelOld = new TemplateOptionEdit(templateOption);
+                templateOptionEdit = new TemplateOptionEdit(templateOption);
             } catch (Exception e) {
                 Logger.log(Level.SEVERE, "Error while creating Generate Code Template Settings dialog", e);
                 throw new RuntimeException(e);
             }
-            return generateCodePanelOld;
+            return templateOptionEdit;
         }
 
         /**

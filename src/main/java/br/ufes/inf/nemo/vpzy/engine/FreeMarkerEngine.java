@@ -3,7 +3,10 @@ package br.ufes.inf.nemo.vpzy.engine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.FileTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -18,6 +21,7 @@ import java.util.logging.Level;
 
 /**
  * Generates code from a template using FreeMarker.
+ *
  * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public class FreeMarkerEngine {
@@ -28,19 +32,28 @@ public class FreeMarkerEngine {
     public FreeMarkerEngine(final String templatePath, final String outputDirectory) {
         cfg = new Configuration(Configuration.VERSION_2_3_31);
 
-        // Set the template loader to load templates from the "templates" folder
-        File templateDir = new File(templatePath);
 
         this.outputDirectory = outputDirectory;
+        cfg.clearTemplateCache();
+        // Set the template loader to load templates from the classpath
+        ClassTemplateLoader templateLoader1 = new ClassTemplateLoader(this.getClass(), templatePath);
+        FileTemplateLoader templateLoader2 = null;
         try {
-            cfg.clearTemplateCache();
-            cfg.setTemplateLoader(new FileTemplateLoader(templateDir));
+            // Set the template loader to load templates from the file system
+            templateLoader2 = new FileTemplateLoader(new File(templatePath));
         } catch (IOException e) {
-            // Handle exception
+            // If the file system template loader fails, log the error and continue.
+            // This is not a fatal error, as the classpath template loader should still work.
+            Logger.log(Level.SEVERE, "An error occurred while loading the template.", e);
         }
+        TemplateLoader[] loaders = { templateLoader1, templateLoader2 };
+        MultiTemplateLoader multiTemplateLoader = new MultiTemplateLoader(loaders);
+        cfg.setTemplateLoader(multiTemplateLoader);
+
     }
 
-    public void generateCode(final FileTypes templateOption, final Map<String, Object> dataModel) throws IOException {
+    public void generateCode(final FileTypes templateOption, final Map<String, Object> dataModel)
+            throws IOException, TemplateException {
         Template template = this.cfg.getTemplate(templateOption.getTemplate());
 
         try {
@@ -61,6 +74,7 @@ public class FreeMarkerEngine {
         } catch (IOException | TemplateException e) {
             Logger.log(Level.SEVERE, "An error occurred while writing to file.");
             e.printStackTrace();
+            throw e;
         }
     }
 
