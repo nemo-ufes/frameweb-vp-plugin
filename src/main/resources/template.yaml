@@ -14,7 +14,7 @@ spring:
     template: EntityClassTemplate.ftl
   enumeration:
     extension: .java
-    template: EnumerationTemplate.ftl
+    template: EnumerationClassTemplate.ftl
   mappedSuperclass:
     extension: .java
     template: MappedSuperclassTemplate.ftl
@@ -26,24 +26,26 @@ spring:
   templatePath: templates/spring
   transientClass:
     extension: .java
-    template: TransientClassTemplate.ftl
+    template: PojoTemplate.ftl
+
+
 jbutler:
   controller:
     extension: .java
-    template: ControllerTemplate.ftl
+    template: ControllerClassTemplate.ftl
   dao:
     extension: .java
-    template: DaoTemplate.ftl
+    template: DaoClassTemplate.ftl
   description: Default Template for JButler
   embeddable:
     extension: .java
-    template: EmbeddableTemplate.ftl
+    template: EmbeddableClassTemplate.ftl
   entity:
     extension: .java
     template: EntityClassTemplate.ftl
   enumeration:
     extension: .java
-    template: EnumerationTemplate.ftl
+    template: EnumerationClassTemplate.ftl
   mappedSuperclass:
     extension: .java
     template: MappedSuperclassTemplate.ftl
@@ -51,8 +53,8 @@ jbutler:
   outputPath: /jbutler/{projectName}
   service:
     extension: .java
-    template: ServiceTemplate.ftl
+    template: ServiceClassTemplate.ftl
   templatePath: /templates/jbutler
   transientClass:
     extension: .java
-    template: TransientTemplate.ftl
+    template: PojoTemplate.ftl

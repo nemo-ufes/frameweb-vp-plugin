@@ -11,6 +11,7 @@ import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Defines the layout of the panel that will be shown in the dialog to edit the configuration of a template option.
@@ -268,9 +269,14 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             // Saves the configuration.
             configManager.save();
 
+            // Imports the template folder.
+            configManager.importTemplateFolder(this.templateOption);
+
+            GenerateCodePanel.getTemplateOptions();
+
             ViewManagerUtils.showMessageDialog("Template Option saved successfully", "Success",
                     ViewManagerUtils.INFORMATION_MESSAGE);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException e) {
             ViewManagerUtils.showMessageDialog(e.getMessage(), "Error", ViewManagerUtils.ERROR_MESSAGE);
         }
 

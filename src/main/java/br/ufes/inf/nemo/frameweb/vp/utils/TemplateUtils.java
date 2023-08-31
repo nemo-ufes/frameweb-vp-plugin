@@ -22,6 +22,8 @@ import com.vp.plugin.model.IRelationshipEnd;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import freemarker.template.TemplateException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,31 +46,15 @@ public final class TemplateUtils {
      *
      * @param templateName The name of the template used.
      * @param outputDir    The directory for the generated code.
+     * @deprecated Use {@link #generateCode(TemplateOption)} instead.
      */
+    @Deprecated(since = "#24", forRemoval = true)
     public static void generateCode(final String templateName, final String outputDir) {
         final IProject project = ProjectManagerUtils.getCurrentProject();
 
         final TemplateOption templateOption = getTemplateOption(templateName);
 
         final FreeMarkerEngine engine = new FreeMarkerEngine(templateOption.getTemplatePath(), outputDir);
-
-        @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
-                IModelElementFactory.MODEL_TYPE_PACKAGE);
-
-        // process packages
-        iter.forEachRemaining(pack -> processPackage(pack, engine, templateOption));
-
-    }
-
-    /**
-     * Generates the code for the FrameWeb project.
-     *
-     * @param templateOption The template option used.
-     */
-    public static void generateCode( final TemplateOption templateOption) {
-        final IProject project = ProjectManagerUtils.getCurrentProject();
-
-        final FreeMarkerEngine engine = new FreeMarkerEngine(templateOption.getTemplatePath(), templateOption.getOutputPath());
 
         @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
                 IModelElementFactory.MODEL_TYPE_PACKAGE);
@@ -86,8 +72,7 @@ public final class TemplateUtils {
      * @throws IllegalArgumentException if the template option is not found or is invalid.
      */
     public static TemplateOption getTemplateOption(final String templateName) {
-        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance()
-                .getGenerateCodeConfigManager();
+        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
         final TemplateOption templateOption = configurationManager.getProperty(templateName);
 
@@ -328,14 +313,35 @@ public final class TemplateUtils {
     }
 
     /**
+     * Generates the code for the FrameWeb project.
+     *
+     * @param templateOption The template option used.
+     */
+    public static void generateCode(final TemplateOption templateOption) {
+        final IProject project = ProjectManagerUtils.getCurrentProject();
+        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
+
+        final Path templatePath = Paths.get(configurationManager.getTemplateFolder().getPath(),
+                templateOption.getName());
+
+        final FreeMarkerEngine engine = new FreeMarkerEngine(templatePath.toString(), templateOption.getOutputPath());
+
+        @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
+                IModelElementFactory.MODEL_TYPE_PACKAGE);
+
+        // process packages
+        iter.forEachRemaining(pack -> processPackage(pack, engine, templateOption));
+
+    }
+
+    /**
      * Gets the template options defined in the configuration file.
      *
      * @return The configurations for the templates.
      * @throws IllegalArgumentException if the template options are not found or are invalid.
      */
     public static Map<String, TemplateOption> getTemplateOptions() {
-        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance()
-                .getGenerateCodeConfigManager();
+        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
         final Map<String, TemplateOption> templateOptions = configurationManager.getOptions();
 

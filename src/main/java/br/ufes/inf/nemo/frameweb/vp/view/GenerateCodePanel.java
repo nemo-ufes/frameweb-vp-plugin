@@ -108,7 +108,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         add(generateCodeButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private DefaultComboBoxModel<TemplateOption> getTemplateOptions() {
+    public static DefaultComboBoxModel<TemplateOption> getTemplateOptions() {
 
         final Map<String, TemplateOption> options = TemplateUtils.getTemplateOptions();
         final Collection<TemplateOption> values = options.values();

@@ -3,10 +3,7 @@ package br.ufes.inf.nemo.vpzy.engine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
-import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.FileTemplateLoader;
-import freemarker.cache.MultiTemplateLoader;
-import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -32,23 +29,18 @@ public class FreeMarkerEngine {
     public FreeMarkerEngine(final String templatePath, final String outputDirectory) {
         cfg = new Configuration(Configuration.VERSION_2_3_31);
 
-
         this.outputDirectory = outputDirectory;
         cfg.clearTemplateCache();
-        // Set the template loader to load templates from the classpath
-        ClassTemplateLoader templateLoader1 = new ClassTemplateLoader(this.getClass(), templatePath);
-        FileTemplateLoader templateLoader2 = null;
+        FileTemplateLoader templateLoader = null;
         try {
-            // Set the template loader to load templates from the file system
-            templateLoader2 = new FileTemplateLoader(new File(templatePath));
+            // Set the template loader to load templates from the file system.
+            templateLoader = new FileTemplateLoader(new File(templatePath));
         } catch (IOException e) {
             // If the file system template loader fails, log the error and continue.
             // This is not a fatal error, as the classpath template loader should still work.
             Logger.log(Level.SEVERE, "An error occurred while loading the template.", e);
         }
-        TemplateLoader[] loaders = { templateLoader1, templateLoader2 };
-        MultiTemplateLoader multiTemplateLoader = new MultiTemplateLoader(loaders);
-        cfg.setTemplateLoader(multiTemplateLoader);
+        cfg.setTemplateLoader(templateLoader);
 
     }
 

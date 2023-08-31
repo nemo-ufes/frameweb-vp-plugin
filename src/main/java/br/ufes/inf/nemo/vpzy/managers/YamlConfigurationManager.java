@@ -4,6 +4,8 @@ import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
+import br.ufes.inf.nemo.vpzy.utils.FileUtils;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.nodes.Tag;
@@ -13,6 +15,11 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -23,6 +30,10 @@ import java.util.logging.Level;
  * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public class YamlConfigurationManager {
+    public static final String TEMPLATE_FOLDER = "templates";
+
+    public static final String ERROR = "Error";
+
     /** The contents of the configuration. */
     private final Yaml yaml;
 
@@ -37,6 +48,8 @@ public class YamlConfigurationManager {
     /** The file in which to save the configuration. */
     private final File configFile;
 
+    private final File templateFolder;
+
     /** Constructor loads the configuration items from the config file. */
     public YamlConfigurationManager(final String pluginName, final String configFileName) {
         this.pluginName = pluginName;
@@ -45,6 +58,7 @@ public class YamlConfigurationManager {
         // Locates the config file in Visual Paradigm's workspace and loads it.
         final File workspace = ApplicationManagerUtils.getWorkspaceLocation();
         configFile = new File(workspace, configFileName);
+        templateFolder = new File(workspace, TEMPLATE_FOLDER);
 
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -79,17 +93,11 @@ public class YamlConfigurationManager {
         }
 
         // If the config file doesn't exist, creates one based on default values and saves.
-        Logger.log(Level.FINE, "Loading {0} configuration from classpath location {1} and saving to {2}",
-                new Object[] { pluginName, configFileName, configFile.getAbsolutePath() });
-        try (final InputStream inputStream = ConfigurationManager.class.getClassLoader()
-                .getResourceAsStream(configFileName)) {
 
-            loadProperties(inputStream);
-
-            save();
-        } catch (IOException e) {
-            Logger.log(Level.SEVERE, "Cannot read {0} from classpath. Plug-in will not remember configuration changes.",
-                    configFileName);
+        try {
+            importDefaultTemplates();
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -142,6 +150,58 @@ public class YamlConfigurationManager {
     }
 
     /**
+     * Imports the default templates from the classpath.
+     */
+    private void importDefaultTemplates() throws IOException, URISyntaxException {
+
+        if (!this.templateFolder.exists()) {
+            final boolean success = templateFolder.mkdir();
+            if (success) {
+                Logger.log(Level.FINEST, "Created templates folder at {0}.", templateFolder.getAbsolutePath());
+
+            } else {
+                Logger.log(Level.SEVERE, "Could not create templates folder at {0}.", templateFolder.getAbsolutePath());
+            }
+        }
+
+        final URL templates = getClass().getClassLoader().getResource(TEMPLATE_FOLDER);
+        assert templates != null : "Could not find templates folder in classpath.";
+        final File[] files = new File(templates.toURI()).listFiles();
+
+        assert files != null : "Could not list templates folder in classpath.";
+
+        for (final File file : files) {
+            Path source = Paths.get(file.getAbsolutePath());
+            FileUtils.copyFolder(source, templateFolder.toPath().resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+
+        }
+
+        Logger.log(Level.FINE, "Loading {0} configuration from classpath location {1} and saving to {2}",
+                new Object[] { pluginName, configFileName, configFile.getAbsolutePath() });
+        try (final InputStream inputStream = YamlConfigurationManager.class.getClassLoader()
+                .getResourceAsStream(configFileName)) {
+
+            loadProperties(inputStream);
+
+            save();
+        } catch (IOException e) {
+            Logger.log(Level.SEVERE, "Cannot read {0} from classpath. Plug-in will not remember configuration changes.",
+                    configFileName);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private FileTypes extractFileType(final Object fileType) {
+        final Map<String, Object> entity = (Map<String, Object>) fileType;
+        final String entityTemplate = (String) entity.get("template");
+        final String entityExtension = (String) entity.get("extension");
+
+        return new FileTypes(entityTemplate, entityExtension);
+    }
+
+
+
+    /**
      * Saves the current configuration to a properties file (see {@code CONFIG_FILE_NAME}) in Visual Paradigm's
      * workspace directory, allowing users to persist configuration changes.
      */
@@ -158,15 +218,6 @@ public class YamlConfigurationManager {
             Logger.log(Level.SEVERE, "Cannot save {0} configurations. Plug-in will not remember configuration changes.",
                     pluginName);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private FileTypes extractFileType(final Object fileType) {
-        final Map<String, Object> entity = (Map<String, Object>) fileType;
-        final String entityTemplate = (String) entity.get("template");
-        final String entityExtension = (String) entity.get("extension");
-
-        return new FileTypes(entityTemplate, entityExtension);
     }
 
     /**
@@ -197,4 +248,80 @@ public class YamlConfigurationManager {
         return options;
     }
 
+    public void importTemplateFolder(final TemplateOption templateOption) throws IOException {
+
+        if (templateOption == null) {
+
+            ViewManagerUtils.showMessageDialog("Template Option not passed", ERROR, ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        templateOption.validate();
+
+        final File sourceTemplates = new File(templateOption.getTemplatePath());
+
+        final String sourceTemplatesAbsolutePath = sourceTemplates.getAbsolutePath();
+        if (!sourceTemplates.exists()) {
+            Logger.log(Level.SEVERE, "Could not find templates folder at {0}.", sourceTemplatesAbsolutePath);
+            ViewManagerUtils.showMessageDialog("Could not find templates folder", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getEntity().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find entity template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getEnumeration().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find enumeration template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getMappedSuperclass().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find mapped superclass template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getTransientClass().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find transient class template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getEmbeddable().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find embeddable template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getDao().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find dao template", ERROR, ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getService().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find service template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        if (templateOption.getController().invalidTemplate(sourceTemplatesAbsolutePath)) {
+            ViewManagerUtils.showMessageDialog("Could not find controller template", ERROR,
+                    ViewManagerUtils.ERROR_MESSAGE);
+            return;
+        }
+
+        final String name = templateOption.getName();
+        final Path resolve = templateFolder.toPath().resolve(name);
+        FileUtils.copyFolder(sourceTemplates.toPath(), resolve, StandardCopyOption.REPLACE_EXISTING);
+
+    }
+
+    public File getTemplateFolder() {
+        return templateFolder;
+    }
 }

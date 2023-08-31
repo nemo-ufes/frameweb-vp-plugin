@@ -35,7 +35,7 @@ public class ConfigurationManager {
     this.configFileName = configFileName;
 
     // Locates the config file in Visual Paradigm's workspace and loads it.
-    File workspace = ApplicationManagerUtils.getWorkspaceLocation();
+    final File workspace = ApplicationManagerUtils.getWorkspaceLocation();
     configFile = new File(workspace, configFileName);
     load();
   }

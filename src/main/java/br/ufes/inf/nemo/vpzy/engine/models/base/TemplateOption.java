@@ -20,7 +20,7 @@ public class TemplateOption implements Serializable {
 
     private FileTypes entity = new FileTypes("EntityClassTemplate.ftl", EXTENSION);
 
-    private FileTypes enumeration = new FileTypes("EnumerationTemplate.ftl", EXTENSION);
+    private FileTypes enumeration = new FileTypes("EnumerationClassTemplate.ftl", EXTENSION);
 
     private FileTypes mappedSuperclass = new FileTypes("MappedSuperclassTemplate.ftl", EXTENSION);
 
