@@ -1,6 +1,7 @@
 package br.ufes.inf.nemo.frameweb.vp;
 
 import java.util.logging.Level;
+import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;
 import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebAssociationEndListener;
@@ -15,8 +16,8 @@ import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
  * Implementation of VPPlugin responsible for configuring FrameWeb plug-in's behavior when loading
  * and unloading. This class also centralizes global information on the FrameWeb plug-in.
  *
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
- * @author Igor Sunderhus e Silva (
+ * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">Ufes Page</a>)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public class FrameWebPlugin implements VPPlugin {
   /* Plug-in information. */
@@ -29,6 +30,7 @@ public class FrameWebPlugin implements VPPlugin {
 
   /** Name of the configuration file. */
   private static final String CONFIG_FILE_NAME = "frameweb-tools.properties";
+  private static final String TEMPLATE_CONFIG_FILE_NAME = "template.yaml";
 
   /* Plug-in configuration keys. */
   public static final String CONFIG_LOGGING_LEVEL = "logging.level";
@@ -67,9 +69,11 @@ public class FrameWebPlugin implements VPPlugin {
   /** Indicates if the Plug-in Settings Dialog is open. */
   private boolean pluginSettingsDialogOpen = false;
 
+  /* code generation properties. */
 
   /** Indicates if the Generate Code Settings Dialog is open. */
   private boolean generateCodeSettingsDialogOpen = false;
+  private YamlConfigurationManager generateCodeConfigManager;
 
   /** Returns the active instance of the plug-in. */
   public static FrameWebPlugin instance() {
@@ -88,13 +92,6 @@ public class FrameWebPlugin implements VPPlugin {
     this.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
   }
 
-  public boolean isGenerateCodeSettingsDialogOpen() {
-      return generateCodeSettingsDialogOpen;
-    }
-
-    public void setGenerateCodeSettingsDialogOpen(boolean generateCodeSettingsDialogOpen) {
-      this.generateCodeSettingsDialogOpen = generateCodeSettingsDialogOpen;
-    }
 
   /**
    * Sets up the plug-in (initialization).
@@ -109,6 +106,7 @@ public class FrameWebPlugin implements VPPlugin {
 
     // Loads the plug-in configuration.
     configManager = new ConfigurationManager(PLUGIN_NAME, CONFIG_FILE_NAME);
+    generateCodeConfigManager = new YamlConfigurationManager(PLUGIN_NAME, TEMPLATE_CONFIG_FILE_NAME);
 
     // Sets up a specific logger for this plug-in.
     Logger.setup(PLUGIN_NAME, Level.parse(configManager.getProperty(CONFIG_LOGGING_LEVEL)));
@@ -151,4 +149,17 @@ public class FrameWebPlugin implements VPPlugin {
   public void unloaded() {
     FrameWebPlugin.activeInstance = null;
   }
+
+  /** Code generation methods */
+  public boolean isGenerateCodeSettingsDialogOpen() {
+    return generateCodeSettingsDialogOpen;
+  }
+
+  public void setGenerateCodeSettingsDialogOpen(boolean generateCodeSettingsDialogOpen) {
+    this.generateCodeSettingsDialogOpen = generateCodeSettingsDialogOpen;
+  }
+
+    public YamlConfigurationManager getGenerateCodeConfigManager() {
+        return generateCodeConfigManager;
+    }
 }

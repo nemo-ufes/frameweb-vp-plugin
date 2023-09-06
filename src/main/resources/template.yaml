@@ -1,0 +1,60 @@
+spring:
+  controller:
+    extension: .java
+    template: ControllerClassTemplate.ftl
+  dao:
+    extension: .java
+    template: DaoClassTemplate.ftl
+  description: Default Template for Spring projects
+  embeddable:
+    extension: .java
+    template: EmbeddableClassTemplate.ftl
+  entity:
+    extension: .java
+    template: EntityClassTemplate.ftl
+  enumeration:
+    extension: .java
+    template: EnumerationClassTemplate.ftl
+  mappedSuperclass:
+    extension: .java
+    template: MappedSuperclassTemplate.ftl
+  name: spring
+  outputPath: /projets/{projectName}
+  service:
+    extension: .java
+    template: ServiceClassTemplate.ftl
+  templatePath: templates/spring
+  transientClass:
+    extension: .java
+    template: PojoTemplate.ftl
+
+
+jbutler:
+  controller:
+    extension: .java
+    template: ControllerClassTemplate.ftl
+  dao:
+    extension: .java
+    template: DaoClassTemplate.ftl
+  description: Default Template for JButler
+  embeddable:
+    extension: .java
+    template: EmbeddableClassTemplate.ftl
+  entity:
+    extension: .java
+    template: EntityClassTemplate.ftl
+  enumeration:
+    extension: .java
+    template: EnumerationClassTemplate.ftl
+  mappedSuperclass:
+    extension: .java
+    template: MappedSuperclassTemplate.ftl
+  name: jbutler
+  outputPath: /jbutler/{projectName}
+  service:
+    extension: .java
+    template: ServiceClassTemplate.ftl
+  templatePath: /templates/jbutler
+  transientClass:
+    extension: .java
+    template: PojoTemplate.ftl
