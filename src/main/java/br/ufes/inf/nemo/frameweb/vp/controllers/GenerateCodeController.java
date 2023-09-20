@@ -53,19 +53,24 @@ public class GenerateCodeController implements VPActionController {
      * A dialog handler that is used by Visual Paradigm to open a dialog based on a panel with its contents.
      */
     protected static class GenerateCodeSettingsDialogHandler implements IDialogHandler {
+
+        private final GenerateCodePanel generateCodePanel;
+        public GenerateCodeSettingsDialogHandler() {
+            try {
+                generateCodePanel = new GenerateCodePanel();
+            } catch (Exception e) {
+                Logger.log(Level.SEVERE, "Error while creating Generate Code Settings dialog", e);
+                throw new RuntimeException(e);
+            }
+        }
+
+
         /**
          * Called once before the dialog is shown. Should return the contents of the dialog.
          */
         @Override
         public Component getComponent() {
-            GenerateCodePanel generateCodePanelOld;
-            try {
-                generateCodePanelOld = new GenerateCodePanel();
-            } catch (Exception e) {
-                Logger.log(Level.SEVERE, "Error while creating Generate Code Settings dialog", e);
-                throw new RuntimeException(e);
-            }
-            return generateCodePanelOld;
+            return generateCodePanel;
         }
 
         /**
@@ -77,6 +82,7 @@ public class GenerateCodeController implements VPActionController {
             dialog.setModal(false);
             dialog.setResizable(true);
             dialog.setSize(WIDTH, HEIGHT);
+            generateCodePanel.setContainerDialog(dialog);
         }
 
         /**

@@ -8,6 +8,7 @@ import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
+import com.vp.plugin.view.IDialog;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -30,6 +31,8 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
      * Provides the configuration values and lets us change them.
      */
     private final YamlConfigurationManager configManager = plugin.getGenerateCodeConfigManager();
+
+    private IDialog containerDialog;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private FileTypeEdit controllerFileTypeEdit;
@@ -276,6 +279,9 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
 
             ViewManagerUtils.showMessageDialog("Template Option saved successfully", "Success",
                     ViewManagerUtils.INFORMATION_MESSAGE);
+
+            // Closes the configuration dialog.
+            containerDialog.close();
         } catch (IllegalArgumentException | IOException e) {
             ViewManagerUtils.showMessageDialog(e.getMessage(), "Error", ViewManagerUtils.ERROR_MESSAGE);
         }
@@ -290,6 +296,10 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             File selectedFile = chooser.getSelectedFile();
             outputPathTextField.setText(selectedFile.getAbsolutePath());
         }
+    }
+
+    public void setContainerDialog(final IDialog containerDialog) {
+        this.containerDialog = containerDialog;
     }
 
 }
