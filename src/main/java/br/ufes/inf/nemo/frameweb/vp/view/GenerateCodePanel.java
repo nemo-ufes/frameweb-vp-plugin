@@ -13,6 +13,8 @@ import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,11 +27,17 @@ import java.util.logging.Level;
 public class GenerateCodePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<TemplateOption> templateComboBox;
 
+    private IDialog containerDialog;
+
     /**
      * Creates new form GenerateCodePanel
      */
     public GenerateCodePanel() {
         initComponents();
+    }
+
+    public void setContainerDialog(final IDialog containerDialog) {
+        this.containerDialog = containerDialog;
     }
 
     /**
@@ -143,6 +151,16 @@ public class GenerateCodePanel extends javax.swing.JPanel {
             TemplateUtils.generateCode(selectedItem);
             ViewManagerUtils.showMessageDialog("Code generated successfully", "Success",
                     ViewManagerUtils.INFORMATION_MESSAGE);
+
+            // Closes the configuration dialog.
+            containerDialog.close();
+
+            final File file = new File (Paths.get(selectedItem.getOutputPath()).toString());
+            final Desktop desktop = Desktop.getDesktop();
+            desktop.open(file);
+
+            FrameWebPlugin.instance().setGenerateCodeSettingsDialogOpen(false);
+
         } catch (Exception e) {
             Logger.log(Level.SEVERE, "Error while generating code", e);
             ViewManagerUtils.showMessageDialog("Error while generating code", "Error", ViewManagerUtils.ERROR_MESSAGE);
@@ -153,10 +171,15 @@ public class GenerateCodePanel extends javax.swing.JPanel {
      * A dialog handler that is used by Visual Paradigm to open a dialog based on a panel with its contents.
      */
     private static class TemplateOptionEditDialogHandler implements IDialogHandler {
-        private final TemplateOption templateOption;
+        private final TemplateOptionEdit templateOptionEdit;
 
         public TemplateOptionEditDialogHandler(final TemplateOption templateOption) {
-            this.templateOption = templateOption;
+            try {
+                templateOptionEdit = new TemplateOptionEdit(templateOption);
+            } catch (Exception e) {
+                Logger.log(Level.SEVERE, "Error while creating Generate Code Template Settings dialog", e);
+                throw new RuntimeException(e);
+            }
         }
 
         /**
@@ -164,13 +187,6 @@ public class GenerateCodePanel extends javax.swing.JPanel {
          */
         @Override
         public Component getComponent() {
-            TemplateOptionEdit templateOptionEdit;
-            try {
-                templateOptionEdit = new TemplateOptionEdit(templateOption);
-            } catch (Exception e) {
-                Logger.log(Level.SEVERE, "Error while creating Generate Code Template Settings dialog", e);
-                throw new RuntimeException(e);
-            }
             return templateOptionEdit;
         }
 
@@ -178,11 +194,12 @@ public class GenerateCodePanel extends javax.swing.JPanel {
          * Called after getComponent(), dialog is created but not shown. Sets outlook of the dialog.
          */
         @Override
-        public void prepare(IDialog dialog) {
+        public void prepare(final IDialog dialog) {
             dialog.setTitle(FrameWebPlugin.PLUGIN_NAME + " Code Generation Template Settings");
             dialog.setModal(false);
             dialog.setResizable(true);
             dialog.setSize(814, 470);
+            templateOptionEdit.setContainerDialog(dialog);
         }
 
         /**
