@@ -8,6 +8,7 @@ import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.utils.TemplateUtils;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
@@ -155,7 +156,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
             // Closes the configuration dialog.
             containerDialog.close();
 
-            final File file = new File (Paths.get(selectedItem.getOutputPath()).toString());
+            final File file = new File (Paths.get(selectedItem.getOutputPath().replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName())).toString());
             final Desktop desktop = Desktop.getDesktop();
             desktop.open(file);
 

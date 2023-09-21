@@ -3,6 +3,7 @@ package br.ufes.inf.nemo.vpzy.engine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -50,7 +51,7 @@ public class FreeMarkerEngine {
 
         try {
             // Define the file path
-            final String pathString = String.format("%s/%s/%s%s", outputDirectory, dataModel.get("path"),
+            final String pathString = String.format("%s/%s/%s%s", outputDirectory.replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName()), dataModel.get("path"),
                     ((ClassModel) dataModel.get("class")).getName(), templateOption.getExtension());
             Path path = Paths.get(pathString);
 
