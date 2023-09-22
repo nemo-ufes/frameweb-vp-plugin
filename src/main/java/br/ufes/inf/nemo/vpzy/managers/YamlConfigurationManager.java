@@ -71,7 +71,7 @@ public class YamlConfigurationManager {
     }
 
     /**
-     * Loads the configuration items from a properties file (see {@code CONFIG_FILE_NAME}) in Visual Paradigm's
+     * Loads the configuration items from a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
      * workspace directory. If not found, loads from the classpath the default configurations and saves to the workspace
      * for next time. This method is called during the construction of a YamlConfigurationManager.
      */
@@ -102,7 +102,7 @@ public class YamlConfigurationManager {
     }
 
     /**
-     * Loads the configuration items from a properties file (see {@code CONFIG_FILE_NAME}) in Visual Paradigm's
+     * Loads the configuration items from a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
      *
      * @param inputStream The input stream from which to read the properties.
      */
@@ -202,7 +202,7 @@ public class YamlConfigurationManager {
 
 
     /**
-     * Saves the current configuration to a properties file (see {@code CONFIG_FILE_NAME}) in Visual Paradigm's
+     * Saves the current configuration to a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
      * workspace directory, allowing users to persist configuration changes.
      */
     public void save() {

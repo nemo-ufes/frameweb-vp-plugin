@@ -19,7 +19,7 @@ spring:
     extension: .java
     template: MappedSuperclassTemplate.ftl
   name: spring
-  outputPath: /projets/{projectName}
+  outputPath: /spring/{projectName}
   service:
     extension: .java
     template: ServiceClassTemplate.ftl
