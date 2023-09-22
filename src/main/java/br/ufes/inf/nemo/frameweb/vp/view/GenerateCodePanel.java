@@ -34,6 +34,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
      * Creates new form GenerateCodePanel
      */
     public GenerateCodePanel() {
+        Logger.log(Level.CONFIG, "Creating Generate Code Settings panel");
         initComponents();
     }
 
@@ -52,6 +53,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         templateLabel = new javax.swing.JLabel();
         templateComboBox = new javax.swing.JComboBox<>();
+        templateComboBox.setModel(getTemplateOptions());
         JButton editButton = new JButton();
         JButton newButton = new JButton();
         JButton generateCodeButton = new JButton();
@@ -69,7 +71,6 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(templateLabel, gridBagConstraints);
 
-        templateComboBox.setModel(getTemplateOptions());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -119,11 +120,13 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
     public static DefaultComboBoxModel<TemplateOption> getTemplateOptions() {
 
+        Logger.log(Level.CONFIG, "Getting template options");
         final Map<String, TemplateOption> options = TemplateUtils.getTemplateOptions();
         final Collection<TemplateOption> values = options.values();
         final TemplateOption defaultItem = new TemplateOption();
         defaultItem.setDescription("Select a template");
         final TemplateOption[] a = new TemplateOption[] { defaultItem };
+        Logger.log(Level.CONFIG, "Template options retrieved");
         return new DefaultComboBoxModel<>(values.toArray(a));
     }
     // End of variables declaration//GEN-END:variables

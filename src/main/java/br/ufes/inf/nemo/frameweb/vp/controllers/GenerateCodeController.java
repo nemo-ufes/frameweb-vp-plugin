@@ -31,6 +31,7 @@ public class GenerateCodeController implements VPActionController {
         final FrameWebPlugin plugin = FrameWebPlugin.instance();
         // If the dialog is already open, ignores the action.
         if (plugin.isGenerateCodeSettingsDialogOpen()) {
+            Logger.log(Level.CONFIG, "Generate Code Settings dialog is already open, ignoring action.");
             return;
         }
 
@@ -57,7 +58,9 @@ public class GenerateCodeController implements VPActionController {
         private final GenerateCodePanel generateCodePanel;
         public GenerateCodeSettingsDialogHandler() {
             try {
+                Logger.log(Level.CONFIG, "Creating Generate Code Settings dialog");
                 generateCodePanel = new GenerateCodePanel();
+                Logger.log(Level.CONFIG, "Generate Code Settings dialog created");
             } catch (Exception e) {
                 Logger.log(Level.SEVERE, "Error while creating Generate Code Settings dialog", e);
                 throw new RuntimeException(e);

@@ -59,15 +59,22 @@ public class YamlConfigurationManager {
         final File workspace = ApplicationManagerUtils.getWorkspaceLocation();
         configFile = new File(workspace, configFileName);
         templateFolder = new File(workspace, TEMPLATE_FOLDER);
+        Logger.log(Level.CONFIG, "Loading {0} configuration from {1}. File exists? {2}",
+                new Object[] { pluginName, configFile.getAbsolutePath(), configFile.exists() });
+        try {
+            DumperOptions dumperOptions = new DumperOptions();
+            dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+            Representer representer = new Representer();
+            representer.addClassTag(TemplateOption.class, Tag.MAP);
 
-        Representer representer = new Representer();
-        representer.addClassTag(TemplateOption.class, Tag.MAP);
-
-        this.yaml = new Yaml(representer, dumperOptions);
+            this.yaml = new Yaml(representer, dumperOptions);
+        } catch (Exception e) {
+            Logger.log(Level.SEVERE, "Error while creating YamlConfigurationManager", e);
+            throw e;
+        }
         load();
+        Logger.log(Level.CONFIG, "Configuration successfully loaded for plug-in {0}.", pluginName);
     }
 
     /**
@@ -97,12 +104,15 @@ public class YamlConfigurationManager {
         try {
             importDefaultTemplates();
         } catch (IOException | URISyntaxException e) {
+            Logger.log(Level.SEVERE, "Cannot read {0} from classpath. Plug-in will not remember configuration changes.",
+                    configFileName);
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * Loads the configuration items from a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
+     * Loads the configuration items from a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual
+     * Paradigm's
      *
      * @param inputStream The input stream from which to read the properties.
      */
@@ -172,7 +182,8 @@ public class YamlConfigurationManager {
 
         for (final File file : files) {
             Path source = Paths.get(file.getAbsolutePath());
-            FileUtils.copyFolder(source, templateFolder.toPath().resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+            FileUtils.copyFolder(source, templateFolder.toPath().resolve(source.getFileName()),
+                    StandardCopyOption.REPLACE_EXISTING);
 
         }
 
@@ -198,8 +209,6 @@ public class YamlConfigurationManager {
 
         return new FileTypes(entityTemplate, entityExtension);
     }
-
-
 
     /**
      * Saves the current configuration to a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
@@ -269,8 +278,7 @@ public class YamlConfigurationManager {
         }
 
         if (templateOption.getEntity().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find entity template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
+            ViewManagerUtils.showMessageDialog("Could not find entity template", ERROR, ViewManagerUtils.ERROR_MESSAGE);
             return;
         }
 

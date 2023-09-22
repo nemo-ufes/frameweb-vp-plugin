@@ -106,10 +106,11 @@ public class FrameWebPlugin implements VPPlugin {
 
     // Loads the plug-in configuration.
     configManager = new ConfigurationManager(PLUGIN_NAME, CONFIG_FILE_NAME);
-    generateCodeConfigManager = new YamlConfigurationManager(PLUGIN_NAME, TEMPLATE_CONFIG_FILE_NAME);
-
     // Sets up a specific logger for this plug-in.
     Logger.setup(PLUGIN_NAME, Level.parse(configManager.getProperty(CONFIG_LOGGING_LEVEL)));
+
+    generateCodeConfigManager = new YamlConfigurationManager(PLUGIN_NAME, TEMPLATE_CONFIG_FILE_NAME);
+
   }
 
   /**

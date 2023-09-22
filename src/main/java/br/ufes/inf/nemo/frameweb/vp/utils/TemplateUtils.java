@@ -209,6 +209,7 @@ public final class TemplateUtils {
         try {
             engine.generateCode(fileTypes, dataModel);
         } catch (IOException | TemplateException e) {
+            Logger.log(Level.SEVERE, "Error while generating code", e);
             throw new RuntimeException(e);
         }
     }
@@ -341,11 +342,27 @@ public final class TemplateUtils {
      * @throws IllegalArgumentException if the template options are not found or are invalid.
      */
     public static Map<String, TemplateOption> getTemplateOptions() {
-        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
+        Logger.log(Level.CONFIG, "Getting template options");
+        final FrameWebPlugin instance = FrameWebPlugin.instance();
+
+        if (instance == null) {
+            Logger.log(Level.SEVERE, "Plugin instance not found");
+            throw new IllegalArgumentException("Plugin instance not found");
+        }
+
+        final YamlConfigurationManager configurationManager = instance.getGenerateCodeConfigManager();
+
+
+        if (configurationManager == null) {
+            Logger.log(Level.SEVERE, "Configuration manager not found");
+            throw new IllegalArgumentException("Configuration manager not found");
+        }
 
         final Map<String, TemplateOption> templateOptions = configurationManager.getOptions();
 
+
         if (templateOptions == null) {
+            Logger.log(Level.SEVERE, "Template options not found");
             throw new IllegalArgumentException("Template options not found");
         }
 

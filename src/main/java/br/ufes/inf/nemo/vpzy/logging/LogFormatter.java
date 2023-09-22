@@ -24,7 +24,7 @@ public class LogFormatter extends Formatter {
     String formattedMessage = formatMessage(record);
     if (record.getThrown() != null)
       formattedMessage = formattedMessage + " (" + record.getThrown().toString() + ")";
-    String outputFormat = "[%1$s] %2$s: %3$s";
+    String outputFormat = "[%1$s] %2$s: %3$s%n";
     return String.format(outputFormat,
         DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(record.getInstant(), ZoneOffset.UTC)),
         record.getLevel().getName(), formattedMessage);
