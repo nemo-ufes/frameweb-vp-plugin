@@ -35,7 +35,7 @@
       </action>
       <!-- -->
 
-      <separator id="br.ufes.inf.nemo.frameweb.vp.separator.beforeOpenPluginSettingsAction"
+      <separator id="br.ufes.inf.nemo.frameweb.vp.separator.beforeCheckModelAction"
                  menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.main.toolbar/br.ufes.inf.nemo.frameweb.vp.actionset.main.menu/#" />
       <!-- Toolbar Button: Check Model. -->
       <!-- Icon source: https://www.flaticon.com/free-icon/correct_4436481 -->

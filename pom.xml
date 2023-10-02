@@ -136,13 +136,6 @@
     </dependency>
 
 
-    <!--    Reading yaml files -->
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>2.0</version>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -198,6 +191,24 @@
                   <directory>${project.build.directory}/classes</directory>
                 </resource>
               </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>install-vp-plugin-dependencies</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeScope>compile</includeScope>
+              <excludeGroupIds>com.visualparadigm.app</excludeGroupIds>
+              <outputDirectory>${visualparadigm.plugin.dir}/${project.artifactId}-${project.version}/lib</outputDirectory>
             </configuration>
           </execution>
         </executions>
