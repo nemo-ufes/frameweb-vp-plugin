@@ -9,6 +9,7 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * be applied to classes in the plug-in.
  * 
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public enum FrameWebClass {
   /* Application Model classes: */
@@ -37,7 +38,8 @@ public enum FrameWebClass {
   FORM_COMPONENT("", "Web Form", "form", Color.DEEP_SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
 
   /* Persistence Model classes: */
-  DAO_CLASS("", "DAO Class", "dao", Color.TOMATO, FrameWebPackage.PERSISTENCE_PACKAGE),
+  DAO_CLASS("persistence.dao.class", "DAO Class", "dao", Color.TOMATO, FrameWebPackage.PERSISTENCE_PACKAGE),
+  DAO_INTERFACE("persistence.dao.interface", "DAO Interface", "dao-interface", Color.TOMATO, FrameWebPackage.PERSISTENCE_PACKAGE),
 
   /* Not a FrameWeb class: */
   NOT_A_FRAMEWEB_CLASS("", "", "", Color.WHITE, FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE);

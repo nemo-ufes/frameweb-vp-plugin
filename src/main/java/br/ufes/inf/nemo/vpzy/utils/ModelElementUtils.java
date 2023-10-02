@@ -13,6 +13,7 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * Utility class that provides helper methods regarding Model Elements in Visual Paradigm.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public final class ModelElementUtils {
   /**
@@ -76,5 +77,21 @@ public final class ModelElementUtils {
         classUIModel.getFillColor().setColor1(color.getAwtColor());
       }
     }
+  }
+
+  public static void changeShape(final IModelElement modelElement) {
+
+    for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
+      if (diagramElement instanceof IShapeUIModel) {
+        Logger.log(Level.FINER, "Changing shape of {0}",
+                new Object[] {modelElement.getName()});
+        IShapeUIModel classUIModel = (IShapeUIModel) diagramElement;
+        classUIModel.setPresentationOption(IShapeUIModel.PRESENTATION_OPTION_STANDARD);
+
+        Logger.log(Level.INFO, "Shape changed to {0}",
+                new Object[] {classUIModel.getPresentationOption()});
+      }
+    }
+
   }
 }
