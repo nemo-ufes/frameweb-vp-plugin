@@ -16,13 +16,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.zip.ZipInputStream;
 
 /**
  * Holds and validates all the properties that a template option must have.
@@ -164,16 +163,13 @@ public class YamlConfigurationManager {
             }
         }
 
-        final URL templates = getClass().getClassLoader().getResource(TEMPLATE_FOLDER);
-        assert templates != null : "Could not find templates folder in classpath.";
-        final File[] files = new File(templates.toURI()).listFiles();
+        final InputStream pmdFolder = getClass().getClassLoader().getResourceAsStream(TEMPLATE_FOLDER + ".zip");
 
-        assert files != null : "Could not list templates folder in classpath.";
-
-        for (final File file : files) {
-            Path source = Paths.get(file.getAbsolutePath());
-            FileUtils.copyFolder(source, templateFolder.toPath().resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-
+        if (pmdFolder != null) {
+            try (final ZipInputStream zipInputStream = new ZipInputStream(pmdFolder)) {
+                // Extract the zip contents and keep in temp directory
+                FileUtils.extract(zipInputStream, templateFolder);
+            }
         }
 
         Logger.log(Level.FINE, "Loading {0} configuration from classpath location {1} and saving to {2}",
@@ -189,6 +185,8 @@ public class YamlConfigurationManager {
                     configFileName);
         }
     }
+
+
 
     @SuppressWarnings("unchecked")
     private FileTypes extractFileType(final Object fileType) {
