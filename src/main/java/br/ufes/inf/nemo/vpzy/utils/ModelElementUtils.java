@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramElement;
 import com.vp.plugin.diagram.IShapeUIModel;
+import com.vp.plugin.diagram.shape.IClassUIModel;
 import com.vp.plugin.model.IModelElement;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.view.Color;
@@ -79,17 +80,22 @@ public final class ModelElementUtils {
     }
   }
 
-  public static void changeShape(final IModelElement modelElement) {
+  public static void changeInterfaceBall(final IModelElement modelElement, final boolean isInterface) {
 
     for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
-      if (diagramElement instanceof IShapeUIModel) {
-        Logger.log(Level.FINER, "Changing shape of {0}",
-                new Object[] {modelElement.getName()});
-        IShapeUIModel classUIModel = (IShapeUIModel) diagramElement;
-        classUIModel.setPresentationOption(IShapeUIModel.PRESENTATION_OPTION_STANDARD);
+      if (diagramElement instanceof IClassUIModel) {
+        Logger.log(Level.FINER, "Changing shape of {0}", new Object[] { modelElement.getName() });
 
-        Logger.log(Level.INFO, "Shape changed to {0}",
-                new Object[] {classUIModel.getPresentationOption()});
+        IClassUIModel classUIModel2 = (IClassUIModel) diagramElement;
+        classUIModel2.setShowTypeOption(IClassUIModel.TYPE_NAME_ONLY);
+        if (isInterface) {
+          modelElement.addStereotype("Interface");
+          classUIModel2.setInterfaceBall(true);
+          classUIModel2.setShowStereotypeIconName(IShapeUIModel.SHOW_STEREOTYPE_ICON_NAME_YES);
+        } else {
+          modelElement.removeStereotype("Interface");
+          classUIModel2.setInterfaceBall(false);
+        }
       }
     }
 

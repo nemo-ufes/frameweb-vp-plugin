@@ -67,6 +67,8 @@ public class FrameWebClassListener extends ManagedModelListener {
     // If a FrameWeb class stereotype has been applied, changes the class color.
     if (frameWebClass != FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
       ModelElementUtils.changeFillColor(modelElement, frameWebClass.getColor());
+
+      ModelElementUtils.changeInterfaceBall(modelElement, frameWebClass.getStereotypeName().contains("interface"));
     }
 
     // Otherwise, checks if the package to which the class belongs has a default class type.

@@ -89,14 +89,6 @@ public class SetFrameWebStereotypeToClassContextController implements VPContextA
 
         // Adds the new FrameWeb class stereotype.
         modelElement.addStereotype(newStereotype);
-
-        if (frameWebClass.getStereotypeName().contains("interface")) {
-            modelElement.addStereotype("Interface");
-          // TODO change shape to interface ball
-        } else {
-            modelElement.removeStereotype("Interface");
-            // TODO change shape to normal
-        }
       }
     }
   }
