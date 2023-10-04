@@ -22,6 +22,7 @@ import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
  * (right-click) for UML Class elements.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public class SetFrameWebStereotypeToClassContextController implements VPContextActionController {
   /**

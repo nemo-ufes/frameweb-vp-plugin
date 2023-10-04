@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import com.vp.plugin.diagram.IDiagramElement;
 import com.vp.plugin.diagram.IShapeUIModel;
+import com.vp.plugin.diagram.shape.IClassUIModel;
 import com.vp.plugin.model.IModelElement;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.view.Color;
@@ -13,6 +14,7 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * Utility class that provides helper methods regarding Model Elements in Visual Paradigm.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
  */
 public final class ModelElementUtils {
   /**
@@ -76,5 +78,26 @@ public final class ModelElementUtils {
         classUIModel.getFillColor().setColor1(color.getAwtColor());
       }
     }
+  }
+
+  public static void changeInterfaceBall(final IModelElement modelElement, final boolean isInterface) {
+
+    for (IDiagramElement diagramElement : modelElement.getDiagramElements()) {
+      if (diagramElement instanceof IClassUIModel) {
+        Logger.log(Level.FINER, "Changing shape of {0}", new Object[] { modelElement.getName() });
+
+        IClassUIModel classUIModel2 = (IClassUIModel) diagramElement;
+        classUIModel2.setShowTypeOption(IClassUIModel.TYPE_NAME_ONLY);
+        if (isInterface) {
+          modelElement.addStereotype("Interface");
+          classUIModel2.setInterfaceBall(true);
+          classUIModel2.setShowStereotypeIconName(IShapeUIModel.SHOW_STEREOTYPE_ICON_NAME_YES);
+        } else {
+          modelElement.removeStereotype("Interface");
+          classUIModel2.setInterfaceBall(false);
+        }
+      }
+    }
+
   }
 }
