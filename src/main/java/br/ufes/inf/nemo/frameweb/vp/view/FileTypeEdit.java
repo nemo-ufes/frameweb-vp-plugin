@@ -5,7 +5,7 @@ import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 /**
  * Basic layout for adding information about a file type and template.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class FileTypeEdit extends javax.swing.JPanel {
     private javax.swing.JTextField extensionTextField;

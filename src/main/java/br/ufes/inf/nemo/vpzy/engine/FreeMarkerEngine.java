@@ -1,7 +1,7 @@
 package br.ufes.inf.nemo.vpzy.engine;
 
+import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.ClassModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import freemarker.cache.FileTemplateLoader;
@@ -18,15 +18,21 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * Generates code from a template using FreeMarker.
+ * Configuration and code generation using templates for FreeMarker.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class FreeMarkerEngine {
     private final Configuration cfg;
 
     private final String outputDirectory;
 
+    /**
+     * Configuration given the template path and the output directory.
+     *
+     * @param templatePath    The path to the template directory.
+     * @param outputDirectory The path to the output directory.
+     */
     public FreeMarkerEngine(final String templatePath, final String outputDirectory) {
         cfg = new Configuration(Configuration.VERSION_2_3_31);
 
@@ -45,14 +51,23 @@ public class FreeMarkerEngine {
 
     }
 
+    /**
+     * Generates code given a template option and a data model.
+     * @param templateOption The template option to be used.
+     * @param dataModel The data model to be used.
+     * @throws IOException If an error occurs while writing to file.
+     * @throws TemplateException If an error occurs while processing the template.
+     */
     public void generateCode(final FileTypes templateOption, final Map<String, Object> dataModel)
             throws IOException, TemplateException {
         Template template = this.cfg.getTemplate(templateOption.getTemplate());
 
         try {
             // Define the file path
-            final String pathString = String.format("%s/%s/%s%s", outputDirectory.replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName()), dataModel.get("path"),
-                    ((ClassModel) dataModel.get("class")).getName(), templateOption.getExtension());
+            final String pathString = String.format("%s/%s/%s%s",
+                    outputDirectory.replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName()),
+                    dataModel.get("path"), ((AbstractClassModel) dataModel.get("class")).getName(),
+                    templateOption.getExtension());
             Path path = Paths.get(pathString);
 
             // Create the necessary directories if they don't already exist

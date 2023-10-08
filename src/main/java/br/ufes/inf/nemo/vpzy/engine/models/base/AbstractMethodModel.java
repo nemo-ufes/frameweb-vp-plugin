@@ -6,16 +6,39 @@ import com.vp.plugin.model.IParameter;
 import java.util.Iterator;
 import java.util.logging.Level;
 
-public class MethodModel {
+/**
+ * Contains the common attributes for the method models.
+ *
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
+ * @version 0.0.1
+ */
+public abstract class AbstractMethodModel {
+    /**
+     * The name of the method.
+     */
     private final String name;
 
+    /**
+     * The type of the method.
+     */
     private final String type;
 
+    /**
+     * The visibility of the method. If no visibility is defined, the default visibility is defined by the template.
+     */
     private final String visibility;
 
+    /**
+     * The parameters of the method.
+     */
     private final ParameterModel[] parameters;
 
-    public MethodModel(final IOperation operation) {
+    /**
+     * Extracts the {@link IOperation} information for the {@link AbstractMethodModel}.
+     *
+     * @param operation The operation processed.
+     */
+    protected AbstractMethodModel(final IOperation operation) {
 
         this.name = operation.getName();
         this.type = operation.getReturnTypeAsString();
@@ -28,7 +51,8 @@ public class MethodModel {
         for (int i = 0; i < operation.parameterCount(); i++) {
             final IParameter parameter = iterator.next();
             this.parameters[i] = new ParameterModel(parameter.getName(), parameter.getTypeAsString());
-            Logger.log(Level.FINE, "ParameterModel: " +  this.parameters[i].getName() + " - " +  this.parameters[i].getType());
+            Logger.log(Level.FINE,
+                    "ParameterModel: " + this.parameters[i].getName() + " - " + this.parameters[i].getType());
         }
 
     }

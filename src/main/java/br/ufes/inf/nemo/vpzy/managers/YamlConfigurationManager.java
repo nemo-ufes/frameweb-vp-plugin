@@ -26,7 +26,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Holds and validates all the properties that a template option must have.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class YamlConfigurationManager {
     public static final String TEMPLATE_FOLDER = "templates";
@@ -101,7 +101,8 @@ public class YamlConfigurationManager {
     }
 
     /**
-     * Loads the configuration items from a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
+     * Loads the configuration items from a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual
+     * Paradigm's
      *
      * @param inputStream The input stream from which to read the properties.
      */
@@ -131,12 +132,17 @@ public class YamlConfigurationManager {
 
             final FileTypes dao = extractFileType(templateInfo.get("dao"));
 
+            final FileTypes daoInterface = extractFileType(templateInfo.get("daoInterface"));
+
             final FileTypes service = extractFileType(templateInfo.get("service"));
+
+            final FileTypes serviceInterface = extractFileType(templateInfo.get("serviceInterface"));
 
             final FileTypes controller = extractFileType(templateInfo.get("controller"));
 
             final TemplateOption templateOption = new TemplateOption(key, description, templatePath, outputPath, entity,
-                    enumeration, mappedSuperclass, transientClass, embeddable, dao, service, controller);
+                    enumeration, mappedSuperclass, transientClass, embeddable, dao, daoInterface, service,
+                    serviceInterface, controller);
 
             templateOption.validate();
 
@@ -186,8 +192,6 @@ public class YamlConfigurationManager {
         }
     }
 
-
-
     @SuppressWarnings("unchecked")
     private FileTypes extractFileType(final Object fileType) {
         final Map<String, Object> entity = (Map<String, Object>) fileType;
@@ -196,8 +200,6 @@ public class YamlConfigurationManager {
 
         return new FileTypes(entityTemplate, entityExtension);
     }
-
-
 
     /**
      * Saves the current configuration to a properties file (see {@code TEMPLATE_CONFIG_FILE_NAME}) in Visual Paradigm's
@@ -267,8 +269,7 @@ public class YamlConfigurationManager {
         }
 
         if (templateOption.getEntity().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find entity template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
+            ViewManagerUtils.showMessageDialog("Could not find entity template", ERROR, ViewManagerUtils.ERROR_MESSAGE);
             return;
         }
 

@@ -23,7 +23,7 @@ import java.util.logging.Level;
 /**
  * Defines the layout of the panel that will be shown in the dialog to generate the code.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class GenerateCodePanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<TemplateOption> templateComboBox;

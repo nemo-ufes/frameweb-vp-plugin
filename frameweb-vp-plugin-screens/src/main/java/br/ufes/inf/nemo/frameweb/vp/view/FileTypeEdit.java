@@ -6,7 +6,7 @@ package br.ufes.inf.nemo.frameweb.vp.view;
 
 /**
  *
- * @author FULLM
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class FileTypeEdit extends javax.swing.JPanel {
 

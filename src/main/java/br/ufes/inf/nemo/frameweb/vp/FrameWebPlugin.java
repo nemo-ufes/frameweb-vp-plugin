@@ -17,7 +17,7 @@ import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
  * and unloading. This class also centralizes global information on the FrameWeb plug-in.
  *
  * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">Ufes Page</a>)
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class FrameWebPlugin implements VPPlugin {
   /* Plug-in information. */

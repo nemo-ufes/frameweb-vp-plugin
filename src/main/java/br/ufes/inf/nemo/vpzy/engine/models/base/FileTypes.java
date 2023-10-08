@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 
 /**
- * Holds and validates the information about a file type.
+ * Holds and validates the information for the template of a given file type.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class FileTypes implements Serializable {
     private String template = "template.ftl";

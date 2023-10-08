@@ -16,7 +16,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Utility class for file operations.
  *
- * @author Igor Sunderhus e Silva
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  * @version 0.0.1
  */
 public final class FileUtils {

@@ -14,7 +14,7 @@ import java.util.logging.Level;
 /**
  * Controller that handles the Generate Code action, activated by a toolbar button.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  * @version 1.0
  */
 public class GenerateCodeController implements VPActionController {

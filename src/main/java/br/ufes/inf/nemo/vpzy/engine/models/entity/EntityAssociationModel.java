@@ -3,19 +3,25 @@ package br.ufes.inf.nemo.vpzy.engine.models.entity;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebAssociationEndConstraint;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
+import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAssociationModel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import com.teamdev.jxbrowser.deps.org.checkerframework.checker.nullness.qual.NonNull;
 import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IRelationshipEnd;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class RelationshipModel {
+/**
+ * Association model for Entity classes.
+ *
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
+ * @version 0.0.1
+ */
+public class EntityAssociationModel extends AbstractAssociationModel {
     private static final String ONE_TO_MANY = "OneToMany";
 
     private static final String ONE_TO_ONE = "OneToOne";
@@ -48,14 +54,6 @@ public class RelationshipModel {
 
     private final boolean targetTransient;
 
-    private final String sourceTypeName;
-
-    private final String targetTypeName;
-
-    private final String sourceName;
-
-    private final String targetName;
-
     private final String targetCollection;
 
     private final String sourceCollection;
@@ -72,7 +70,8 @@ public class RelationshipModel {
 
     private final String sourceOrder;
 
-    public RelationshipModel(@NonNull final IRelationshipEnd source) {
+    public EntityAssociationModel(@NonNull final IRelationshipEnd source) {
+        super(source);
 
         final Map<String, String> sourceConstraints = getConstraints(source);
 
@@ -101,24 +100,6 @@ public class RelationshipModel {
         this.targetTransient = FrameWebUtils.getFrameWebClass(target.getModelElement())
                 .equals(FrameWebClass.TRANSIENT_CLASS);
 
-        // Names for the classes in the relationship
-        this.sourceTypeName = fromAssociation.getTypeAsString();
-        this.targetTypeName = toAssociation.getTypeAsString();
-
-        // Replace between curly braces because the constraints show in the name.
-        final String sourceNameFromAssociation =
-                fromAssociation.getName() != null ? fromAssociation.getName().replaceAll("\\{.*}", "") : null;
-
-        // Name for the property in the relationship
-        this.sourceName = !StringUtils.isBlank(sourceNameFromAssociation)
-                ? sourceNameFromAssociation
-                : Character.toLowerCase(this.sourceTypeName.charAt(0)) + this.sourceTypeName.substring(1);
-
-        final String targetNameFromAssociation =
-                toAssociation.getName() != null ? toAssociation.getName().replaceAll("\\{.*}", "") : null;
-        this.targetName = !StringUtils.isBlank(targetNameFromAssociation)
-                ? targetNameFromAssociation
-                : Character.toLowerCase(this.targetTypeName.charAt(0)) + this.targetTypeName.substring(1);
 
         // Collection type in the relationship
         this.targetCollection = targetConstraints.get(COLLECTION);
@@ -174,10 +155,10 @@ public class RelationshipModel {
                 .append("targetToSourceCardinality", targetToSourceCardinality)
                 .append("sourceTransient", sourceTransient)
                 .append("targetTransient", targetTransient)
-                .append("sourceTypeName", sourceTypeName)
-                .append("targetTypeName", targetTypeName)
-                .append("sourceName", sourceName)
-                .append("targetName", targetName)
+                .append("sourceTypeName", this.getSourceTypeName())
+                .append("targetTypeName", this.getTargetTypeName())
+                .append("sourceName", this.getSourceName())
+                .append("targetName", this.getTargetName())
                 .append("targetCollection", targetCollection)
                 .append("sourceCollection", sourceCollection)
                 .append("targetFetch", targetFetch)
@@ -206,22 +187,6 @@ public class RelationshipModel {
 
     public String getTargetToSourceCardinality() {
         return targetToSourceCardinality;
-    }
-
-    public String getSourceTypeName() {
-        return sourceTypeName;
-    }
-
-    public String getTargetTypeName() {
-        return targetTypeName;
-    }
-
-    public String getSourceName() {
-        return sourceName;
-    }
-
-    public String getTargetName() {
-        return targetName;
     }
 
     public String getTargetCollection() {

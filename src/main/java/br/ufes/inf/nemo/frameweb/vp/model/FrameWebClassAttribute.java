@@ -7,8 +7,8 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  * Enumeration of FrameWeb class attributes and their respective names, stereotypes, etc., which can
  * be applied to class attributes in the plug-in.
  *
- * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">...</a>)
+ * @author <a href="http://www.inf.ufes.br/~vitorsouza/">Vítor E. Silva Souza</a>
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public enum FrameWebClassAttribute {
   /* Stereotypes for attributes of Entity Model classes: */
