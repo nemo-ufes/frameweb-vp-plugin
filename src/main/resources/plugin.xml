@@ -229,11 +229,24 @@
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
-        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.application.service"
+        id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.application.service.class"
         label="Service Class"
         style="normal"
         menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
         icon="icons/letter-a-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
+      </action>
+
+
+      <!-- Menu Item: Set FrameWeb Stereotype > Service Interface -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.application.service.interface"
+              label="Service Interface"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
+              icon="icons/letter-a-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
