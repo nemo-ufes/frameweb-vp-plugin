@@ -9,7 +9,7 @@ import javax.swing.JFileChooser;
 
 /**
  *
- * @author FULLM
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class TemplateOptionEdit extends javax.swing.JPanel {
 

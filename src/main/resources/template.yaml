@@ -5,6 +5,9 @@ spring:
   dao:
     extension: .java
     template: DaoClassTemplate.ftl
+  daoInterface:
+    extension: .java
+    template: DaoInterfaceTemplate.ftl
   description: Default Template for Spring projects
   embeddable:
     extension: .java
@@ -23,6 +26,9 @@ spring:
   service:
     extension: .java
     template: ServiceClassTemplate.ftl
+  serviceInterface:
+    extension: .java
+    template: ServiceInterfaceTemplate.ftl
   templatePath: templates/spring
   transientClass:
     extension: .java
@@ -36,6 +42,9 @@ jbutler:
   dao:
     extension: .java
     template: DaoClassTemplate.ftl
+  daoInterface:
+    extension: .java
+    template: DaoInterfaceTemplate.ftl
   description: Default Template for JButler
   embeddable:
     extension: .java
@@ -54,6 +63,9 @@ jbutler:
   service:
     extension: .java
     template: ServiceClassTemplate.ftl
+  serviceInterface:
+    extension: .java
+    template: ServiceInterfaceTemplate.ftl
   templatePath: /templates/jbutler
   transientClass:
     extension: .java

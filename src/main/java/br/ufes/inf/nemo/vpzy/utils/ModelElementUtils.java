@@ -14,7 +14,7 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  * Utility class that provides helper methods regarding Model Elements in Visual Paradigm.
  *
  * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public final class ModelElementUtils {
   /**
@@ -86,16 +86,16 @@ public final class ModelElementUtils {
       if (diagramElement instanceof IClassUIModel) {
         Logger.log(Level.FINER, "Changing shape of {0}", new Object[] { modelElement.getName() });
 
-        IClassUIModel classUIModel2 = (IClassUIModel) diagramElement;
-        classUIModel2.setShowTypeOption(IClassUIModel.TYPE_NAME_ONLY);
+        IClassUIModel classUIModel = (IClassUIModel) diagramElement;
+        classUIModel.fitSize();
         if (isInterface) {
           modelElement.addStereotype("Interface");
-          classUIModel2.setInterfaceBall(true);
-          classUIModel2.setShowStereotypeIconName(IShapeUIModel.SHOW_STEREOTYPE_ICON_NAME_YES);
+         // classUIModel.setInterfaceBall(true);
         } else {
           modelElement.removeStereotype("Interface");
-          classUIModel2.setInterfaceBall(false);
+         // classUIModel.setInterfaceBall(false);
         }
+
       }
     }
 

@@ -14,7 +14,7 @@ import java.util.logging.Level;
 /**
  * Defines the layout of the panel that will be shown in the dialog to generate the code.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 @Deprecated(since = "#24", forRemoval = true)
 public class GenerateCodePanelOld extends JPanel {

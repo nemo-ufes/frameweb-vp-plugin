@@ -7,8 +7,8 @@ import br.ufes.inf.nemo.vpzy.logging.Logger;
  * Enumeration of FrameWeb constraint types and their respective names, specifications, class types,
  * etc., which can be applied to association ends in the plug-in.
  *
- * @author Vítor E. Silva Souza (<a href="http://www.inf.ufes.br/~vitorsouza/">...</a>)
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">...</a>)
+ * @author <a href="http://www.inf.ufes.br/~vitorsouza/">Vítor E. Silva Souza</a>
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public enum FrameWebAssociationEndConstraint {
   /* Constraints for association ends of Entity Model classes: */
@@ -233,7 +233,7 @@ public enum FrameWebAssociationEndConstraint {
       }
     }
 
-    Logger.log(Level.INFO,
+    Logger.log(Level.FINE,
             "Providing FrameWeb association end constraint for plug-in UI ID {0}: {1}",
             new Object[] {pluginUIID, constraint});
     return constraint;

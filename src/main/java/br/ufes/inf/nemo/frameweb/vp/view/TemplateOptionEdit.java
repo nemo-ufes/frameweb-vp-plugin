@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Defines the layout of the panel that will be shown in the dialog to edit the configuration of a template option.
  *
- * @author Igor Sunderhus e Silva (<a href="https://github.com/igorssilva">Github page</a>)
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public class TemplateOptionEdit extends javax.swing.JPanel {
     private final TemplateOption templateOption;
@@ -39,6 +39,8 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
 
     private FileTypeEdit daoFileTypeEdit;
 
+    private FileTypeEdit daoInterfaceFileTypeEdit;
+
     private javax.swing.JTextField descriptionTextField;
 
     private FileTypeEdit embeddableFileTypeEdit;
@@ -54,6 +56,8 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
     private javax.swing.JTextField outputPathTextField;
 
     private FileTypeEdit serviceFileTypeEdit;
+
+    private FileTypeEdit serviceInterfaceFileTypeEdit;
 
     private javax.swing.JTextField templatePathTextField;
 
@@ -97,8 +101,10 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
         transientFileTypeEdit = new FileTypeEdit();
         embeddableFileTypeEdit = new FileTypeEdit();
         daoFileTypeEdit = new FileTypeEdit();
+        daoInterfaceFileTypeEdit = new FileTypeEdit();
         controllerFileTypeEdit = new FileTypeEdit();
         serviceFileTypeEdit = new FileTypeEdit();
+        serviceInterfaceFileTypeEdit = new FileTypeEdit();
         saveButton = new javax.swing.JButton();
         outputPathLabel = new javax.swing.JLabel();
         outputPathTextField = new javax.swing.JTextField();
@@ -179,6 +185,8 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
         templateFilesTabbedPane.addTab("DAO", daoFileTypeEdit);
         templateFilesTabbedPane.addTab("Controller", controllerFileTypeEdit);
         templateFilesTabbedPane.addTab("Service", serviceFileTypeEdit);
+        templateFilesTabbedPane.addTab("DAO Interface", daoInterfaceFileTypeEdit);
+        templateFilesTabbedPane.addTab("Service Interface", serviceInterfaceFileTypeEdit);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -234,8 +242,10 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             transientFileTypeEdit.setFields(templateOption.getTransientClass());
             embeddableFileTypeEdit.setFields(templateOption.getEmbeddable());
             daoFileTypeEdit.setFields(templateOption.getDao());
+            daoInterfaceFileTypeEdit.setFields(templateOption.getDaoInterface());
             controllerFileTypeEdit.setFields(templateOption.getController());
             serviceFileTypeEdit.setFields(templateOption.getService());
+            serviceInterfaceFileTypeEdit.setFields(templateOption.getServiceInterface());
         }
     }
 
@@ -262,8 +272,10 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             this.templateOption.setTransientClass(transientFileTypeEdit.getFileType());
             this.templateOption.setEmbeddable(embeddableFileTypeEdit.getFileType());
             this.templateOption.setDao(daoFileTypeEdit.getFileType());
+            this.templateOption.setDaoInterface(daoInterfaceFileTypeEdit.getFileType());
             this.templateOption.setController(controllerFileTypeEdit.getFileType());
             this.templateOption.setService(serviceFileTypeEdit.getFileType());
+            this.templateOption.setServiceInterface(serviceInterfaceFileTypeEdit.getFileType());
 
             this.templateOption.validate();
 

@@ -13,7 +13,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class AttributeModel extends AbstractAttributeModel {
+/**
+ * Attribute model for Entity classes.
+ *
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
+ * @version 0.0.1
+ */
+public class EntityAttributeModel extends AbstractAttributeModel {
     private final boolean notNull;
 
     private final boolean isTransient;
@@ -32,7 +38,7 @@ public class AttributeModel extends AbstractAttributeModel {
 
     private final String column;
 
-    public AttributeModel(@NonNull IAttribute attribute) {
+    public EntityAttributeModel(@NonNull IAttribute attribute) {
         super(attribute);
 
         // Update the attribute values based on the map
