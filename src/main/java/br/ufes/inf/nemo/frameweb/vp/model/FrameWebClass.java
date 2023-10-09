@@ -13,10 +13,10 @@ import br.ufes.inf.nemo.vpzy.view.Color;
  */
 public enum FrameWebClass {
   /* Application Model classes: */
-  SERVICE_CLASS("application.service", "Service Class", "service", Color.GOLD,
+  SERVICE_CLASS("application.service.class", "Service Class", "service", Color.GOLD,
       FrameWebPackage.APPLICATION_PACKAGE),
 
-  SERVICE_INTERFACE("", "Service Interface", "service-interface", Color.GOLD,
+  SERVICE_INTERFACE("application.service.interface", "Service Interface", "service-interface", Color.GOLD,
       FrameWebPackage.APPLICATION_PACKAGE),
 
   /* Entity Model classes: */
