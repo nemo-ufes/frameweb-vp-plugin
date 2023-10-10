@@ -92,6 +92,28 @@ public final class FrameWebUtils {
     }
 
     /**
+     * Returns a list of the IClass in the given project that match the FrameWeb class passed.
+     *
+     * @param project The given project.
+     * @param fwClass The FrameWeb class to be matched.
+     * @return A list of the IClasses in the given project.
+     */
+    public static List<IClass> getFrameWebClasses(IProject project, FrameWebClass fwClass) {
+        final Iterator<?> iter = project.allLevelModelElementIterator(IModelElementFactory.MODEL_TYPE_CLASS);
+        final List<IClass> clazzes = new ArrayList<>();
+        while (iter.hasNext()) {
+            final IClass clazz = (IClass) iter.next();
+            final FrameWebClass currentFWClass = getFrameWebClass(clazz);
+
+            if (currentFWClass.equals(fwClass)) {
+                clazzes.add(clazz);
+            }
+
+        }
+        return clazzes;
+    }
+
+    /**
      * Identifies if a given model element represents a FrameWeb class. Returns
      * {@code FrameWebClass.NOT_A_FRAMEWEB_CLASS} if it doesn't.
      *

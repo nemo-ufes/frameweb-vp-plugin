@@ -181,6 +181,40 @@
       <contextTypes all="false" />
       <include type="Class" />
 
+
+
+      <!-- Menu: Add FrameWeb Dependency. -->
+      <menu
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency"
+              label="Add FrameWeb Dependency"
+              mnemonic="F"
+              menuPath="#"
+              icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Add FrameWeb Dependency > DAO Interface -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-p_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency.persistent.dao.interface"
+              label="DAO Interface"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency/#"
+              icon="icons/letter-p-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebDependencyToClassContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Dependency > Service Interface -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3097003# -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency.application.service.interface"
+              label="Service Interface"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency/#"
+              icon="icons/letter-a-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebDependencyToClassContextController" />
+      </action>
+
       <!-- Menu: Set FrameWeb Stereotype. -->
       <menu
         id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype"
@@ -251,33 +285,36 @@
       </action>
 
       <!-- Menu Item: Set FrameWeb Stereotype > DAO Class -->
-      <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-p_3096983 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
               id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.persistence.dao.class"
               label="DAO Class"
               style="normal"
               menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
-              icon="icons/letter-a-black-block.png">
+              icon="icons/letter-p-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
       <!-- Menu Item: Set FrameWeb Stereotype > DAO Interface -->
-      <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3096983 -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-p_3096983 -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
               id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.persistence.dao.interface"
               label="DAO Interface"
               style="normal"
               menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
-              icon="icons/letter-a-black-block.png">
+              icon="icons/letter-p-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
+
+
+
 
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
       <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.separator"
-        menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype" />
+                 menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency" />
     </contextSensitiveActionSet>
     <!-- -->
 
