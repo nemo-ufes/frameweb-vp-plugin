@@ -2,16 +2,16 @@ package br.ufes.inf.nemo.frameweb.vp.controllers;
 
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassDependency;
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
+import com.vp.plugin.diagram.IDiagramElement;
+import com.vp.plugin.diagram.IDiagramUIModel;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IModelElement;
-import com.vp.plugin.model.factory.IModelElementFactory;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,11 +33,6 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
         // Processes the selected element
         final IModelElement modelElement = context.getModelElement();
 
-        if (!IModelElementFactory.MODEL_TYPE_CLASS.equals(modelElement.getModelType())) {
-            Logger.log(Level.WARNING, "The selected element is not a class, ignoring action.");
-            return;
-        }
-
         final FrameWebClass modelElementFrameWebClass = FrameWebUtils.getFrameWebClass(modelElement);
 
         if (modelElementFrameWebClass == FrameWebClass.NOT_A_FRAMEWEB_CLASS) {
@@ -45,32 +40,24 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
             return;
         }
 
-        final IModelElement packageElement = modelElement.getParent();
-
-        if (packageElement == null) {
-            Logger.log(Level.WARNING, "The selected element has no parent, ignoring action.");
-            return;
-        }
-
-        if (!IModelElementFactory.MODEL_TYPE_PACKAGE.equals(packageElement.getModelType())) {
-            Logger.log(Level.WARNING, "The selected element is not in a package, ignoring action.");
-            return;
-        }
-
-        if (FrameWebUtils.getFrameWebPackage(packageElement) == FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
-            Logger.log(Level.WARNING, "The selected element is not in a FrameWeb Package, ignoring action.");
-            return;
-        }
-
-        final IModelElement currentModel = packageElement.getParent();
-
-        Logger.log(Level.INFO, "Parent: {0}, ModelType: {1}", new Object[] { currentModel.getName(), currentModel.getModelType()});
+        final IDiagramUIModel currentDiagram = context.getDiagram();
 
 
+        context.getDiagram().diagramElementIterator().forEachRemaining(element -> {
+            final IDiagramElement diagramElement = (IDiagramElement) element;
+            final IModelElement diagramElementModel = diagramElement.getModelElement();
+            Logger.log(Level.INFO, "DiagramElement: {0}, ModelType: {1}",
+                    new Object[] { diagramElementModel.getName(), diagramElementModel.getModelType() });
+        });
+
+        final IModelElement parentModel = currentDiagram.getParentModel();
+        Logger.log(Level.INFO, "ModelElement: {0}, ModelType: {1}, Diagram: {2}, Parent Model: {3}",
+                new Object[] { modelElement.getName(), modelElement.getModelType(), currentDiagram.getName(),
+                        parentModel.getName() });
 
         // Determines which FrameWeb Class Dependency to apply from the menu item.
         FrameWebClassDependency frameWebClassDependency = FrameWebClassDependency.ofPluginUIID(action.getActionId());
-        Logger.log(Level.INFO, "Adding dependency {0} to {1}",
+        Logger.log(Level.INFO, "Adding {0} to {1}",
                 new Object[] { frameWebClassDependency.getName(), modelElement.getName() });
 
         final List<IClass> frameWebClasses = FrameWebUtils.getFrameWebClasses(ProjectManagerUtils.getCurrentProject(),
@@ -78,8 +65,16 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
 
         // logs the classes that will be added as dependencies
         for (final IClass clazz : frameWebClasses) {
-            Logger.log(Level.INFO, "Adding dependency {0} to {1}",
-                    new Object[] { clazz.getName(), modelElement.getName() });
+            final IModelElement clazzPackage = clazz.getParent();
+
+            Logger.log(Level.INFO, "Adding dependency {0} - {1} to {2}",
+                    new Object[] { clazz.getName(), clazzPackage.getName(), modelElement.getName() });
+
+            // Adds the dependency to the class.
+
+
+
+
         }
 
     }
