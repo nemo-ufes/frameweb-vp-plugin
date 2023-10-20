@@ -18,6 +18,10 @@ import java.util.logging.Level;
  * @version 0.0.1
  */
 public class EntityClassModel extends AbstractClassModel {
+    /**
+     * The inheritance stereotype of the class.
+     *
+     */
     private final String inheritanceStereotype;
 
     public EntityClassModel(@NonNull final IClass clazz) {

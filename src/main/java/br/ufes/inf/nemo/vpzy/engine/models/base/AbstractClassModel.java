@@ -25,9 +25,14 @@ public abstract class AbstractClassModel {
 
     /**
      * The name of the parent class, if it exists.
+     * If it does not exist, it is an empty string.
      */
     private final String generalization;
 
+    /**
+     * The list of interfaces implemented by the class.
+     * If it does not exist, it is an empty list.
+     */
     private final List<String> realizations = new ArrayList<>();
 
     /**

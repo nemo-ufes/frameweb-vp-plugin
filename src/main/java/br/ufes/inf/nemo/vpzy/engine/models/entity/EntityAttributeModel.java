@@ -20,22 +20,49 @@ import java.util.logging.Level;
  * @version 0.0.1
  */
 public class EntityAttributeModel extends AbstractAttributeModel {
+    /**
+     * If the attribute is not null.
+     */
     private final boolean notNull;
 
+    /**
+     * If the attribute is transient.
+     */
     private final boolean isTransient;
 
+    /**
+     * The size of the attribute.
+     */
     private final int size;
 
+    /**
+     * The precision of the attribute, if it is a date or time.
+     */
     private final String dateTimePrecision;
 
+    /**
+     * If the attribute is embedded.
+     */
     private final boolean embedded;
 
+    /**
+     * If the attribute is a lob.
+     */
     private final boolean lob;
 
+    /**
+     * If the attribute is the id attribute of an entity
+     */
     private final boolean id;
 
+    /**
+     * If the attribute is the version attribute of an entity
+     */
     private final boolean version;
 
+    /**
+     * The column name of the attribute.
+     */
     private final String column;
 
     public EntityAttributeModel(@NonNull IAttribute attribute) {
