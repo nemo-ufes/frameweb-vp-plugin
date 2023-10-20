@@ -6,9 +6,6 @@
         <#items as realization>
             #{realization}<#sep>, </#sep>
         </#items>
-        <#if defaultRealization?has_content>
-            , ${defaultRealization}
-        </#if>
     <#else>
         <#if defaultRealization?has_content>
             implements ${defaultRealization}
