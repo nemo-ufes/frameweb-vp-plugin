@@ -2,7 +2,7 @@
     <#list associations as association>
         <#assign targetTypeName = association.targetTypeName>
         <#assign targetName = association.targetName>
-        <#assign domainClassName = targetName?replace('Repository', '') >
+        <#assign domainClassName = targetTypeName?replace('Repository', '') >
         <#assign domainClassNameCamelCase = domainClassName?uncap_first>
 
         @Override
