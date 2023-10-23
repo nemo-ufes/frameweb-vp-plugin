@@ -2,8 +2,8 @@
 <#import "MethodOverrideTemplate.ftl" as method>
 <#import "ClassGeneralizationTemplate.ftl" as generalization>
 <#import "ClassRealizationTemplate.ftl" as realizations>
-<#assign defaultGeneralization = "${class.name?replace('Impl', '')}">
-<#assign defaultRealization = "">>
+<#assign defaultGeneralization = "">
+<#assign defaultRealization = "${class.name?replace('Impl', '')}">>
 package ${package.name};
 
 
