@@ -12,9 +12,13 @@ import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
@@ -35,10 +39,6 @@ public class GenerateCodePanel extends javax.swing.JPanel {
      */
     public GenerateCodePanel() {
         initComponents();
-    }
-
-    public void setContainerDialog(final IDialog containerDialog) {
-        this.containerDialog = containerDialog;
     }
 
     /**
@@ -102,13 +102,44 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(newButton, gridBagConstraints);
 
+        // Icon Source <a href="https://www.flaticon.com/free-animated-icons/loading" title="loading animated icons">Loading animated icons created by Freepik - Flaticon</a>
+        final InputStream stream = getClass().getResourceAsStream("/icons/loading.gif");
+        BufferedImage read = null;
+        try {
+             read = ImageIO.read(stream);
+        } catch (IOException e) {
+            // Ignore not finding the loading icon
+        }
+        final ImageIcon loadingIcon = new ImageIcon(read, "Generating Code...");
+        final JLabel loadingLabel = new JLabel("Generating Code...", loadingIcon, SwingConstants.CENTER);
+        Dimension p = this.getSize();
+        loadingLabel.setBounds((int) (p.getWidth() / 2), (int) (p.getHeight() / 2), 50, 10);
+
+        loadingLabel.setVisible(false);
+        add(loadingLabel);
+
         generateCodeButton.setText("Generate");
-        generateCodeButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                generateCodeButtonMouseClicked();
-            }
+        generateCodeButton.addActionListener(arg0 -> {
+            // event start
+
+            loadingLabel.setVisible(true);
+            new SwingWorker<Void, String>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    // Worken hard or hardly worken...
+                    generateCodeButtonMouseClicked();
+                    Thread.sleep(5000);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    loadingLabel.setVisible(false);
+                    FrameWebPlugin.instance().setGenerateCodeSettingsDialogOpen(false);
+                }
+            }.execute();
         });
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -126,13 +157,13 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         final TemplateOption[] a = new TemplateOption[] { defaultItem };
         return new DefaultComboBoxModel<>(values.toArray(a));
     }
-    // End of variables declaration//GEN-END:variables
 
     private void editButtonMouseClicked() {
 
         final TemplateOption selectedItem = (TemplateOption) templateComboBox.getSelectedItem();
         ViewManagerUtils.showDialog(new TemplateOptionEditDialogHandler(selectedItem));
     }
+    // End of variables declaration//GEN-END:variables
 
     private void newButtonMouseClicked() {
 
@@ -140,15 +171,15 @@ public class GenerateCodePanel extends javax.swing.JPanel {
     }
 
     private void generateCodeButtonMouseClicked() {
-        final TemplateOption selectedItem = (TemplateOption) templateComboBox.getSelectedItem();
-
-        if (selectedItem == null || selectedItem.getName() == null) {
-            ViewManagerUtils.showMessageDialog("Please select a template option", "Error",
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
-        }
-
         try {
+            final TemplateOption selectedItem = (TemplateOption) templateComboBox.getSelectedItem();
+
+            if (selectedItem == null || selectedItem.getName() == null) {
+                ViewManagerUtils.showMessageDialog("Please select a template option", "Error",
+                        ViewManagerUtils.ERROR_MESSAGE);
+                return;
+            }
+
             TemplateUtils.generateCode(selectedItem);
             ViewManagerUtils.showMessageDialog("Code generated successfully", "Success",
                     ViewManagerUtils.INFORMATION_MESSAGE);
@@ -156,16 +187,19 @@ public class GenerateCodePanel extends javax.swing.JPanel {
             // Closes the configuration dialog.
             containerDialog.close();
 
-            final File file = new File (Paths.get(selectedItem.getOutputPath().replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName())).toString());
+            final File file = new File(Paths.get(selectedItem.getOutputPath()
+                    .replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName())).toString());
             final Desktop desktop = Desktop.getDesktop();
             desktop.open(file);
-
-            FrameWebPlugin.instance().setGenerateCodeSettingsDialogOpen(false);
 
         } catch (Exception e) {
             Logger.log(Level.SEVERE, "Error while generating code", e);
             ViewManagerUtils.showMessageDialog("Error while generating code", "Error", ViewManagerUtils.ERROR_MESSAGE);
         }
+    }
+
+    public void setContainerDialog(final IDialog containerDialog) {
+        this.containerDialog = containerDialog;
     }
 
     /**
