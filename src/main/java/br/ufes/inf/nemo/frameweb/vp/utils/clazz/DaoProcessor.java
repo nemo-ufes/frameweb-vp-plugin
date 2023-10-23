@@ -12,6 +12,7 @@ import com.vp.plugin.model.IAttribute;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IOperation;
 import com.vp.plugin.model.IRelationshipEnd;
+import java.util.Map;
 
 /**
  * Processor class for dao classes.
@@ -44,6 +45,17 @@ public class DaoProcessor extends AbstractClassProcessor {
     @Override
     protected AbstractClassModel getClassModel(final IClass clazz) {
         return new DaoClassModel(clazz);
+    }
+
+    /**
+     * No specific data is added to the data model.
+     *
+     * @param dataModel The data model.
+     * @param clazz     The class processed.
+     */
+    @Override
+    protected void addSpecificData(final Map<String, Object> dataModel, final IClass clazz) {
+        // No specific data is added to the data model.
     }
 
     /**

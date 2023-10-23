@@ -3,6 +3,7 @@ package br.ufes.inf.nemo.frameweb.vp.utils;
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.frameweb.vp.utils.pack.AbstractPackageProcessor;
+import br.ufes.inf.nemo.frameweb.vp.utils.pack.ApplicationPackageProcessor;
 import br.ufes.inf.nemo.frameweb.vp.utils.pack.EntityPackageProcessor;
 import br.ufes.inf.nemo.frameweb.vp.utils.pack.PersistentPackageProcessor;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
@@ -102,8 +103,7 @@ public final class TemplateUtils {
                 packageProcessing = EntityPackageProcessor.getInstance();
                 break;
             case APPLICATION_PACKAGE:
-                // TODO: process application package
-                packageProcessing = null;
+                packageProcessing = ApplicationPackageProcessor.getInstance();
                 break;
             case CONTROLLER_PACKAGE:
                 // TODO: process controller package

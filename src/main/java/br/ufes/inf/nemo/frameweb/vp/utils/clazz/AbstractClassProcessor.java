@@ -53,6 +53,8 @@ public abstract class AbstractClassProcessor {
         final List<AbstractAssociationModel> entityAssociationModels = processAssociation(clazz);
         dataModel.put(ProcessingKeys.ASSOCIATIONS_KEY, entityAssociationModels);
 
+        addSpecificData(dataModel, clazz);
+
         try {
             engine.generateCode(fileTypes, dataModel);
         } catch (IOException | TemplateException e) {
@@ -157,7 +159,15 @@ public abstract class AbstractClassProcessor {
     }
 
     /**
-     * Abstract method to delegate the generation of the attribute model to the subclasses.
+     * Delegates the addition of specific data to the subclasses.
+     *
+     * @param dataModel The data model.
+     * @param clazz     The class processed.
+     */
+    protected abstract void addSpecificData(final Map<String, Object> dataModel, final IClass clazz);
+
+    /**
+     * Delegates the generation of the attribute model to the subclasses.
      *
      * @param attribute The attribute processed.
      * @return The attribute model.
@@ -165,7 +175,7 @@ public abstract class AbstractClassProcessor {
     protected abstract AbstractAttributeModel getAttributeModel(final IAttribute attribute);
 
     /**
-     * Abstract method to delegate the generation of the method model to the subclasses.
+     * Delegates the generation of the method model to the subclasses.
      *
      * @param operation The operation processed.
      * @return The method model.
@@ -173,7 +183,7 @@ public abstract class AbstractClassProcessor {
     protected abstract AbstractMethodModel getMethodModel(final IOperation operation);
 
     /**
-     * Abstract method to delegate the generation of the association model to the subclasses.
+     * Delegates the generation of the association model to the subclasses.
      *
      * @param relationship The relationship processed.
      * @return The association model.

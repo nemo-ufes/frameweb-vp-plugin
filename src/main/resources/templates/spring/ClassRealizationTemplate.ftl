@@ -4,7 +4,7 @@
     <#list realizations>
         implements
         <#items as realization>
-            #{realization}<#sep>, </#sep>
+            ${realization}<#sep>, </#sep>
         </#items>
     <#else>
         <#if defaultRealization?has_content>
