@@ -11,17 +11,18 @@ import com.vp.plugin.model.IAttribute;
  */
 public abstract class AbstractAttributeModel {
     /**
-     * The name of the attribute.
+     * The name of the attribute in camelCase.
      */
     private final String name;
 
     /**
-     * The type of the attribute.
+     * The name for the attribute’s type.
      */
     private final String type;
 
     /**
      * The visibility of the attribute. If no visibility is defined, the default visibility is defined by the template.
+     * The visibility can be: public, protected, private, package.
      */
     private final String visibility;
 

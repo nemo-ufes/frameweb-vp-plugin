@@ -36,7 +36,8 @@ public class EntityAttributeModel extends AbstractAttributeModel {
     private final int size;
 
     /**
-     * The precision of the attribute, if it is a date or time.
+     * Attribute's date precision.
+     * Possible values: date, time, timestamp.
      */
     private final String dateTimePrecision;
 

@@ -6,16 +6,16 @@
 <#import "ClassRealizationTemplate.ftl" as realizations>
 <#import "ServiceAssociationTemplate.ftl" as assoc>
 <#assign defaultGeneralization = "">
-<#assign defaultRealization = "${class.name?replace('Impl|Bean', '', 'r')}">
-package ${package.name};
+<#assign defaultRealization = "${clazz.name?replace('Impl|Bean', '', 'r')}">
+package ${pack.name};
 
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-public class ${class.name}
-<@generalization.generate_generalization generalization=class.generalization defaultGeneralization=defaultGeneralization/> <@realizations.generate_realization realizations=class.realizations defaultRealization=defaultRealization/> {
+public class ${clazz.name}
+<@generalization.generate_generalization generalization=clazz.generalization defaultGeneralization=defaultGeneralization/> <@realizations.generate_realization realizations=clazz.realizations defaultRealization=defaultRealization/> {
 
 <#-- ASSOCIATIONS -->
 <@assoc.generate_associations associations=associations/>

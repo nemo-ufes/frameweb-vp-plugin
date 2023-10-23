@@ -1,6 +1,6 @@
 package br.ufes.inf.nemo.vpzy.engine;
 
-import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractClassModel;
+import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractTemplateModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -58,7 +57,7 @@ public class FreeMarkerEngine {
      * @throws IOException If an error occurs while writing to file.
      * @throws TemplateException If an error occurs while processing the template.
      */
-    public void generateCode(final FileTypes templateOption, final Map<String, Object> dataModel)
+    public void generateCode(final FileTypes templateOption, final AbstractTemplateModel dataModel)
             throws IOException, TemplateException {
         Template template = this.cfg.getTemplate(templateOption.getTemplate());
 
@@ -66,7 +65,7 @@ public class FreeMarkerEngine {
             // Define the file path
             final String pathString = String.format("%s/%s/%s%s",
                     outputDirectory.replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName()),
-                    dataModel.get("path"), ((AbstractClassModel) dataModel.get("class")).getName(),
+                    dataModel.getPath(), dataModel.getClazz().getName(),
                     templateOption.getExtension());
             Path path = Paths.get(pathString);
 

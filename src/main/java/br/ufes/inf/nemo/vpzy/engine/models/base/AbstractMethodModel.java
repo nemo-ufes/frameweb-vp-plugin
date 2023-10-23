@@ -19,12 +19,13 @@ public abstract class AbstractMethodModel {
     private final String name;
 
     /**
-     * The type of the method.
+     * The name of the method’s return type.
      */
     private final String type;
 
     /**
      * The visibility of the method. If no visibility is defined, the default visibility is defined by the template.
+     * The visibility can be: public, protected, private, package.
      */
     private final String visibility;
 

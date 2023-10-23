@@ -47,12 +47,14 @@ public class EntityAssociationModel extends AbstractAssociationModel {
     }
 
     /**
-     * The cardinality of the relationship from the source to the target.
+     * Source to target relationship's cardinality.
+     * The possible cardinality values: {@value #ONE_TO_ONE}, {@value #ONE_TO_MANY}, {@value #MANY_TO_ONE}.
      */
     private final String sourceToTargetCardinality;
 
     /**
-     * The cardinality of the relationship from the target to the source.
+     * Target to source relationship's cardinality.
+     * The cardinality can be: {@value #ONE_TO_ONE}, {@value #ONE_TO_MANY}, {@value #MANY_TO_ONE}.
      */
 
     private final String targetToSourceCardinality;
@@ -68,42 +70,50 @@ public class EntityAssociationModel extends AbstractAssociationModel {
     private final boolean targetTransient;
 
     /**
-     * The collection type of the target.
+     * The target’s collection type.
+     * Possible values: bag, list, map, set.
      */
     private final String targetCollection;
 
     /**
-     * The collection type of the source.
+     * The source’s collection type.
+     * Possible values: bag, list, map, set.
      */
     private final String sourceCollection;
 
     /**
-     * The fetch type of the target.
+     * The target’s fetch type.
+     * Possible values: eager, lazy.
      */
     private final String targetFetch;
 
     /**
-     * The fetch type of the source.
+     * The source’s fetch type.
+     * Possible values: eager, lazy.
      */
     private final String sourceFetch;
 
     /**
-     * The cascade type of the target.
+     * The target’s cascade type.
+     * Possible values: none, all, merge, persist, refresh, remove.
      */
     private final String targetCascade;
 
     /**
-     * The cascade type of the source.
+     * The source’s cascade type.
+     * Possible values: none, all, merge, persist, refresh, remove.
      */
     private final String sourceCascade;
 
     /**
-     * The order type of the target.
+     * The target’s order type.
+     * Possible values: natural, (comma separated list of property names).
      */
     private final String targetOrder;
 
     /**
-     * The order type of the source.
+     * The source’s order type.
+     * Possible values: natural, (comma separated list of property names).
      */
     private final String sourceOrder;
 

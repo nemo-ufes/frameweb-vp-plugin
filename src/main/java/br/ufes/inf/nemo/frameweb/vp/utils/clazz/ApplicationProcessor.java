@@ -4,15 +4,18 @@ import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationAssociationMod
 import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationAttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationMethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationTemplateModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAssociationModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractMethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractTemplateModel;
 import com.vp.plugin.model.IAttribute;
 import com.vp.plugin.model.IClass;
+import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IOperation;
 import com.vp.plugin.model.IRelationshipEnd;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Processor class for Application classes.
@@ -37,6 +40,17 @@ public class ApplicationProcessor extends AbstractClassProcessor {
     }
 
     /**
+     * No specific data is added to the data model.
+     *
+     * @param dataModel The data model.
+     * @param clazz     The class processed.
+     */
+    @Override
+    protected void addSpecificData(final AbstractTemplateModel dataModel, final IClass clazz) {
+        // No specific data is added to the data model.
+    }
+
+    /**
      * Generates a Application class model
      *
      * @param clazz The class processed.
@@ -48,14 +62,23 @@ public class ApplicationProcessor extends AbstractClassProcessor {
     }
 
     /**
-     * No specific data is added to the data model.
+     * Initializes a template model for an application class.
      *
-     * @param dataModel The data model.
-     * @param clazz     The class processed.
+     * @param pack                    Package of the class.
+     * @param classModel              Class model.
+     * @param path                    System path for the file.
+     * @param abstractMethodModels    Methods of the class.
+     * @param entityAttributeModels   Attributes of the class.
+     * @param entityAssociationModels Associations of the class.
+     * @return The template model for the engine.
      */
     @Override
-    protected void addSpecificData(final Map<String, Object> dataModel, final IClass clazz) {
-        // No specific data is added to the data model.
+    protected AbstractTemplateModel processTemplateModel(final IModelElement pack, final AbstractClassModel classModel,
+            final String path, final List<AbstractMethodModel> abstractMethodModels,
+            final List<AbstractAttributeModel> entityAttributeModels,
+            final List<AbstractAssociationModel> entityAssociationModels) {
+        return new ApplicationTemplateModel(pack, classModel, path, abstractMethodModels, entityAttributeModels,
+                entityAssociationModels);
     }
 
     /**
