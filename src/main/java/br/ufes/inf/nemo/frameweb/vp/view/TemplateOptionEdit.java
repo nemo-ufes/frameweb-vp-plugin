@@ -146,12 +146,7 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
 
         templatePathTextField.setToolTipText("Path to the folder containing the template files");
         templatePathTextField.setPreferredSize(new java.awt.Dimension(200, 22));
-        templatePathTextField.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                templatePathTextFieldMouseClicked();
-            }
-        });
+        templatePathTextField.addActionListener(evt -> templatePathTextFieldMouseClicked());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -197,12 +192,7 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
 
         saveButton.setText("Save");
         saveButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        saveButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saveButtonMouseClicked();
-            }
-        });
+        saveButton.addActionListener(evt -> saveButtonMouseClicked());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 10;
@@ -217,12 +207,7 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
         add(outputPathLabel, gridBagConstraints);
 
         outputPathTextField.setPreferredSize(new java.awt.Dimension(200, 22));
-        outputPathTextField.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                outputPathTextFieldMouseClicked();
-            }
-        });
+        outputPathTextField.addActionListener(evt -> outputPathTextFieldMouseClicked());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -276,16 +261,15 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             this.templateOption.setController(controllerFileTypeEdit.getFileType());
             this.templateOption.setService(serviceFileTypeEdit.getFileType());
             this.templateOption.setServiceInterface(serviceInterfaceFileTypeEdit.getFileType());
-
             this.templateOption.validate();
 
             configManager.setProperty(templateOption.getName(), templateOption);
 
-            // Saves the configuration.
-            configManager.save();
-
             // Imports the template folder.
             configManager.importTemplateFolder(this.templateOption);
+
+            // Saves the configuration.
+            configManager.save();
 
             GenerateCodePanel.getTemplateOptions();
 

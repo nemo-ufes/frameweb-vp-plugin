@@ -135,6 +135,17 @@
       <systemPath>${visualparadigm.app.dir}${file.separator}ormlib${file.separator}orm.jar</systemPath>
     </dependency>
 
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.14.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-yaml</artifactId>
+      <version>2.14.2</version>
+    </dependency>
 
   </dependencies>
 
@@ -226,6 +237,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.22.2</version>
       </plugin>
+
     </plugins>
   </build>
 

@@ -1,21 +1,19 @@
 package br.ufes.inf.nemo.vpzy.managers;
 
-import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.FileUtils;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.nodes.Tag;
-import org.yaml.snakeyaml.representer.Representer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
@@ -34,7 +32,7 @@ public class YamlConfigurationManager {
     public static final String ERROR = "Error";
 
     /** The contents of the configuration. */
-    private final Yaml yaml;
+    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     private final Map<String, TemplateOption> options = new HashMap<>();
 
@@ -59,13 +57,6 @@ public class YamlConfigurationManager {
         configFile = new File(workspace, configFileName);
         templateFolder = new File(workspace, TEMPLATE_FOLDER);
 
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-
-        Representer representer = new Representer();
-        representer.addClassTag(TemplateOption.class, Tag.MAP);
-
-        this.yaml = new Yaml(representer, dumperOptions);
         load();
     }
 
@@ -95,7 +86,7 @@ public class YamlConfigurationManager {
 
         try {
             importDefaultTemplates();
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -106,44 +97,16 @@ public class YamlConfigurationManager {
      *
      * @param inputStream The input stream from which to read the properties.
      */
-    private void loadProperties(final InputStream inputStream) {
+    private void loadProperties(final InputStream inputStream) throws IOException {
+        TypeFactory typeFactory = mapper.getTypeFactory();
+        MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, TemplateOption.class);
+        final Map<String, TemplateOption> data = mapper.readValue(inputStream, mapType);
 
-        final Map<String, Object> data2 = (Map<String, Object>) yaml.load(inputStream);
-
-        for (Map.Entry<String, Object> entry : data2.entrySet()) {
+        for (Map.Entry<String, TemplateOption> entry : data.entrySet()) {
 
             final String key = entry.getKey();
 
-            final Map<String, Object> templateInfo = (Map<String, Object>) entry.getValue();
-
-            final String templatePath = (String) templateInfo.get("templatePath");
-            final String outputPath = (String) templateInfo.get("outputPath");
-            final String description = (String) templateInfo.get("description");
-
-            final FileTypes entity = extractFileType(templateInfo.get("entity"));
-
-            final FileTypes enumeration = extractFileType(templateInfo.get("enumeration"));
-
-            final FileTypes mappedSuperclass = extractFileType(templateInfo.get("mappedSuperclass"));
-
-            final FileTypes transientClass = extractFileType(templateInfo.get("transientClass"));
-
-            final FileTypes embeddable = extractFileType(templateInfo.get("embeddable"));
-
-            final FileTypes dao = extractFileType(templateInfo.get("dao"));
-
-            final FileTypes daoInterface = extractFileType(templateInfo.get("daoInterface"));
-
-            final FileTypes service = extractFileType(templateInfo.get("service"));
-
-            final FileTypes serviceInterface = extractFileType(templateInfo.get("serviceInterface"));
-
-            final FileTypes controller = extractFileType(templateInfo.get("controller"));
-
-            final TemplateOption templateOption = new TemplateOption(key, description, templatePath, outputPath, entity,
-                    enumeration, mappedSuperclass, transientClass, embeddable, dao, daoInterface, service,
-                    serviceInterface, controller);
-
+            final TemplateOption templateOption = entry.getValue();
             templateOption.validate();
 
             options.put(key, templateOption);
@@ -157,7 +120,7 @@ public class YamlConfigurationManager {
     /**
      * Imports the default templates from the classpath.
      */
-    private void importDefaultTemplates() throws IOException, URISyntaxException {
+    private void importDefaultTemplates() throws IOException {
 
         if (!this.templateFolder.exists()) {
             final boolean success = templateFolder.mkdir();
@@ -180,8 +143,7 @@ public class YamlConfigurationManager {
 
         Logger.log(Level.FINE, "Loading {0} configuration from classpath location {1} and saving to {2}",
                 new Object[] { pluginName, configFileName, configFile.getAbsolutePath() });
-        try (final InputStream inputStream = YamlConfigurationManager.class.getClassLoader()
-                .getResourceAsStream(configFileName)) {
+        try (final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFileName)) {
 
             loadProperties(inputStream);
 
@@ -190,15 +152,6 @@ public class YamlConfigurationManager {
             Logger.log(Level.SEVERE, "Cannot read {0} from classpath. Plug-in will not remember configuration changes.",
                     configFileName);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private FileTypes extractFileType(final Object fileType) {
-        final Map<String, Object> entity = (Map<String, Object>) fileType;
-        final String entityTemplate = (String) entity.get("template");
-        final String entityExtension = (String) entity.get("extension");
-
-        return new FileTypes(entityTemplate, entityExtension);
     }
 
     /**
@@ -211,8 +164,7 @@ public class YamlConfigurationManager {
 
         // Stores the properties in the file.
         try (final FileWriter outputStream = new FileWriter(configFile)) {
-
-            yaml.dump(options, outputStream);
+            mapper.writeValue(outputStream, options);
             Logger.log(Level.FINEST, "Configuration successfully saved for plug-in {0}.", pluginName);
         } catch (IOException e) {
             Logger.log(Level.SEVERE, "Cannot save {0} configurations. Plug-in will not remember configuration changes.",

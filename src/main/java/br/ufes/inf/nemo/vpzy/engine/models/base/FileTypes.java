@@ -41,6 +41,14 @@ public class FileTypes implements Serializable {
         return extension;
     }
 
+    public void setTemplate(final String template) {
+        this.template = template;
+    }
+
+    public void setExtension(final String extension) {
+        this.extension = extension;
+    }
+
     /**
      * Validates the required properties for the file type.
      * If any of the required properties is missing, an {@link IllegalArgumentException} is thrown.

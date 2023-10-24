@@ -12,13 +12,9 @@ import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.view.IDialog;
 import com.vp.plugin.view.IDialogHandler;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
@@ -77,12 +73,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         add(templateComboBox, gridBagConstraints);
 
         editButton.setText("Edit");
-        editButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                editButtonMouseClicked();
-            }
-        });
+        editButton.addActionListener(evt -> editButtonMouseClicked());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -90,54 +81,44 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         add(editButton, gridBagConstraints);
 
         newButton.setText("New");
-        newButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                newButtonMouseClicked();
-            }
-        });
+        newButton.addActionListener(evt -> newButtonMouseClicked());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         add(newButton, gridBagConstraints);
 
-        // Icon Source <a href="https://www.flaticon.com/free-animated-icons/loading" title="loading animated icons">Loading animated icons created by Freepik - Flaticon</a>
-        final InputStream stream = getClass().getResourceAsStream("/icons/loading.gif");
-        BufferedImage read = null;
-        try {
-             read = ImageIO.read(stream);
-        } catch (IOException e) {
-            // Ignore not finding the loading icon
-        }
-        final ImageIcon loadingIcon = new ImageIcon(read, "Generating Code...");
-        final JLabel loadingLabel = new JLabel("Generating Code...", loadingIcon, SwingConstants.CENTER);
-        Dimension p = this.getSize();
-        loadingLabel.setBounds((int) (p.getWidth() / 2), (int) (p.getHeight() / 2), 50, 10);
+        // Where the GUI is constructed:
+        final JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        progressBar.setVisible(false);
 
-        loadingLabel.setVisible(false);
-        add(loadingLabel);
 
         generateCodeButton.setText("Generate");
-        generateCodeButton.addActionListener(arg0 -> {
+        generateCodeButton.addActionListener(actionEvent -> {
             // event start
+            generateCodeButton.setEnabled(false);
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            progressBar.setVisible(true);
 
-            loadingLabel.setVisible(true);
-            new SwingWorker<Void, String>() {
+            final SwingWorker<Void, String> swingWorker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    // Worken hard or hardly worken...
                     generateCodeButtonMouseClicked();
-                    Thread.sleep(5000);
                     return null;
                 }
 
                 @Override
                 protected void done() {
-                    loadingLabel.setVisible(false);
-                    FrameWebPlugin.instance().setGenerateCodeSettingsDialogOpen(false);
+                    Toolkit.getDefaultToolkit().beep();
+                    generateCodeButton.setEnabled(true);
+                    progressBar.setVisible(false);
+                    setCursor(null); //turn off the wait cursor
+                    containerDialog.close();
                 }
-            }.execute();
+            };
+
+            swingWorker.execute();
         });
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -146,6 +127,9 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         add(generateCodeButton, gridBagConstraints);
+
+
+        add(progressBar);
     }// </editor-fold>//GEN-END:initComponents
 
     public static DefaultComboBoxModel<TemplateOption> getTemplateOptions() {
@@ -183,9 +167,6 @@ public class GenerateCodePanel extends javax.swing.JPanel {
             TemplateUtils.generateCode(selectedItem);
             ViewManagerUtils.showMessageDialog("Code generated successfully", "Success",
                     ViewManagerUtils.INFORMATION_MESSAGE);
-
-            // Closes the configuration dialog.
-            containerDialog.close();
 
             final File file = new File(Paths.get(selectedItem.getOutputPath()
                     .replace("{projectName}", ProjectManagerUtils.getCurrentProject().getName())).toString());
