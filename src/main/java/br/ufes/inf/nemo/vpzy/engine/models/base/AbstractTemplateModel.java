@@ -61,27 +61,58 @@ public abstract class AbstractTemplateModel {
         this.associations = associations;
     }
 
+    /**
+     * Get the package of the class.
+     *
+     * @return The package of the class.
+     */
     public IModelElement getPack() {
         return pack;
     }
 
+    /**
+     * Get the class model.
+     *
+     * @return The class model.
+     */
     public AbstractClassModel getClazz() {
         return clazz;
     }
 
+    /**
+     * Get the system path for the file.
+     *
+     * @return The system path for the file.
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Get the methods of the class.
+     *
+     * @return The methods of the class.
+     */
     public List<AbstractMethodModel> getMethods() {
         return methods;
     }
 
+    /**
+     * Get the attributes of the class.
+     *
+     * @return The attributes of the class.
+     */
     public List<AbstractAttributeModel> getAttributes() {
         return attributes;
     }
 
+    /**
+     * Get the associations.
+     *
+     * @return The list of associations.
+     */
     public List<AbstractAssociationModel> getAssociations() {
         return associations;
     }
+
 }

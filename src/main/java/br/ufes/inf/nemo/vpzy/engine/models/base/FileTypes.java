@@ -13,8 +13,8 @@ import java.util.logging.Level;
  */
 public class FileTypes implements Serializable {
     /**
-     * The name of the template file.
-     * The template file must be located in the template folder defined in the configuration file.
+     * The name of the template file. The template file must be located in the template folder defined in the
+     * configuration file.
      */
     private String template = "template.ftl";
 
@@ -23,35 +23,60 @@ public class FileTypes implements Serializable {
      */
     private String extension = ".java";
 
+    /**
+     * Default constructor for Yaml.
+     */
     public FileTypes() {
         // Default Constructor for Yaml
     }
 
+    /**
+     * Creates a new file type.
+     *
+     * @param template  The name of the template file.
+     * @param extension The extension for the output file.
+     */
     public FileTypes(final String template, final String extension) {
         this.template = template;
         this.extension = extension;
     }
 
+    /**
+     * The name of the template file. The template file must be located in the template folder defined in the
+     * configuration file.
+     *
+     * @return The name of the template file.
+     */
     public String getTemplate() {
         return template;
     }
 
-
-    public String getExtension() {
-        return extension;
-    }
-
+    /**
+     * {@link FileTypes#getTemplate}
+     */
     public void setTemplate(final String template) {
         this.template = template;
     }
 
+    /**
+     * The extension for the output file. The extension must include the dot.
+     *
+     * @return The extension for the output file.
+     */
+    public String getExtension() {
+        return extension;
+    }
+
+    /**
+     * {@link FileTypes#getExtension}
+     */
     public void setExtension(final String extension) {
         this.extension = extension;
     }
 
     /**
-     * Validates the required properties for the file type.
-     * If any of the required properties is missing, an {@link IllegalArgumentException} is thrown.
+     * Validates the required properties for the file type. If any of the required properties is missing, an
+     * {@link IllegalArgumentException} is thrown.
      */
     public void validate() {
         if (template == null || template.trim().isEmpty() || extension == null || extension.trim().isEmpty()) {
@@ -61,6 +86,7 @@ public class FileTypes implements Serializable {
 
     /**
      * Validates if the template file exists.
+     *
      * @param templateFolder The folder where the template file is located.
      * @return True if the template file does not exist, false otherwise.
      */

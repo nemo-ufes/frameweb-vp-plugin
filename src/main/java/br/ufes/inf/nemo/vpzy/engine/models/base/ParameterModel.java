@@ -28,10 +28,20 @@ public class ParameterModel {
         this.type = type;
     }
 
+    /**
+     * The name of the parameter.
+     *
+     * @return The name of the parameter.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * The name of the parameter's type.
+     *
+     * @return The name of the parameter's type.
+     */
     public String getType() {
         return type;
     }

@@ -38,16 +38,31 @@ public abstract class AbstractAttributeModel {
         this.visibility = attribute.getVisibility();
     }
 
+    /**
+     * Get the name of the attribute in camelCase.
+     *
+     * @return The name of the attribute.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the name for the attribute’s type.
+     *
+     * @return The type of the attribute.
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Get the visibility of the attribute. If no visibility is defined, the default visibility is defined by the
+     * template. The visibility can be: public, protected, private, package.
+     *
+     * @return The visibility of the attribute.
+     */
     public String getVisibility() {
         return visibility;
     }
-
 }

@@ -24,8 +24,8 @@ public abstract class AbstractMethodModel {
     private final String type;
 
     /**
-     * The visibility of the method. If no visibility is defined, the default visibility is defined by the template.
-     * The visibility can be: public, protected, private, package.
+     * The visibility of the method. If no visibility is defined, the default visibility is defined by the template. The
+     * visibility can be: public, protected, private, package.
      */
     private final String visibility;
 
@@ -58,14 +58,23 @@ public abstract class AbstractMethodModel {
 
     }
 
+    /**
+     * {@link AbstractMethodModel#name}
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * {@link AbstractMethodModel#type}
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * {@link AbstractMethodModel#visibility}
+     */
     public String getVisibility() {
         return visibility;
     }

@@ -47,16 +47,15 @@ public class EntityAssociationModel extends AbstractAssociationModel {
     }
 
     /**
-     * Source to target relationship's cardinality.
-     * The possible cardinality values: {@value #ONE_TO_ONE}, {@value #ONE_TO_MANY}, {@value #MANY_TO_ONE}.
+     * Source to target relationship's cardinality. The possible cardinality values: {@value #ONE_TO_ONE},
+     * {@value #ONE_TO_MANY}, {@value #MANY_TO_ONE}.
      */
     private final String sourceToTargetCardinality;
 
     /**
-     * Target to source relationship's cardinality.
-     * The cardinality can be: {@value #ONE_TO_ONE}, {@value #ONE_TO_MANY}, {@value #MANY_TO_ONE}.
+     * Target to source relationship's cardinality. The cardinality can be: {@value #ONE_TO_ONE}, {@value #ONE_TO_MANY},
+     * {@value #MANY_TO_ONE}.
      */
-
     private final String targetToSourceCardinality;
 
     /**
@@ -70,50 +69,42 @@ public class EntityAssociationModel extends AbstractAssociationModel {
     private final boolean targetTransient;
 
     /**
-     * The target’s collection type.
-     * Possible values: bag, list, map, set.
+     * The target’s collection type. Possible values: bag, list, map, set.
      */
     private final String targetCollection;
 
     /**
-     * The source’s collection type.
-     * Possible values: bag, list, map, set.
+     * The source’s collection type. Possible values: bag, list, map, set.
      */
     private final String sourceCollection;
 
     /**
-     * The target’s fetch type.
-     * Possible values: eager, lazy.
+     * The target’s fetch type. Possible values: eager, lazy.
      */
     private final String targetFetch;
 
     /**
-     * The source’s fetch type.
-     * Possible values: eager, lazy.
+     * The source’s fetch type. Possible values: eager, lazy.
      */
     private final String sourceFetch;
 
     /**
-     * The target’s cascade type.
-     * Possible values: none, all, merge, persist, refresh, remove.
+     * The target’s cascade type. Possible values: none, all, merge, persist, refresh, remove.
      */
     private final String targetCascade;
 
     /**
-     * The source’s cascade type.
-     * Possible values: none, all, merge, persist, refresh, remove.
+     * The source’s cascade type. Possible values: none, all, merge, persist, refresh, remove.
      */
     private final String sourceCascade;
 
     /**
-     * The target’s order type.
-     * Possible values: natural, (comma separated list of property names).
+     * The target’s order type. Possible values: natural, (comma separated list of property names).
      */
     private final String targetOrder;
 
     /**
-     * The source’s order type.
-     * Possible values: natural, (comma separated list of property names).
+     * The source’s order type. Possible values: natural, (comma separated list of property names).
      */
     private final String sourceOrder;
 
@@ -146,7 +137,6 @@ public class EntityAssociationModel extends AbstractAssociationModel {
 
         this.targetTransient = FrameWebUtils.getFrameWebClass(target.getModelElement())
                 .equals(FrameWebClass.TRANSIENT_CLASS);
-
 
         // Collection type in the relationship
         this.targetCollection = targetConstraints.get(COLLECTION);
@@ -181,7 +171,7 @@ public class EntityAssociationModel extends AbstractAssociationModel {
             if (frameWebAssociationEndConstraint != null) {
                 Logger.log(Level.FINE,
                         "Constraint: " + constraint.getName() + " - " + constraint.getSpecification().getValueAsString()
-                                + " - " + frameWebAssociationEndConstraint.isParameterized());
+                        + " - " + frameWebAssociationEndConstraint.isParameterized());
                 if (!frameWebAssociationEndConstraint.isParameterized()) {
                     constraints.put(constraintType[0], constraintType[1]);
                 } else {
@@ -228,52 +218,114 @@ public class EntityAssociationModel extends AbstractAssociationModel {
     }
 
     //<editor-fold desc="Boilerplate" default="folded">
+
+    /**
+     * Get the source to target relationship's cardinality.
+     *
+     * @return The source to target relationship's cardinality.
+     */
     public String getSourceToTargetCardinality() {
         return sourceToTargetCardinality;
     }
 
+    /**
+     * Get the target to source relationship's cardinality.
+     *
+     * @return The target to source relationship's cardinality.
+     */
     public String getTargetToSourceCardinality() {
         return targetToSourceCardinality;
     }
 
+    /**
+     * Get the target's collection type.
+     *
+     * @return The target's collection type.
+     */
     public String getTargetCollection() {
         return targetCollection;
     }
 
+    /**
+     * Get the source's collection type.
+     *
+     * @return The source's collection type.
+     */
     public String getSourceCollection() {
         return sourceCollection;
     }
 
+    /**
+     * Get the target's fetch type.
+     *
+     * @return The target's fetch type.
+     */
     public String getTargetFetch() {
         return targetFetch;
     }
 
+    /**
+     * Get the source's fetch type.
+     *
+     * @return The source's fetch type.
+     */
     public String getSourceFetch() {
         return sourceFetch;
     }
 
+    /**
+     * Get the target's cascade type.
+     *
+     * @return The target's cascade type.
+     */
     public String getTargetCascade() {
         return targetCascade;
     }
 
+    /**
+     * Get the source's cascade type.
+     *
+     * @return The source's cascade type.
+     */
     public String getSourceCascade() {
         return sourceCascade;
     }
 
+    /**
+     * Check if the source is transient.
+     *
+     * @return True if the source is transient, false otherwise.
+     */
     public boolean isSourceTransient() {
         return sourceTransient;
     }
 
+    /**
+     * Check if the target is transient.
+     *
+     * @return True if the target is transient, false otherwise.
+     */
     public boolean isTargetTransient() {
         return targetTransient;
     }
 
+    /**
+     * Get the target's order type.
+     *
+     * @return The target's order type.
+     */
     public String getTargetOrder() {
         return targetOrder;
     }
 
+    /**
+     * Get the source's order type.
+     *
+     * @return The source's order type.
+     */
     public String getSourceOrder() {
         return sourceOrder;
     }
+
     //</editor-fold>
 }
