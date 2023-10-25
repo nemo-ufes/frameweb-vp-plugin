@@ -53,6 +53,8 @@ public class FileTypes implements Serializable {
 
     /**
      * {@link FileTypes#getTemplate}
+     *
+     * @param template The name of the template file.
      */
     public void setTemplate(final String template) {
         this.template = template;
@@ -69,6 +71,8 @@ public class FileTypes implements Serializable {
 
     /**
      * {@link FileTypes#getExtension}
+     *
+     * @param extension The extension for the output file.
      */
     public void setExtension(final String extension) {
         this.extension = extension;

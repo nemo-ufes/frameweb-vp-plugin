@@ -19,7 +19,8 @@ public abstract class AbstractMethodModel {
     private final String name;
 
     /**
-     * The name of the method’s return type.
+     * The name of the method’s return type. If no return type is defined, the default return type is defined by the
+     * template.
      */
     private final String type;
 
@@ -59,26 +60,39 @@ public abstract class AbstractMethodModel {
     }
 
     /**
-     * {@link AbstractMethodModel#name}
+     * The name of the method.
+     *
+     * @return The name of the method.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * {@link AbstractMethodModel#type}
+     * The name of the method’s return type. If no return type is defined, the default return type is defined by the
+     * template.
+     *
+     * @return The type of the method.
      */
     public String getType() {
         return type;
     }
 
     /**
-     * {@link AbstractMethodModel#visibility}
+     * The visibility of the method. If no visibility is defined, the default visibility is defined by the template. The
+     * visibility can be: public, protected, private, package.
+     *
+     * @return The visibility of the method.
      */
     public String getVisibility() {
         return visibility;
     }
 
+    /**
+     * The parameters of the method.
+     *
+     * @return The parameters of the method.
+     */
     public ParameterModel[] getParameters() {
         return parameters;
     }
