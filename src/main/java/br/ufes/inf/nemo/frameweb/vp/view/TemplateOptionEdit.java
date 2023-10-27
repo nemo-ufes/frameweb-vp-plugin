@@ -5,7 +5,9 @@
 package br.ufes.inf.nemo.frameweb.vp.view;
 
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
+import br.ufes.inf.nemo.vpzy.TemplateValidationException;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
+import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.view.IDialog;
@@ -13,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Defines the layout of the panel that will be shown in the dialog to edit the configuration of a template option.
@@ -263,10 +266,12 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
             this.templateOption.setServiceInterface(serviceInterfaceFileTypeEdit.getFileType());
             this.templateOption.validate();
 
-            configManager.setProperty(templateOption.getName(), templateOption);
 
             // Imports the template folder.
             configManager.importTemplateFolder(this.templateOption);
+
+
+            configManager.setProperty(templateOption.getName(), templateOption);
 
             // Saves the configuration.
             configManager.save();
@@ -278,8 +283,9 @@ public class TemplateOptionEdit extends javax.swing.JPanel {
 
             // Closes the configuration dialog.
             containerDialog.close();
-        } catch (IllegalArgumentException | IOException e) {
-            ViewManagerUtils.showMessageDialog(e.getMessage(), "Error", ViewManagerUtils.ERROR_MESSAGE);
+        } catch (IllegalArgumentException | IOException | TemplateValidationException e) {
+            Logger.log(Level.SEVERE, "Error saving template option", e);
+            ViewManagerUtils.showMessageDialog(e.getMessage() + ". See log for more details.", "Error", ViewManagerUtils.ERROR_MESSAGE);
         }
 
     }
