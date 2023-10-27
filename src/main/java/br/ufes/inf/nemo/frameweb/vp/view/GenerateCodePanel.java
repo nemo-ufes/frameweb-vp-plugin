@@ -114,6 +114,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
                     generateCodeButton.setEnabled(true);
                     progressBar.setVisible(false);
                     setCursor(null); //turn off the wait cursor
+                    FrameWebPlugin.instance().setGenerateCodeSettingsDialogOpen(false);
                     containerDialog.close();
                 }
             };
