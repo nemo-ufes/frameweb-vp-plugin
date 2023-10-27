@@ -46,28 +46,65 @@ public class EntityAssociationModel extends AbstractAssociationModel {
         CARDINALITY_MAP.put("*", ONE_TO_MANY);
     }
 
+    /**
+     * The cardinality of the relationship from the source to the target.
+     */
     private final String sourceToTargetCardinality;
+
+    /**
+     * The cardinality of the relationship from the target to the source.
+     */
 
     private final String targetToSourceCardinality;
 
+    /**
+     * If the source is transient.
+     */
     private final boolean sourceTransient;
 
+    /**
+     * If the target is transient.
+     */
     private final boolean targetTransient;
 
+    /**
+     * The collection type of the target.
+     */
     private final String targetCollection;
 
+    /**
+     * The collection type of the source.
+     */
     private final String sourceCollection;
 
+    /**
+     * The fetch type of the target.
+     */
     private final String targetFetch;
 
+    /**
+     * The fetch type of the source.
+     */
     private final String sourceFetch;
 
+    /**
+     * The cascade type of the target.
+     */
     private final String targetCascade;
 
+    /**
+     * The cascade type of the source.
+     */
     private final String sourceCascade;
 
+    /**
+     * The order type of the target.
+     */
     private final String targetOrder;
 
+    /**
+     * The order type of the source.
+     */
     private final String sourceOrder;
 
     public EntityAssociationModel(@NonNull final IRelationshipEnd source) {
