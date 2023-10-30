@@ -13,10 +13,15 @@ import br.ufes.inf.nemo.vpzy.view.Color;
 /**
  * Utility class that provides helper methods regarding Model Elements in Visual Paradigm.
  *
- * @author Vítor E. Silva Souza (http://www.inf.ufes.br/~vitorsouza/)
+ * @author <a href="http://www.inf.ufes.br/~vitorsouza/">Vítor E. Silva Souza</a>
  * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  */
 public final class ModelElementUtils {
+
+  private ModelElementUtils() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Returns the model elements whose diagram elements are currently selected in the active diagram.
    * 
@@ -90,10 +95,10 @@ public final class ModelElementUtils {
         classUIModel.fitSize();
         if (isInterface) {
           modelElement.addStereotype("Interface");
-         // classUIModel.setInterfaceBall(true);
+          classUIModel.setInterfaceBall(true);
         } else {
           modelElement.removeStereotype("Interface");
-         // classUIModel.setInterfaceBall(false);
+          classUIModel.setInterfaceBall(false);
         }
 
       }
