@@ -4,14 +4,18 @@ import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAssociationModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractMethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractTemplateModel;
 import br.ufes.inf.nemo.vpzy.engine.models.dao.DaoAssociationModel;
 import br.ufes.inf.nemo.vpzy.engine.models.dao.DaoAttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.dao.DaoClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.dao.DaoMethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.dao.DaoTemplateModel;
 import com.vp.plugin.model.IAttribute;
 import com.vp.plugin.model.IClass;
+import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IOperation;
 import com.vp.plugin.model.IRelationshipEnd;
+import java.util.List;
 
 /**
  * Processor class for dao classes.
@@ -36,6 +40,17 @@ public class DaoProcessor extends AbstractClassProcessor {
     }
 
     /**
+     * No specific data is added to the data model.
+     *
+     * @param dataModel The data model.
+     * @param clazz     The class processed.
+     */
+    @Override
+    protected void addSpecificData(final AbstractTemplateModel dataModel, final IClass clazz) {
+        // No specific data is added to the data model.
+    }
+
+    /**
      * Generates a dao class model
      *
      * @param clazz The class processed.
@@ -44,6 +59,26 @@ public class DaoProcessor extends AbstractClassProcessor {
     @Override
     protected AbstractClassModel getClassModel(final IClass clazz) {
         return new DaoClassModel(clazz);
+    }
+
+    /**
+     * Initializes a dao template model.
+     *
+     * @param pack                    Package of the class.
+     * @param classModel              Class model.
+     * @param path                    System path for the file.
+     * @param abstractMethodModels    Methods of the class.
+     * @param entityAttributeModels   Attributes of the class.
+     * @param entityAssociationModels Associations of the class.
+     * @return The template model for the engine.
+     */
+    @Override
+    protected AbstractTemplateModel processTemplateModel(final IModelElement pack, final AbstractClassModel classModel,
+            final String path, final List<AbstractMethodModel> abstractMethodModels,
+            final List<AbstractAttributeModel> entityAttributeModels,
+            final List<AbstractAssociationModel> entityAssociationModels) {
+        return new DaoTemplateModel(pack, classModel, path, abstractMethodModels, entityAttributeModels,
+                entityAssociationModels);
     }
 
     /**

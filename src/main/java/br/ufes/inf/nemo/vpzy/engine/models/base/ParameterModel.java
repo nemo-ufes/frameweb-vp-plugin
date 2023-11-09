@@ -13,7 +13,7 @@ public class ParameterModel {
     private final String name;
 
     /**
-     * The type of the parameter.
+     * The name of the parameter's type.
      */
     private final String type;
 
@@ -21,17 +21,27 @@ public class ParameterModel {
      * Creates a new parameter model.
      *
      * @param name The name of the parameter.
-     * @param type The type of the parameter.
+     * @param type The name of the parameter's type.
      */
     public ParameterModel(final String name, final String type) {
         this.name = name;
         this.type = type;
     }
 
+    /**
+     * The name of the parameter.
+     *
+     * @return The name of the parameter.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * The name of the parameter's type.
+     *
+     * @return The name of the parameter's type.
+     */
     public String getType() {
         return type;
     }

@@ -1,15 +1,15 @@
 package br.ufes.inf.nemo.frameweb.vp.utils.clazz;
 
+import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationAssociationModel;
+import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationAttributeModel;
+import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationClassModel;
+import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationMethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.application.ApplicationTemplateModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAssociationModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractMethodModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractTemplateModel;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.EntityAssociationModel;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.EntityAttributeModel;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.EntityClassModel;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.EntityMethodModel;
-import br.ufes.inf.nemo.vpzy.engine.models.entity.EntityTemplateModel;
 import com.vp.plugin.model.IAttribute;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IModelElement;
@@ -18,15 +18,15 @@ import com.vp.plugin.model.IRelationshipEnd;
 import java.util.List;
 
 /**
- * Processor class for entity classes.
+ * Processor class for Application classes.
  *
  * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
  * @version 0.0.1
  */
-public class EntityProcessor extends AbstractClassProcessor {
-    private static final AbstractClassProcessor instance = new EntityProcessor();
+public class ApplicationProcessor extends AbstractClassProcessor {
+    private static final AbstractClassProcessor instance = new ApplicationProcessor();
 
-    private EntityProcessor() {
+    private ApplicationProcessor() {
         // Singleton factory
     }
 
@@ -51,18 +51,18 @@ public class EntityProcessor extends AbstractClassProcessor {
     }
 
     /**
-     * Generates a entity class model
+     * Generates a Application class model
      *
      * @param clazz The class processed.
      * @return The class model.
      */
     @Override
     protected AbstractClassModel getClassModel(final IClass clazz) {
-        return new EntityClassModel(clazz);
+        return new ApplicationClassModel(clazz);
     }
 
     /**
-     * Initializes an entity template model.
+     * Initializes a template model for an application class.
      *
      * @param pack                    Package of the class.
      * @param classModel              Class model.
@@ -77,40 +77,40 @@ public class EntityProcessor extends AbstractClassProcessor {
             final String path, final List<AbstractMethodModel> abstractMethodModels,
             final List<AbstractAttributeModel> entityAttributeModels,
             final List<AbstractAssociationModel> entityAssociationModels) {
-        return new EntityTemplateModel(pack, classModel, path, abstractMethodModels, entityAttributeModels,
+        return new ApplicationTemplateModel(pack, classModel, path, abstractMethodModels, entityAttributeModels,
                 entityAssociationModels);
     }
 
     /**
-     * Generates a entity attribute model
+     * Generates a Application attribute model
      *
      * @param attribute The attribute processed.
      * @return The attribute model.
      */
     @Override
     protected AbstractAttributeModel getAttributeModel(final IAttribute attribute) {
-        return new EntityAttributeModel(attribute);
+        return new ApplicationAttributeModel(attribute);
     }
 
     /**
-     * Generates a entity method model
+     * Generates a Application method model
      *
      * @param operation The operation processed.
      * @return The method model.
      */
     @Override
     protected AbstractMethodModel getMethodModel(final IOperation operation) {
-        return new EntityMethodModel(operation);
+        return new ApplicationMethodModel(operation);
     }
 
     /**
-     * Generates a entity association model
+     * Generates a Application association model
      *
      * @param relationship The relationship processed.
      * @return The association model.
      */
     @Override
     protected AbstractAssociationModel getAssociationModel(final IRelationshipEnd relationship) {
-        return new EntityAssociationModel(relationship);
+        return new ApplicationAssociationModel(relationship);
     }
 }

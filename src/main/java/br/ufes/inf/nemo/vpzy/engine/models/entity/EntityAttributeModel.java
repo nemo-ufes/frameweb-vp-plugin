@@ -36,7 +36,7 @@ public class EntityAttributeModel extends AbstractAttributeModel {
     private final int size;
 
     /**
-     * The precision of the attribute, if it is a date or time.
+     * Attribute's date precision. Possible values: date, time, timestamp.
      */
     private final String dateTimePrecision;
 
@@ -73,7 +73,9 @@ public class EntityAttributeModel extends AbstractAttributeModel {
         this.lob = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_LOB.getStereotypeName());
         this.id = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_ID.getStereotypeName());
         this.version = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_VERSION.getStereotypeName());
-        this.isTransient = attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_TRANSIENT.getStereotypeName()) || attribute.hasStereotype("transient");
+        this.isTransient =
+                attribute.hasStereotype(FrameWebClassAttribute.PERSISTENT_CLASS_TRANSIENT.getStereotypeName())
+                || attribute.hasStereotype("transient");
 
         // Create a map with the default values for the attribute stereotypes.
         final Map<String, Object> attributeConstraints = generateConstraintsMap(attribute);
@@ -128,39 +130,85 @@ public class EntityAttributeModel extends AbstractAttributeModel {
         return value;
     }
 
+    /**
+     * Check if the attribute is embedded.
+     *
+     * @return True if the attribute is embedded, false otherwise.
+     */
     public boolean isEmbedded() {
         return embedded;
     }
 
+    /**
+     * Check if the attribute is a LOB (Large Object).
+     *
+     * @return True if the attribute is a LOB, false otherwise.
+     */
     public boolean isLob() {
         return lob;
     }
 
+    /**
+     * Check if the attribute is the ID attribute of an entity.
+     *
+     * @return True if the attribute is the ID attribute of an entity, false otherwise.
+     */
     public boolean isId() {
         return id;
     }
 
+    /**
+     * Check if the attribute is the version attribute of an entity.
+     *
+     * @return True if the attribute is the version attribute of an entity, false otherwise.
+     */
     public boolean isVersion() {
         return version;
     }
 
+    /**
+     * Check if the attribute is not null.
+     *
+     * @return True if the attribute is not null, false otherwise.
+     */
     public boolean isNotNull() {
         return notNull;
     }
 
+    /**
+     * Get the size of the attribute.
+     *
+     * @return The size of the attribute.
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Get the attribute's date and time precision.
+     *
+     * @return The attribute's date and time precision. Possible values: date, time, timestamp.
+     */
     public String getDateTimePrecision() {
         return dateTimePrecision;
     }
 
+    /**
+     * Check if the attribute is transient.
+     *
+     * @return True if the attribute is transient, false otherwise.
+     */
     public boolean isTransient() {
         return isTransient;
     }
 
+    /**
+     * Get the column name of the attribute.
+     *
+     * @return The column name of the attribute.
+     */
     public String getColumn() {
         return column;
     }
+
 }

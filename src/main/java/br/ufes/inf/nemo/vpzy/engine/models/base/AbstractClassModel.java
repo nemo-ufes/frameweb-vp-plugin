@@ -24,14 +24,12 @@ public abstract class AbstractClassModel {
     private final String name;
 
     /**
-     * The name of the parent class, if it exists.
-     * If it does not exist, it is an empty string.
+     * The name of the parent class, if it exists. If it does not exist, it is an empty string.
      */
     private final String generalization;
 
     /**
-     * The list of interfaces implemented by the class.
-     * If it does not exist, it is an empty list.
+     * The list of interfaces implemented by the class. If it does not exist, it is an empty list.
      */
     private final List<String> realizations = new ArrayList<>();
 
@@ -73,15 +71,31 @@ public abstract class AbstractClassModel {
 
     }
 
+    /**
+     * Get the name of the class.
+     *
+     * @return The name of the class.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the name of the parent class, if it exists. If it does not exist, it is an empty string.
+     *
+     * @return The name of the parent class or an empty string if it doesn't exist.
+     */
     public String getGeneralization() {
         return generalization;
     }
 
+    /**
+     * Get the list of interfaces implemented by the class. If it does not exist, it is an empty list.
+     *
+     * @return The list of implemented interfaces or an empty list if they don't exist.
+     */
     public List<String> getRealizations() {
         return realizations;
     }
+
 }

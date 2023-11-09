@@ -23,14 +23,14 @@ public abstract class AbstractAssociationModel {
     private final String targetTypeName;
 
     /**
-     * The property name for the source of the relationship.
-     * If the property name is not defined, the name of the class is used.
+     * The property name for the source of the relationship. If the property name is not defined, the name of the class
+     * in camelCase is used.
      */
     private final String sourceName;
 
     /**
-     * The property name for the target of the relationship.
-     * If the property name is not defined, the name of the class is used.
+     * The property name for the target of the relationship. If the property name is not defined, the name of the class
+     * in camelCase is used.
      */
     private final String targetName;
 
@@ -67,18 +67,40 @@ public abstract class AbstractAssociationModel {
                 : Character.toLowerCase(this.targetTypeName.charAt(0)) + this.targetTypeName.substring(1);
     }
 
+    /**
+     * Get the type for the source of the relationship.
+     *
+     * @return The source type name.
+     */
     public String getSourceTypeName() {
         return sourceTypeName;
     }
 
+    /**
+     * Get the type for the target of the relationship.
+     *
+     * @return The target type name.
+     */
     public String getTargetTypeName() {
         return targetTypeName;
     }
 
+    /**
+     * Get the property name for the source of the relationship. If the property name is not defined, the name of the
+     * class in camelCase is used.
+     *
+     * @return The source property name.
+     */
     public String getSourceName() {
         return sourceName;
     }
 
+    /**
+     * Get the property name for the target of the relationship. If the property name is not defined, the name of the
+     * class in camelCase is used.
+     *
+     * @return The target property name.
+     */
     public String getTargetName() {
         return targetName;
     }

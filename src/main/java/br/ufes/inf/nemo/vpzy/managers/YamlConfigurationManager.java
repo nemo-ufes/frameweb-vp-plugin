@@ -1,24 +1,25 @@
 package br.ufes.inf.nemo.vpzy.managers;
 
-import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
+import br.ufes.inf.nemo.vpzy.TemplateValidationException;
+import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.FileUtils;
-import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.nodes.Tag;
-import org.yaml.snakeyaml.representer.Representer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.zip.ZipInputStream;
@@ -31,10 +32,8 @@ import java.util.zip.ZipInputStream;
 public class YamlConfigurationManager {
     public static final String TEMPLATE_FOLDER = "templates";
 
-    public static final String ERROR = "Error";
-
     /** The contents of the configuration. */
-    private final Yaml yaml;
+    private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     private final Map<String, TemplateOption> options = new HashMap<>();
 
@@ -59,13 +58,6 @@ public class YamlConfigurationManager {
         configFile = new File(workspace, configFileName);
         templateFolder = new File(workspace, TEMPLATE_FOLDER);
 
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-
-        Representer representer = new Representer();
-        representer.addClassTag(TemplateOption.class, Tag.MAP);
-
-        this.yaml = new Yaml(representer, dumperOptions);
         load();
     }
 
@@ -75,7 +67,7 @@ public class YamlConfigurationManager {
      * for next time. This method is called during the construction of a YamlConfigurationManager.
      */
     protected void load() {
-        Logger.log(Level.FINER, "Loading {0} configuration from {1}. File exists? {2}",
+        Logger.log(Level.FINER, "Loading {0} configuration from {1}. File exists? {2}" ,
                 new Object[] { pluginName, configFile.getAbsolutePath(), configFile.exists() });
 
         // If there's already a config file, loads it.
@@ -86,7 +78,7 @@ public class YamlConfigurationManager {
                 loadProperties(inputStream);
                 return;
             } catch (IOException e) {
-                Logger.log(Level.SEVERE, "Cannot read {0}. Will try to use the default {1} configurations instead.",
+                Logger.log(Level.SEVERE, "Cannot read {0}. Will try to use the default {1} configurations instead." ,
                         new Object[] { configFile.getAbsolutePath(), pluginName });
             }
         }
@@ -95,7 +87,7 @@ public class YamlConfigurationManager {
 
         try {
             importDefaultTemplates();
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -106,50 +98,22 @@ public class YamlConfigurationManager {
      *
      * @param inputStream The input stream from which to read the properties.
      */
-    private void loadProperties(final InputStream inputStream) {
+    private void loadProperties(final InputStream inputStream) throws IOException {
+        TypeFactory typeFactory = mapper.getTypeFactory();
+        MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, TemplateOption.class);
+        final Map<String, TemplateOption> data = mapper.readValue(inputStream, mapType);
 
-        final Map<String, Object> data2 = (Map<String, Object>) yaml.load(inputStream);
-
-        for (Map.Entry<String, Object> entry : data2.entrySet()) {
+        for (Map.Entry<String, TemplateOption> entry : data.entrySet()) {
 
             final String key = entry.getKey();
 
-            final Map<String, Object> templateInfo = (Map<String, Object>) entry.getValue();
-
-            final String templatePath = (String) templateInfo.get("templatePath");
-            final String outputPath = (String) templateInfo.get("outputPath");
-            final String description = (String) templateInfo.get("description");
-
-            final FileTypes entity = extractFileType(templateInfo.get("entity"));
-
-            final FileTypes enumeration = extractFileType(templateInfo.get("enumeration"));
-
-            final FileTypes mappedSuperclass = extractFileType(templateInfo.get("mappedSuperclass"));
-
-            final FileTypes transientClass = extractFileType(templateInfo.get("transientClass"));
-
-            final FileTypes embeddable = extractFileType(templateInfo.get("embeddable"));
-
-            final FileTypes dao = extractFileType(templateInfo.get("dao"));
-
-            final FileTypes daoInterface = extractFileType(templateInfo.get("daoInterface"));
-
-            final FileTypes service = extractFileType(templateInfo.get("service"));
-
-            final FileTypes serviceInterface = extractFileType(templateInfo.get("serviceInterface"));
-
-            final FileTypes controller = extractFileType(templateInfo.get("controller"));
-
-            final TemplateOption templateOption = new TemplateOption(key, description, templatePath, outputPath, entity,
-                    enumeration, mappedSuperclass, transientClass, embeddable, dao, daoInterface, service,
-                    serviceInterface, controller);
-
+            final TemplateOption templateOption = entry.getValue();
             templateOption.validate();
 
             options.put(key, templateOption);
         }
 
-        Logger.log(Level.FINEST, "Configuration successfully loaded for plug-in {0}, saved to {1}.",
+        Logger.log(Level.FINEST, "Configuration successfully loaded for plug-in {0}, saved to {1}." ,
                 new Object[] { pluginName, configFile.getAbsolutePath() });
 
     }
@@ -157,19 +121,20 @@ public class YamlConfigurationManager {
     /**
      * Imports the default templates from the classpath.
      */
-    private void importDefaultTemplates() throws IOException, URISyntaxException {
+    private void importDefaultTemplates() throws IOException {
 
         if (!this.templateFolder.exists()) {
             final boolean success = templateFolder.mkdir();
             if (success) {
-                Logger.log(Level.FINEST, "Created templates folder at {0}.", templateFolder.getAbsolutePath());
+                Logger.log(Level.FINEST, "Created templates folder at {0}." , templateFolder.getAbsolutePath());
 
             } else {
-                Logger.log(Level.SEVERE, "Could not create templates folder at {0}.", templateFolder.getAbsolutePath());
+                Logger.log(Level.SEVERE, "Could not create templates folder at {0}." ,
+                        templateFolder.getAbsolutePath());
             }
         }
 
-        final InputStream pmdFolder = getClass().getClassLoader().getResourceAsStream(TEMPLATE_FOLDER + ".zip");
+        final InputStream pmdFolder = getClass().getClassLoader().getResourceAsStream(TEMPLATE_FOLDER + ".zip" );
 
         if (pmdFolder != null) {
             try (final ZipInputStream zipInputStream = new ZipInputStream(pmdFolder)) {
@@ -178,27 +143,18 @@ public class YamlConfigurationManager {
             }
         }
 
-        Logger.log(Level.FINE, "Loading {0} configuration from classpath location {1} and saving to {2}",
+        Logger.log(Level.FINE, "Loading {0} configuration from classpath location {1} and saving to {2}" ,
                 new Object[] { pluginName, configFileName, configFile.getAbsolutePath() });
-        try (final InputStream inputStream = YamlConfigurationManager.class.getClassLoader()
-                .getResourceAsStream(configFileName)) {
+        try (final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(configFileName)) {
 
             loadProperties(inputStream);
 
             save();
         } catch (IOException e) {
-            Logger.log(Level.SEVERE, "Cannot read {0} from classpath. Plug-in will not remember configuration changes.",
+            Logger.log(Level.SEVERE,
+                    "Cannot read {0} from classpath. Plug-in will not remember configuration changes." ,
                     configFileName);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private FileTypes extractFileType(final Object fileType) {
-        final Map<String, Object> entity = (Map<String, Object>) fileType;
-        final String entityTemplate = (String) entity.get("template");
-        final String entityExtension = (String) entity.get("extension");
-
-        return new FileTypes(entityTemplate, entityExtension);
     }
 
     /**
@@ -206,17 +162,17 @@ public class YamlConfigurationManager {
      * workspace directory, allowing users to persist configuration changes.
      */
     public void save() {
-        Logger.log(Level.FINER, "Saving {0} configuration to {1}. File exists? {2}",
+        Logger.log(Level.FINER, "Saving {0} configuration to {1}. File exists? {2}" ,
                 new Object[] { pluginName, configFile.getAbsolutePath(), configFile.exists() });
 
         // Stores the properties in the file.
         try (final FileWriter outputStream = new FileWriter(configFile)) {
-
-            yaml.dump(options, outputStream);
-            Logger.log(Level.FINEST, "Configuration successfully saved for plug-in {0}.", pluginName);
+            mapper.writeValue(outputStream, options);
+            Logger.log(Level.FINEST, "Configuration successfully saved for plug-in {0}." , pluginName);
         } catch (IOException e) {
-            Logger.log(Level.SEVERE, "Cannot save {0} configurations. Plug-in will not remember configuration changes.",
-                    pluginName);
+            Logger.log(Level.SEVERE,
+                    "Cannot save {0} configurations. Plug-in will not remember configuration changes." , pluginName);
+            throw new RuntimeException(e);
         }
     }
 
@@ -229,7 +185,7 @@ public class YamlConfigurationManager {
      */
     public TemplateOption getProperty(String key) {
         final TemplateOption value = options.get(key);
-        Logger.log(Level.FINEST, "Retrieving configuration for key {0}: {1}.", new Object[] { key, value });
+        Logger.log(Level.FINEST, "Retrieving configuration for key {0}: {1}." , new Object[] { key, value });
         return value;
     }
 
@@ -240,7 +196,7 @@ public class YamlConfigurationManager {
      * @param value The new value to set.
      */
     public void setProperty(String key, TemplateOption value) {
-        Logger.log(Level.FINEST, "Changing configuration for key {0}: {1}.", new Object[] { key, value });
+        Logger.log(Level.FINEST, "Changing configuration for key {0}: {1}." , new Object[] { key, value });
         options.put(key, value);
     }
 
@@ -248,77 +204,78 @@ public class YamlConfigurationManager {
         return options;
     }
 
-    public void importTemplateFolder(final TemplateOption templateOption) throws IOException {
+    public void importTemplateFolder(final TemplateOption templateOption) throws IOException, TemplateValidationException {
+        List<String> validationErrors = new ArrayList<>();
 
         if (templateOption == null) {
-
-            ViewManagerUtils.showMessageDialog("Template Option not passed", ERROR, ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            throw new TemplateValidationException("Template option cannot be null.", null);
         }
 
         templateOption.validate();
 
         final File sourceTemplates = new File(templateOption.getTemplatePath());
-
         final String sourceTemplatesAbsolutePath = sourceTemplates.getAbsolutePath();
+
         if (!sourceTemplates.exists()) {
-            Logger.log(Level.SEVERE, "Could not find templates folder at {0}.", sourceTemplatesAbsolutePath);
-            ViewManagerUtils.showMessageDialog("Could not find templates folder", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find templates folder at " + sourceTemplatesAbsolutePath);
         }
 
         if (templateOption.getEntity().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find entity template", ERROR, ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find entity template");
         }
 
         if (templateOption.getEnumeration().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find enumeration template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find enumeration template");
         }
 
         if (templateOption.getMappedSuperclass().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find mapped superclass template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find mapped superclass template");
         }
 
         if (templateOption.getTransientClass().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find transient class template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find transient class template");
         }
 
         if (templateOption.getEmbeddable().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find embeddable template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find embeddable template");
         }
 
         if (templateOption.getDao().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find dao template", ERROR, ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find dao template");
         }
 
         if (templateOption.getService().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find service template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find service template");
         }
 
         if (templateOption.getController().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            ViewManagerUtils.showMessageDialog("Could not find controller template", ERROR,
-                    ViewManagerUtils.ERROR_MESSAGE);
-            return;
+            validationErrors.add("Could not find controller template");
+        }
+
+        if (!FreeMarkerEngine.validateTemplateStructures(sourceTemplates)) {
+            validationErrors.add("Invalid template syntax structure. Check the logs for details.");
+        }
+
+        if (!validationErrors.isEmpty()) {
+            for (String error : validationErrors) {
+                Logger.log(Level.SEVERE, error);
+            }
+            throw new TemplateValidationException("One or more template validation errors occurred.", null);
         }
 
         final String name = templateOption.getName();
         final Path resolve = templateFolder.toPath().resolve(name);
-        FileUtils.copyFolder(sourceTemplates.toPath(), resolve, StandardCopyOption.REPLACE_EXISTING);
 
+        try {
+            FileUtils.copyFolder(sourceTemplates.toPath(), resolve, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            Logger.log(Level.SEVERE, "Could not copy templates folder to " + resolve);
+            throw new TemplateValidationException("Error while copying templates folder.", e);
+        }
     }
+
+
+
 
     public File getTemplateFolder() {
         return templateFolder;

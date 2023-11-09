@@ -5,20 +5,20 @@ import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAssociationModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractAttributeModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractClassModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractMethodModel;
+import br.ufes.inf.nemo.vpzy.engine.models.base.AbstractTemplateModel;
 import br.ufes.inf.nemo.vpzy.engine.models.base.FileTypes;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.model.IAttribute;
 import com.vp.plugin.model.IClass;
+import com.vp.plugin.model.IModelElement;
 import com.vp.plugin.model.IOperation;
 import com.vp.plugin.model.IRelationshipEnd;
 import freemarker.template.TemplateException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -30,6 +30,8 @@ import java.util.logging.Level;
 public abstract class AbstractClassProcessor {
     /**
      * Generates the code for an entity class in the FrameWeb project.
+     * <p>
+     * The data model is defined by the specific implementation of {@link AbstractTemplateModel}
      *
      * @param clazz     The class processed.
      * @param engine    The FreeMarker engine used to generate the code.
@@ -37,21 +39,9 @@ public abstract class AbstractClassProcessor {
      */
     public void process(final IClass clazz, final FreeMarkerEngine engine, final FileTypes fileTypes) {
 
-        final Map<String, Object> dataModel = new HashMap<>();
-        dataModel.put(ProcessingKeys.PACKAGE_NAME_KEY, clazz.getParent());
-        dataModel.put(ProcessingKeys.CLASS_NAME_KEY, getClassModel(clazz));
-        dataModel.put(ProcessingKeys.PATH_KEY, packageNameToPath(clazz.getParent().getName()));
+        final AbstractTemplateModel dataModel = getTemplateModel(clazz);
 
-        Logger.log(Level.FINE, "################# " + clazz.getName() + " (" + dataModel + ")");
-
-        final List<AbstractAttributeModel> entityAttributeModels = processAttribute(clazz);
-        dataModel.put(ProcessingKeys.ATTRIBUTES_KEY, entityAttributeModels);
-
-        final List<AbstractMethodModel> abstractMethodModels = processMethod(clazz);
-        dataModel.put(ProcessingKeys.METHODS_KEY, abstractMethodModels);
-
-        final List<AbstractAssociationModel> entityAssociationModels = processAssociation(clazz);
-        dataModel.put(ProcessingKeys.ASSOCIATIONS_KEY, entityAssociationModels);
+        addSpecificData(dataModel, clazz);
 
         try {
             engine.generateCode(fileTypes, dataModel);
@@ -61,6 +51,31 @@ public abstract class AbstractClassProcessor {
             Logger.log(Level.SEVERE, "Error generating code for " + clazz.getName() + " class.", e);
         }
     }
+
+    private AbstractTemplateModel getTemplateModel(final IClass clazz) {
+        final IModelElement pack = clazz.getParent();
+        final AbstractClassModel classModel = getClassModel(clazz);
+        final String path = packageNameToPath(pack.getName());
+
+        Logger.log(Level.FINE, "################# " + clazz.getName());
+
+        final List<AbstractAttributeModel> entityAttributeModels = processAttribute(clazz);
+
+        final List<AbstractMethodModel> abstractMethodModels = processMethod(clazz);
+
+        final List<AbstractAssociationModel> entityAssociationModels = processAssociation(clazz);
+
+        return processTemplateModel(pack, classModel, path, abstractMethodModels, entityAttributeModels,
+                entityAssociationModels);
+    }
+
+    /**
+     * Delegates the addition of specific data to the subclasses.
+     *
+     * @param dataModel The data model.
+     * @param clazz     The class processed.
+     */
+    protected abstract void addSpecificData(final AbstractTemplateModel dataModel, final IClass clazz);
 
     /**
      * Abstract method to delegate the generation of the class model to the subclasses.
@@ -157,7 +172,24 @@ public abstract class AbstractClassProcessor {
     }
 
     /**
-     * Abstract method to delegate the generation of the attribute model to the subclasses.
+     * Delegates the generation of the template model to the subclasses.
+     *
+     * @param pack                    Package of the class.
+     * @param classModel              Class model.
+     * @param path                    System path for the file.
+     * @param abstractMethodModels    Methods of the class.
+     * @param entityAttributeModels   Attributes of the class.
+     * @param entityAssociationModels Associations of the class.
+     * @return The template model for the engine.
+     */
+    protected abstract AbstractTemplateModel processTemplateModel(final IModelElement pack,
+            final AbstractClassModel classModel, final String path,
+            final List<AbstractMethodModel> abstractMethodModels,
+            final List<AbstractAttributeModel> entityAttributeModels,
+            final List<AbstractAssociationModel> entityAssociationModels);
+
+    /**
+     * Delegates the generation of the attribute model to the subclasses.
      *
      * @param attribute The attribute processed.
      * @return The attribute model.
@@ -165,7 +197,7 @@ public abstract class AbstractClassProcessor {
     protected abstract AbstractAttributeModel getAttributeModel(final IAttribute attribute);
 
     /**
-     * Abstract method to delegate the generation of the method model to the subclasses.
+     * Delegates the generation of the method model to the subclasses.
      *
      * @param operation The operation processed.
      * @return The method model.
@@ -173,7 +205,7 @@ public abstract class AbstractClassProcessor {
     protected abstract AbstractMethodModel getMethodModel(final IOperation operation);
 
     /**
-     * Abstract method to delegate the generation of the association model to the subclasses.
+     * Delegates the generation of the association model to the subclasses.
      *
      * @param relationship The relationship processed.
      * @return The association model.

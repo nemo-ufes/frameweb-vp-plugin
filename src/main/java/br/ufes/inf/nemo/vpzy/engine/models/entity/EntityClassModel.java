@@ -19,8 +19,7 @@ import java.util.logging.Level;
  */
 public class EntityClassModel extends AbstractClassModel {
     /**
-     * The inheritance stereotype of the class.
-     *
+     * Class' inheritance stereotype. Possible values: join, single-table, union.
      */
     private final String inheritanceStereotype;
 
@@ -60,6 +59,11 @@ public class EntityClassModel extends AbstractClassModel {
 
     }
 
+    /**
+     * Class' inheritance stereotype. Possible values: join, single-table, union.
+     *
+     * @return The inheritance stereotype of the class.
+     */
     public String getInheritanceStereotype() {
         return inheritanceStereotype;
     }

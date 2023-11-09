@@ -157,114 +157,254 @@ public class TemplateOption implements Serializable {
 
     }
 
+    /**
+     * Get the name of the template option.
+     *
+     * @return The name of the template option.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name of the template option.
+     *
+     * @param name The name of the template option.
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     * Get the description of the template option.
+     *
+     * @return The description of the template option.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Set the description of the template option.
+     *
+     * @param description The description of the template option.
+     */
     public void setDescription(final String description) {
         this.description = description;
     }
 
+    /**
+     * Get the path to the template files. Should be an absolute path for the importing to work.
+     *
+     * @return The path to the template files.
+     */
     public String getTemplatePath() {
         return templatePath;
     }
 
+    /**
+     * Set the path to the template files. Should be an absolute path for the importing to work.
+     *
+     * @param templatePath The path to the template files.
+     */
     public void setTemplatePath(final String templatePath) {
         this.templatePath = templatePath;
     }
 
+    /**
+     * Get the path to the output files. Should be an absolute path for the export to work.
+     *
+     * @return The path to the output files.
+     */
     public String getOutputPath() {
         return outputPath;
     }
 
+    /**
+     * Set the path to the output files. Should be an absolute path for the export to work.
+     *
+     * @param outputPath The path to the output files.
+     */
     public void setOutputPath(final String outputPath) {
         this.outputPath = outputPath;
     }
 
+    /**
+     * Get the template information for the entity class.
+     *
+     * @return The template information for the entity class.
+     */
     public FileTypes getEntity() {
         return entity;
     }
 
+    /**
+     * Set the template information for the entity class.
+     *
+     * @param entity The template information for the entity class.
+     */
     public void setEntity(final FileTypes entity) {
         this.entity = entity;
     }
 
+    /**
+     * Get the template information for the enumeration class.
+     *
+     * @return The template information for the enumeration class.
+     */
     public FileTypes getEnumeration() {
         return enumeration;
     }
 
+    /**
+     * Set the template information for the enumeration class.
+     *
+     * @param enumeration The template information for the enumeration class.
+     */
     public void setEnumeration(final FileTypes enumeration) {
         this.enumeration = enumeration;
     }
 
+    /**
+     * Get the template information for the mapped superclass.
+     *
+     * @return The template information for the mapped superclass.
+     */
     public FileTypes getMappedSuperclass() {
         return mappedSuperclass;
     }
 
+    /**
+     * Set the template information for the mapped superclass.
+     *
+     * @param mappedSuperclass The template information for the mapped superclass.
+     */
     public void setMappedSuperclass(final FileTypes mappedSuperclass) {
         this.mappedSuperclass = mappedSuperclass;
     }
 
+    /**
+     * Get the template information for the transient class.
+     *
+     * @return The template information for the transient class.
+     */
     public FileTypes getTransientClass() {
         return transientClass;
     }
 
+    /**
+     * Set the template information for the transient class.
+     *
+     * @param transientClass The template information for the transient class.
+     */
     public void setTransientClass(final FileTypes transientClass) {
         this.transientClass = transientClass;
     }
 
+    /**
+     * Get the template information for the embeddable class.
+     *
+     * @return The template information for the embeddable class.
+     */
     public FileTypes getEmbeddable() {
         return embeddable;
     }
 
+    /**
+     * Set the template information for the embeddable class.
+     *
+     * @param embeddable The template information for the embeddable class.
+     */
     public void setEmbeddable(final FileTypes embeddable) {
         this.embeddable = embeddable;
     }
 
+    /**
+     * Get the template information for the DAO class.
+     *
+     * @return The template information for the DAO class.
+     */
     public FileTypes getDao() {
         return dao;
     }
 
+    /**
+     * Set the template information for the DAO class.
+     *
+     * @param dao The template information for the DAO class.
+     */
     public void setDao(final FileTypes dao) {
         this.dao = dao;
     }
 
+    /**
+     * Get the template information for the DAO interface.
+     *
+     * @return The template information for the DAO interface.
+     */
     public FileTypes getDaoInterface() {
         return daoInterface;
     }
 
+    /**
+     * Set the template information for the DAO interface.
+     *
+     * @param daoInterface The template information for the DAO interface.
+     */
     public void setDaoInterface(final FileTypes daoInterface) {
         this.daoInterface = daoInterface;
     }
 
+    /**
+     * Get the template information for the Service class.
+     *
+     * @return The template information for the Service class.
+     */
     public FileTypes getService() {
         return service;
     }
 
+    /**
+     * Set the template information for the Service class.
+     *
+     * @param service The template information for the Service class.
+     */
     public void setService(final FileTypes service) {
         this.service = service;
     }
 
+    /**
+     * Get the template information for the Service interface.
+     *
+     * @return The template information for the Service interface.
+     */
     public FileTypes getServiceInterface() {
         return serviceInterface;
     }
 
+    /**
+     * Set the template information for the Service interface.
+     *
+     * @param serviceInterface The template information for the Service interface.
+     */
     public void setServiceInterface(final FileTypes serviceInterface) {
         this.serviceInterface = serviceInterface;
     }
 
+    /**
+     * Get the template information for the Controller class.
+     *
+     * @return The template information for the Controller class.
+     */
     public FileTypes getController() {
         return controller;
     }
 
+    /**
+     * Set the template information for the Controller class.
+     *
+     * @param controller The template information for the Controller class.
+     */
     public void setController(final FileTypes controller) {
         this.controller = controller;
     }

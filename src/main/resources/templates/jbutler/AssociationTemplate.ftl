@@ -1,5 +1,4 @@
 <#macro generate_associations associations className>
-
     <#list associations as association>
         <#assign sourceToTargetCardinality = association.sourceToTargetCardinality>
         <#assign targetToSourceCardinality = association.targetToSourceCardinality>
@@ -21,33 +20,53 @@
         <#if sourceTypeName == className && targetTypeName == className>
             /** Self association */
             <#if sourceToTargetCardinality == "OneToMany" || sourceToTargetCardinality == "ManyToOne">
-                @ManyToOne
-                public ${sourceTypeName} ${sourceName};
-                @OneToMany(mappedBy="${sourceName}")
-                <#if sourceOrder?has_content>
-                    @OrderBy("${sourceOrder}")
+                <#if sourceTransient>
+                    @Transient
+                <#else>
+                    @ManyToOne
+                    public ${sourceTypeName} ${sourceName};
+                    @OneToMany(mappedBy="${sourceName}")
+                    <#if sourceOrder?has_content>
+                        @OrderBy("${sourceOrder}")
+                    </#if>
                 </#if>
                 public ${targetCollection}<${targetTypeName}> ${targetName};
             <#elseif sourceToTargetCardinality == "OneToOne">
-                @OneToOne
+                <#if sourceTransient>
+                    @Transient
+                <#else>
+                    @OneToOne
+                </#if>
                 private ${sourceTypeName} ${sourceName};
-                @OneToOne(mappedBy="${sourceName}")
+                <#if targetTransient>
+                    @Transient
+                <#else>
+                    @OneToOne(mappedBy="${sourceName}")
+                </#if>
                 private ${targetTypeName} ${targetName};
             <#elseif sourceToTargetCardinality == "ManyToMany">
-                @ManyToMany
-                <#if sourceOrder?has_content>
-                    @OrderBy("${sourceOrder}")
+                <#if sourceTransient>
+                    @Transient
+                <#else>
+                    @ManyToMany
+                    <#if sourceOrder?has_content>
+                        @OrderBy("${sourceOrder}")
+                    </#if>
                 </#if>
                 private ${sourceCollection}<${sourceTypeName}> ${sourceName};
-                @ManyToMany(mappedBy="${sourceName}")
-                <#if targetOrder?has_content>
-                    @OrderBy("${targetOrder}")
+                <#if targetTransient>
+                    @Transient
+                <#else>
+                    @ManyToMany(mappedBy="${sourceName}")
+                    <#if targetOrder?has_content>
+                        @OrderBy("${targetOrder}")
+                    </#if>
                 </#if>
                 private ${targetCollection}<${targetTypeName}> ${targetName};
             </#if>
         <#elseif sourceTypeName == className>
             /** ${sourceTypeName} to ${targetTypeName} */
-            <#if sourceToTargetCardinality == "OneToMany" >
+            <#if sourceToTargetCardinality == "OneToMany">
                 <#if targetTransient >
                     @Transient
                 <#else>
@@ -57,7 +76,7 @@
                     @OrderBy("${targetOrder}")
                 </#if>
                 public ${targetCollection}<${targetTypeName}> ${targetName};
-            <#elseif sourceToTargetCardinality == "ManyToOne" >
+            <#elseif sourceToTargetCardinality == "ManyToOne">
                 <#if targetTransient >
                     @Transient
                 <#else>
@@ -84,7 +103,7 @@
             </#if>
         <#elseif targetTypeName == className>
             /** ${targetTypeName} to ${sourceTypeName} */
-            <#if targetToSourceCardinality == "OneToMany" >
+            <#if targetToSourceCardinality == "OneToMany">
                 <#if sourceTransient>
                     @Transient
                 <#else>
@@ -121,6 +140,4 @@
             </#if>
         </#if>
     </#list>
-
 </#macro>
-
