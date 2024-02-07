@@ -152,6 +152,8 @@ public class AddFrameWebConstraintToClassAttributeContextController
             "Invalid value", ViewManagerUtils.ERROR_MESSAGE);
         return true;
       }
+    } else if (String.class.isAssignableFrom(parameterType)){
+      return false;
     } else {
       throw new RuntimeException("Unknown parameter type: " + parameterType);
     }
