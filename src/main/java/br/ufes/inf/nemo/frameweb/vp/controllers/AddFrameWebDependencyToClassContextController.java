@@ -13,6 +13,7 @@ import com.vp.plugin.diagram.IDiagramUIModel;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IModelElement;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -43,17 +44,49 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
         final IDiagramUIModel currentDiagram = context.getDiagram();
 
 
+        // List of all packages present in the current diagram
+        final List<IModelElement> currentDiagramPackages = new ArrayList<>();
+        // List of all DAO Interfaces present in the current diagram
+        final List<IModelElement> currentDiagramDAOClasses = new ArrayList<>();
+
         context.getDiagram().diagramElementIterator().forEachRemaining(element -> {
             final IDiagramElement diagramElement = (IDiagramElement) element;
             final IModelElement diagramElementModel = diagramElement.getModelElement();
             Logger.log(Level.INFO, "DiagramElement: {0}, ModelType: {1}",
                     new Object[] { diagramElementModel.getName(), diagramElementModel.getModelType() });
+            if (diagramElementModel.getModelType().equals("Package")){  // TODO - change the if condition
+                currentDiagramPackages.add(diagramElementModel);
+            }
+            else{
+                final FrameWebClass elementFrameWebClass = FrameWebUtils.getFrameWebClass(diagramElementModel);
+                if (elementFrameWebClass == FrameWebClass.DAO_INTERFACE) {
+                    currentDiagramDAOClasses.add(diagramElementModel);
+                }
+
+                if (diagramElementModel.getModelType().equals("GenericConnector")){
+                    // TODO - Get the "from" and the "to" class
+//                    Logger.log(Level.INFO, "From: {0}, To: {1}",
+//                            new Object[] {  });
+                }
+                }
         });
 
+        // Print the name of all the packages in the diagram
+        for (final IModelElement pkg : currentDiagramPackages){
+            Logger.log(Level.INFO, "Package name: {0}",
+                    new Object[] {pkg.getName()});
+        }
+
+        // Error getting parentModel
+//        final IModelElement parentModel = currentDiagram.getParentModel();
+//        Logger.log(Level.INFO, "ModelElement: {0}, ModelType: {1}, Diagram: {2}, Parent Model: {3}",
+//                new Object[] { modelElement.getName(), modelElement.getModelType(), currentDiagram.getName(),
+//                        parentModel.getName() });
+
         final IModelElement parentModel = currentDiagram.getParentModel();
-        Logger.log(Level.INFO, "ModelElement: {0}, ModelType: {1}, Diagram: {2}, Parent Model: {3}",
-                new Object[] { modelElement.getName(), modelElement.getModelType(), currentDiagram.getName(),
-                        parentModel.getName() });
+        Logger.log(Level.INFO, "ModelElement: {0}, ModelType: {1}, Diagram: {2}",
+                new Object[] { modelElement.getName(), modelElement.getModelType(), currentDiagram.getName()});
+
 
         // Determines which FrameWeb Class Dependency to apply from the menu item.
         FrameWebClassDependency frameWebClassDependency = FrameWebClassDependency.ofPluginUIID(action.getActionId());
@@ -70,7 +103,43 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
             Logger.log(Level.INFO, "Adding dependency {0} - {1} to {2}",
                     new Object[] { clazz.getName(), clazzPackage.getName(), modelElement.getName() });
 
-            // Adds the dependency to the class.
+            // Check if the package of the current DAO Interface class is already in the diagram
+            boolean pkgNotInTheDiagram = true;
+            for (final IModelElement pkg : currentDiagramPackages){
+                if (clazzPackage.getName().equals(pkg.getName())){
+                    pkgNotInTheDiagram = false;
+                    break;
+                }
+            }
+
+            if (pkgNotInTheDiagram){
+                // TODO - Add the package of the current DAO Interface class to the diagram
+                Logger.log(Level.INFO, "Package to be added: {0}",
+                        new Object[] {clazzPackage.getName()});
+                currentDiagramPackages.add(clazzPackage);
+            }
+
+
+            // Check if the current DAO Interface class is already in the diagram
+            boolean DAONotInTheDiagram = true;
+            for (final IModelElement DAOInterface : currentDiagramDAOClasses){
+                if (clazz.getName().equals(DAOInterface.getName())){
+                    DAONotInTheDiagram = false;
+                    break;
+                }
+            }
+
+            if (DAONotInTheDiagram){
+                // TODO - Add the current DAO Interface class to the diagram
+                Logger.log(Level.INFO, "DAO Interface to be added: {0}",
+                        new Object[] {clazz.getName()});
+            }
+
+
+            // TODO - Check if the dependency to the DAO Interface class exists
+
+
+            // TODO - Add the dependency to the class.
 
 
 
