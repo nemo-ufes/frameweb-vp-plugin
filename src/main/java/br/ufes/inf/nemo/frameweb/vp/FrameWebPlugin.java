@@ -69,6 +69,9 @@ public class FrameWebPlugin implements VPPlugin {
   /** Indicates if the Plug-in Settings Dialog is open. */
   private boolean pluginSettingsDialogOpen = false;
 
+  /** Indicates if the Select DAO Dialog is open. */
+  private boolean SelectDAODialogOpen = false;
+
   /* code generation properties. */
 
   /** Indicates if the Generate Code Settings Dialog is open. */
@@ -90,6 +93,14 @@ public class FrameWebPlugin implements VPPlugin {
 
   public void setPluginSettingsDialogOpen(boolean pluginSettingsDialogOpen) {
     this.pluginSettingsDialogOpen = pluginSettingsDialogOpen;
+  }
+
+  public boolean isSelectDAODialogOpen() {
+    return SelectDAODialogOpen;
+  }
+
+  public void setSelectDAODialogOpen(boolean SelectDAODialogOpen) {
+    this.SelectDAODialogOpen = SelectDAODialogOpen;
   }
 
 

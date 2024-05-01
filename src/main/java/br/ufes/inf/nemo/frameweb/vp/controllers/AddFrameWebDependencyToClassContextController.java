@@ -1,29 +1,34 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
-import br.ufes.inf.nemo.frameweb.vp.managers.FrameWebStereotypesManager;
+import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassDependency;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
+import br.ufes.inf.nemo.frameweb.vp.view.PluginSettingsPanel;
+import br.ufes.inf.nemo.frameweb.vp.view.SelectDAOPanel;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
-import com.vp.plugin.DiagramManager;
+import br.ufes.inf.nemo.vpzy.utils.DiagramElementUtils;
+import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
 import com.vp.plugin.diagram.IDiagramElement;
 import com.vp.plugin.diagram.IDiagramUIModel;
-import com.vp.plugin.model.IAssociation;
-import com.vp.plugin.model.IStereotype;
+import com.vp.plugin.model.*;
 import com.vp.plugin.model.factory.IModelElementFactory;
-import com.vp.plugin.model.IClass;
-import com.vp.plugin.model.IModelElement;
+import com.vp.plugin.view.IDialog;
+import com.vp.plugin.view.IDialogHandler;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
-import v.bel.j;
-import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
 
 /**
  * Controller that handles the Add Dependency to Class action, activated by a context menu (right-click) for FrameWeb
@@ -33,11 +38,38 @@ import br.ufes.inf.nemo.vpzy.managers.StereotypesManager;
  * @version 0.0.1
  */
 public class AddFrameWebDependencyToClassContextController implements VPContextActionController {
+    /** The contents of the Add FrameWeb Dependency dialog. */
+    private SelectDAOPanel selectDAOPanel;
+
+    /** The Plug-in Settings dialog. */
+    private IDialog selectDAODialog;
+
+    /** A map of the DAO Interfaces of the project. */
+    private Map<String, IClass> daoClassesMap;
+
+    public Map<String, IClass> getDaoClassesMap(){
+        return this.daoClassesMap;
+    }
+
+    private VPContext context;
+
+    /** List of all packages present in the current diagram */
+    private List<IModelElement> currentDiagramPackages;
+    /** List of all DAO Interfaces present in the current diagram */
+    private List<IDiagramElement> currentDiagramDAOInterfaces;
+    /** List of all DAO Interfaces that have an association with the service class */
+    private List<IModelElement> associatedDAOInterfaces;
+    /** Application packages in the diagram*/
+    private List<IDiagramElement> applicationPackages;
+
+
     /** Called when the button is pressed. Adds the dependency to the class and diagram. */
     @Override
     public void performAction(final VPAction action, final VPContext context, final ActionEvent event) {
+        Logger.log(Level.CONFIG, "Performing action: Add FrameWeb Constraint (Class Attribute) > {0}",
+                event.getActionCommand());
 
-        Logger.log(Level.CONFIG, "Performing action: Add FrameWeb Dependency (Class) > {0}", event.getActionCommand());
+        this.context = context;
 
         // Processes the selected element
         final IModelElement modelElement = context.getModelElement();
@@ -49,33 +81,30 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
             return;
         }
 
-        final IDiagramUIModel currentDiagram = context.getDiagram();
-
-
-        // List of all packages present in the current diagram
-        final List<IModelElement> currentDiagramPackages = new ArrayList<>();
-        // List of all DAO Interfaces present in the current diagram
-        final List<IModelElement> currentDiagramDAOInterfaces = new ArrayList<>();
-        // List of all DAO Interfaces that have an association with the service class
-        final List<IModelElement> associatedDAOInterfaces = new ArrayList<>();
+        // Fill in the lists
+        currentDiagramPackages = new ArrayList<>();
+        currentDiagramDAOInterfaces = new ArrayList<>();
+        associatedDAOInterfaces = new ArrayList<>();
+        applicationPackages = new ArrayList<>();
 
         context.getDiagram().diagramElementIterator().forEachRemaining(element -> {
             final IDiagramElement diagramElement = (IDiagramElement) element;
             final IModelElement diagramElementModel = diagramElement.getModelElement();
-            Logger.log(Level.INFO, "DiagramElement: {0}, ModelType: {1}, Shape Type: {2}, Id: {3}",
-                    new Object[] { diagramElementModel.getName(), diagramElementModel.getModelType(),
-                                   diagramElement.getShapeType(), diagramElement.getId()});
             if (diagramElementModel.getModelType().equals(IModelElementFactory.MODEL_TYPE_PACKAGE)){
                 currentDiagramPackages.add(diagramElementModel);
+                final FrameWebPackage elementFrameWebPackage = FrameWebUtils.getFrameWebPackage(diagramElementModel);
+                if (elementFrameWebPackage == FrameWebPackage.APPLICATION_PACKAGE) {
+                    applicationPackages.add(diagramElement);
+                }
             }
             else{
                 final FrameWebClass elementFrameWebClass = FrameWebUtils.getFrameWebClass(diagramElementModel);
                 if (elementFrameWebClass == FrameWebClass.DAO_INTERFACE) {
-                    currentDiagramDAOInterfaces.add(diagramElementModel);
+                    currentDiagramDAOInterfaces.add(diagramElement);
                 }
 
                 if (diagramElementModel.getModelType().equals(IModelElementFactory.MODEL_TYPE_ASSOCIATION)){
-                    // TODO - Get the "from" and the "to" class
+                    // Get the "from" and the "to" class if the element is an association
                     final IAssociation associationElement = (IAssociation) diagramElementModel;
                     final IModelElement toElement = associationElement.getTo();
                     final IModelElement fromElement = associationElement.getFrom();
@@ -88,155 +117,72 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                             associatedDAOInterfaces.add(fromElement);
                         }
                     }
-                    Logger.log(Level.INFO, "To: {0}, From: {1}",
-                            new Object[] { associationElement.getTo().getName(), associationElement.getFrom().getName()});
                 }
-                }
+            }
         });
-
-        // Print the name of all the packages in the diagram
-        for (final IModelElement pkg : currentDiagramPackages){
-            Logger.log(Level.INFO, "Package name: {0}, Id: {1}",
-                    new Object[] {pkg.getName(), pkg.getId()});
-        }
-
-        // Error getting parentModel
-//        final IModelElement parentModel = currentDiagram.getParentModel();
-//        Logger.log(Level.INFO, "ModelElement: {0}, ModelType: {1}, Diagram: {2}, Parent Model: {3}",
-//                new Object[] { modelElement.getName(), modelElement.getModelType(), currentDiagram.getName(),
-//                        parentModel.getName() });
-
-        final IModelElement parentModel = currentDiagram.getParentModel();
-        Logger.log(Level.INFO, "ModelElement: {0}, ModelType: {1}, Diagram: {2}",
-                new Object[] { modelElement.getName(), modelElement.getModelType(), currentDiagram.getName()});
 
 
         // Determines which FrameWeb Class Dependency to apply from the menu item.
         FrameWebClassDependency frameWebClassDependency = FrameWebClassDependency.ofPluginUIID(action.getActionId());
-        Logger.log(Level.INFO, "Adding {0} to {1}",
-                new Object[] { frameWebClassDependency.getName(), modelElement.getName() });
 
         final List<IClass> frameWebClasses = FrameWebUtils.getFrameWebClasses(ProjectManagerUtils.getCurrentProject(),
                 FrameWebClass.of(frameWebClassDependency.getName()));
 
-        // logs the classes that will be added as dependencies
-        for (final IClass clazz : frameWebClasses) {
-            final IModelElement clazzPackage = clazz.getParent();
+        // Create a map that associates the name of the classes (key) to their corresponding IClasses (value)
+        this.daoClassesMap = new HashMap<>();
 
-            Logger.log(Level.INFO, "Adding dependency {0} - {1} to {2}",
-                    new Object[] { clazz.getName(), clazzPackage.getName(), modelElement.getName() });
+        // Checks if the DAO Interface is already in the diagram, if it has association with the service class and
+        // if it's parent (persistence package) is in the diagram. If one of these conditions is false, adds the DAO
+        // Interface to the Map.
+        for (IClass iclass : frameWebClasses) {
+            int flagPut = 0;
 
-            // Check if the package of the current DAO Interface class is already in the diagram
-            boolean pkgNotInTheDiagram = true;
-            for (final IModelElement pkg : currentDiagramPackages){
-                if (clazzPackage.getId().equals(pkg.getId())){
-                    pkgNotInTheDiagram = false;
+            if((iclass.getParent() == null) || (iclass.getParent().toStereotypeModelArray() == null) ||
+                        (FrameWebUtils.getFrameWebPackage(iclass.getParent()) != FrameWebPackage.PERSISTENCE_PACKAGE)){
+                Logger.log(Level.INFO, "Class {0} must belong to a FrameWeb Persistence Package to be selected.",
+                        new Object[]{iclass.getName()});
+                continue;
+            }
+
+            for(IModelElement modElem : associatedDAOInterfaces){
+                if(iclass.getName().equals(modElem.getName())) {
+                    flagPut++;
                     break;
                 }
             }
-
-            // Instance of DiagramManager to use method CreateDiagramElement()
-            j diagManager = new j(null);
-
-            // Gets the FrameWeb stereotypes manager associated with the current project.
-            StereotypesManager stereotypesManager =
-                    StereotypesManager.getInstance(FrameWebStereotypesManager.class);
-
-            if (pkgNotInTheDiagram){
-                // TODO - Add the package of the current DAO Interface class to the diagram
-                Logger.log(Level.INFO, "Package to be added: {0}, Id: {1}",
-                        new Object[] {clazzPackage.getName(), clazzPackage.getId()});
-                currentDiagramPackages.add(clazzPackage);
-
-                final IDiagramElement packageAdded = diagManager.createDiagramElement(context.getDiagram(), clazzPackage);
-                final IModelElement pkgAddedElementModel = packageAdded.getModelElement();
-                Logger.log(Level.INFO, "Package {0} was added to the diagram, Id: {1}, MasterView: {2}, Color: {3}",
-                            new Object[] {pkgAddedElementModel.getName(), pkgAddedElementModel.getId(),
-                                    String.valueOf(packageAdded.isMasterView()), clazzPackage.getDiagramElements()[0].getBackground().toString()});
-
-                IStereotype newStereotype = stereotypesManager.getStereotype(
-                        FrameWebPackage.PERSISTENCE_PACKAGE.getStereotypeName(), IModelElementFactory.MODEL_TYPE_PACKAGE);
-                // Adds the new FrameWeb package stereotype.
-                pkgAddedElementModel.addStereotype(newStereotype);
-//                packageAdded.setBackground(FrameWebPackage.PERSISTENCE_PACKAGE.getColor().getAwtColor());
-
-
-//                final IDiagramElement de = ProjectManagerUtils.getCurrentProject().getDiagramElementById(clazzPackage.getId());
-//                if (context.getDiagram().addDiagramElement(clazzPackage.getDiagramElements()[0])){
-//                    Logger.log(Level.INFO, "Package {0} was added to the diagram, Id: {1}, MasterView: {2}",
-//                            new Object[] {clazzPackage.getName(), clazzPackage.getId(), String.valueOf(clazzPackage.getDiagramElements()[0].isMasterView())});
-//                }
-//                context.getDiagram().fireModuleAddedDiagramElement(clazzPackage.getDiagramElements()[0]);
-
-//                ProjectManagerUtils.getCurrentProject().modelElementIterator("Package").forEachRemaining(element -> {
-//                    IModelElement packageModelElement = (IModelElement) element;
-//                    if (packageModelElement.getName().equals(clazzPackage.getName())) {
-////                        if (context.getDiagram().addDiagramElement(packageModelElement.getDiagramElements()[0])) {
-//                            IModelElementFactory packageModelElementFactory = (IModelElementFactory) element;
-//                            IDiagramOverview overview =  packageModelElementFactory.createDiagramOverview();
-//                            Logger.log(Level.INFO, "TESTE: Package: {0}, Id: {1}",
-//                                    new Object[] {overview.getName(), overview.getId()});
-////                        }
-//                    }
-//                });
-
-//                IDiagramElement packageAdded = context.getDiagram().createDiagramElement(clazzPackage.getDiagramElements()[0].getShapeType(), true);
-//                final IModelElement packageElementModel = packageAdded.getModelElement();
-//                packageElementModel.setName("teste");
-//                packageAdded.setModelElement(packageElementModel);
-//                if (context.getDiagram().addDiagramElement(packageAdded)){
-//                    Logger.log(Level.INFO, "Package {0} was added to the diagram, Id: {1}, MasterView: {2}",
-//                            new Object[] {packageElementModel.getName(), packageAdded.getId(), String.valueOf(packageAdded.isMasterView())});
-//                }
-            }
-
-
-            // Check if the current DAO Interface class is already in the diagram
-            boolean DAONotInTheDiagram = true;
-            for (final IModelElement DAOInterface : currentDiagramDAOInterfaces){
-                if (clazz.getId().equals(DAOInterface.getId())){
-                    DAONotInTheDiagram = false;
+            for(IDiagramElement diaElem: currentDiagramDAOInterfaces){
+                if(iclass.getName().equals(diaElem.getModelElement().getName())) {
+                    flagPut++;
                     break;
                 }
             }
-
-            if (DAONotInTheDiagram){
-                // TODO - Add the current DAO Interface class to the diagram
-                Logger.log(Level.INFO, "DAO Interface to be added: {0}",
-                        new Object[] {clazz.getName()});
-
-
-                final IDiagramElement DAOInterfaceAdded = diagManager.createDiagramElement(context.getDiagram(), clazzPackage.getChildById(clazz.getId()));
-                final IModelElement DAOAddedElementModel = DAOInterfaceAdded.getModelElement();
-                Logger.log(Level.INFO, "DAO Interface {0} was added to the diagram, Id: {1}, MasterView: {2}, Color: {3}",
-                        new Object[] {DAOAddedElementModel.getName(), DAOAddedElementModel.getId(),
-                                String.valueOf(DAOInterfaceAdded.isMasterView()), clazzPackage.getChildById(clazz.getId()).getDiagramElements()[0].getBackground().toString()});
-
-                IStereotype newStereotype = stereotypesManager.getStereotype(
-                        FrameWebClass.DAO_INTERFACE.getStereotypeName(), IModelElementFactory.MODEL_TYPE_PACKAGE);
-                // Adds the new FrameWeb package stereotype.
-                DAOAddedElementModel.addStereotype(newStereotype);
-            }
-
-
-            // Check if the association to the DAO Interface class exists
-            boolean alreadyAssociated = false;
-            for (final IModelElement DAOInterface : associatedDAOInterfaces){
-                if (DAOInterface.getId().equals(clazz.getId())){
-                    alreadyAssociated = true;
+            for(IModelElement pkgElem: currentDiagramPackages){
+                if(iclass.getParent().getName().equals(pkgElem.getName())) {
+                    flagPut++;
                     break;
                 }
             }
-
-            if (!alreadyAssociated){
-                // TODO - Add the association to the class.
-                Logger.log(Level.INFO, "Association to be added: {0} - {1}",
-                        new Object[] {modelElement.getName(), clazz.getName()});
-            }
-
-
-
+            if(!(flagPut == 3))
+                daoClassesMap.put(iclass.getName(), iclass);
         }
+        if(daoClassesMap.isEmpty()){
+            Logger.log(Level.INFO, "There are no DAO classes to be added.");
+            return;
+        }
+
+        Logger.log(Level.INFO, "Adding {0} to {1}",
+                new Object[] { frameWebClassDependency.getName(), modelElement.getName() });
+
+        // --------- Dialog ---------
+        FrameWebPlugin plugin = FrameWebPlugin.instance();
+
+        // If the dialog is already open, ignores the action.
+        if (plugin.isSelectDAODialogOpen())
+            return;
+
+        // Otherwise, opens the dialog.
+        plugin.setSelectDAODialogOpen(true);
+        ViewManagerUtils.showDialog(new AddFrameWebDependencyToClassContextController.SelectDAODialogHandler());
 
     }
 
@@ -264,4 +210,171 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
             action.setEnabled(enabled);
         }
     }
+
+    public void addDependencyToSelectedDAO(List<String> selectedDAONames){
+        final IModelElement modelElement = this.context.getModelElement();
+
+        // Get the position of the application package in the diagram (X and Y)
+        // default values in case there is no application package in the diagram
+        int persistenceX = 100;
+        int persistenceY = 100;
+        if(!applicationPackages.isEmpty()){
+            int applicationWidth = applicationPackages.get(0).getWidth();
+            persistenceX = applicationPackages.get(0).getX() + applicationWidth + 30;
+            persistenceY = applicationPackages.get(0).getY();
+        }
+
+        // Map that associates the persistence packages to the number of DAO Interfaces already added
+        // Used to set the position of the DAO Interfaces added
+        Map<IModelElement, Integer> packagesAndChildrenNum = new HashMap<>();
+
+        // logs the classes that will be added as dependencies
+        for (final String nameDAO : selectedDAONames){
+            final IClass clazz = this.daoClassesMap.get(nameDAO);
+            final IModelElement clazzPackage = clazz.getParent();
+
+            if(!packagesAndChildrenNum.containsKey(clazzPackage)){
+                packagesAndChildrenNum.put(clazzPackage, 0);    
+            }
+            
+            Logger.log(Level.INFO, "Adding dependency {0} - {1} to {2}",
+                    new Object[] { clazz.getName(), clazzPackage.getName(), modelElement.getName() });
+
+            // Check if the package of the current DAO Interface class is already in the diagram
+            boolean pkgNotInTheDiagram = true;
+            for (final IModelElement pkg : currentDiagramPackages){
+                if (clazzPackage.getId().equals(pkg.getId())){
+                    pkgNotInTheDiagram = false;
+                    break;
+                }
+            }
+
+            if (pkgNotInTheDiagram){
+                // Add the package of the current DAO Interface class to the diagram
+                currentDiagramPackages.add(clazzPackage);
+
+                final IDiagramElement packageAdded = DiagramElementUtils.createAuxiliaryViewInDiagram(context.getDiagram(), clazzPackage);
+                final IModelElement pkgAddedElementModel = packageAdded.getModelElement();
+
+                ModelElementUtils.changeFillColor(pkgAddedElementModel, FrameWebPackage.PERSISTENCE_PACKAGE.getColor());
+
+                // Change size and position of the package added
+                packageAdded.setX(persistenceX);
+                packageAdded.setY(persistenceY);
+                if(!(clazzPackage.getDiagramElements()[0] == null)) {
+                    packageAdded.setWidth(clazzPackage.getDiagramElements()[0].getWidth());
+                    packageAdded.setHeight(clazzPackage.getDiagramElements()[0].getHeight());
+                }
+                else{
+                    packageAdded.setWidth(200);
+                    packageAdded.setHeight(200);
+                }
+                persistenceX += packageAdded.getWidth() + 10;
+
+                Logger.log(Level.INFO, "Package {0} was added to the diagram.",
+                        new Object[] {pkgAddedElementModel.getName(), pkgAddedElementModel.getId(),
+                                String.valueOf(packageAdded.isMasterView()), packageAdded.getWidth()});
+            }
+
+
+            // Check if the current DAO Interface class is already in the diagram
+            IDiagramElement currentDAOInterfaceDiagElement = null;
+            boolean DAONotInTheDiagram = true;
+            for (final IDiagramElement DAOInterface : currentDiagramDAOInterfaces){
+                if (clazz.getId().equals(DAOInterface.getModelElement().getId())){
+                    DAONotInTheDiagram = false;
+                    currentDAOInterfaceDiagElement = DAOInterface;
+                    break;
+                }
+            }
+
+            if (DAONotInTheDiagram){
+                // Add the current DAO Interface class to the diagram
+                final IDiagramElement DAOInterfaceAdded = DiagramElementUtils.createAuxiliaryViewInDiagram(context.getDiagram(), clazzPackage.getChildById(clazz.getId()));
+                final IModelElement DAOAddedElementModel = DAOInterfaceAdded.getModelElement();
+                Logger.log(Level.INFO, "DAO Interface {0} was added to the diagram.",
+                        new Object[] {DAOAddedElementModel.getName(), DAOAddedElementModel.getId(),
+                                String.valueOf(DAOInterfaceAdded.isMasterView())});
+
+                ModelElementUtils.changeInterfaceBall(DAOAddedElementModel, true);
+                ModelElementUtils.changeFillColor(DAOAddedElementModel, FrameWebClass.DAO_INTERFACE.getColor());
+
+                // Change the position of the class in the diagram
+                int multi = packagesAndChildrenNum.get(DAOAddedElementModel.getParent());
+                packagesAndChildrenNum.replace(DAOAddedElementModel.getParent(), multi+1);
+                int len = DAOAddedElementModel.getParent().getDiagramElements().length;
+                DAOInterfaceAdded.setX(DAOAddedElementModel.getParent().getDiagramElements()[len-1].getX() + 30 + (40*multi));
+                DAOInterfaceAdded.setY(DAOAddedElementModel.getParent().getDiagramElements()[len-1].getY() + 30);
+
+                DAOInterfaceAdded.setWidth(30);
+                DAOInterfaceAdded.setHeight(30);
+                currentDAOInterfaceDiagElement = DAOInterfaceAdded;
+            }
+
+
+            // Check if the association to the DAO Interface class exists
+            boolean alreadyAssociated = false;
+            for (final IModelElement DAOInterface : associatedDAOInterfaces){
+                if (DAOInterface.getId().equals(clazz.getId())){
+                    alreadyAssociated = true;
+                    break;
+                }
+            }
+
+            if (!alreadyAssociated){
+                // Add the association to the class.
+                final IDiagramElement associationAdded = DiagramElementUtils.createAssociation(context.getDiagram(),
+                        context.getDiagramElement(), currentDAOInterfaceDiagElement);
+                final IModelElement associationAddedElementModel = associationAdded.getModelElement();
+                final IAssociation associationElement = (IAssociation) associationAddedElementModel;
+                final IModelElement toElement = associationElement.getTo();
+                final IModelElement fromElement = associationElement.getFrom();
+
+                if(associationElement.getFromEnd() instanceof IAssociationEnd){
+                    final IAssociationEnd associationEnd = (IAssociationEnd) associationElement.getFromEnd() ;
+                    associationEnd.setNavigable(IAssociationEnd.NAVIGABLE_NAV_UNSPECIFIED);
+                    Logger.log(Level.INFO, "Association was added to the diagram, From: {0}, To: {1}.",
+                            new Object[] {fromElement.getName(), toElement.getName(), associationAdded.getShapeType(),
+                                    associationEnd.getNavigable()});
+                }
+            }
+        }
+    }
+
+
+    /**
+     * A dialog handler that is used by Visual Paradigm to open a dialog based on a panel with its
+     * contents.
+     */
+    protected class SelectDAODialogHandler implements IDialogHandler {
+        /** Called once before the dialog is shown. Should return the contents of the dialog. */
+        @Override
+        public Component getComponent() {
+            selectDAOPanel = new SelectDAOPanel(AddFrameWebDependencyToClassContextController.this);
+            return selectDAOPanel;
+        }
+
+        /** Called after getComponent(), dialog is created but not shown. Sets outlook of the dialog. */
+        @Override
+        public void prepare(IDialog dialog) {
+            selectDAODialog = dialog;
+            selectDAODialog.setTitle("Add FrameWeb Dependency - DAO Interface");
+            selectDAODialog.setModal(false);
+            selectDAODialog.setResizable(true);
+            selectDAODialog.setSize(400, 300);
+            selectDAOPanel.setContainerDialog(selectDAODialog);
+        }
+
+        /** Called when the dialog is shown. */
+        @Override
+        public void shown() {}
+
+        /** Called when the dialog is closed by the user clicking on the close button of the frame. */
+        @Override
+        public boolean canClosed() {
+            FrameWebPlugin.instance().setSelectDAODialogOpen(false);
+            return true;
+        }
+    }
 }
+
