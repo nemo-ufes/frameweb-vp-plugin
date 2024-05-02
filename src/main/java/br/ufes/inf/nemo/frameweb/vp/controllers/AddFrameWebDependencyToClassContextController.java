@@ -296,18 +296,19 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                         new Object[] {DAOAddedElementModel.getName(), DAOAddedElementModel.getId(),
                                 String.valueOf(DAOInterfaceAdded.isMasterView())});
 
-                ModelElementUtils.changeInterfaceBall(DAOAddedElementModel, true);
-                ModelElementUtils.changeFillColor(DAOAddedElementModel, FrameWebClass.DAO_INTERFACE.getColor());
-
                 // Change the position of the class in the diagram
                 int multi = packagesAndChildrenNum.get(DAOAddedElementModel.getParent());
                 packagesAndChildrenNum.replace(DAOAddedElementModel.getParent(), multi+1);
                 int len = DAOAddedElementModel.getParent().getDiagramElements().length;
-                DAOInterfaceAdded.setX(DAOAddedElementModel.getParent().getDiagramElements()[len-1].getX() + 30 + (40*multi));
+                DAOInterfaceAdded.setX(DAOAddedElementModel.getParent().getDiagramElements()[len-1].getX() + 20 + (70*multi));
                 DAOInterfaceAdded.setY(DAOAddedElementModel.getParent().getDiagramElements()[len-1].getY() + 30);
+
+                ModelElementUtils.changeInterfaceBall(DAOAddedElementModel, true);
+                ModelElementUtils.changeFillColor(DAOAddedElementModel, FrameWebClass.DAO_INTERFACE.getColor());
 
                 DAOInterfaceAdded.setWidth(30);
                 DAOInterfaceAdded.setHeight(30);
+
                 currentDAOInterfaceDiagElement = DAOInterfaceAdded;
             }
 
