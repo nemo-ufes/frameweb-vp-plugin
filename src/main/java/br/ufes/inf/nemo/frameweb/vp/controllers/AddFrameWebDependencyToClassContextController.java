@@ -166,7 +166,8 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                 daoClassesMap.put(iclass.getName(), iclass);
         }
         if(daoClassesMap.isEmpty()){
-            Logger.log(Level.INFO, "There are no DAO classes to be added.");
+            ViewManagerUtils.showMessageDialog("There are no DAO classes to be added.",
+                    "Add FrameWeb Dependency - DAO Interface", ViewManagerUtils.INFORMATION_MESSAGE);
             return;
         }
 
@@ -334,7 +335,7 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                 if(associationElement.getFromEnd() instanceof IAssociationEnd){
                     final IAssociationEnd associationEnd = (IAssociationEnd) associationElement.getFromEnd() ;
                     associationEnd.setNavigable(IAssociationEnd.NAVIGABLE_NAV_UNSPECIFIED);
-                    Logger.log(Level.INFO, "Association was added to the diagram, From: {0}, To: {1}.",
+                    Logger.log(Level.INFO, "Association was added to the diagram. From: {0}, To: {1}.",
                             new Object[] {fromElement.getName(), toElement.getName(), associationAdded.getShapeType(),
                                     associationEnd.getNavigable()});
                 }
