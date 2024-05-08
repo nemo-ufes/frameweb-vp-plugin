@@ -66,7 +66,7 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
     /** Called when the button is pressed. Adds the dependency to the class and diagram. */
     @Override
     public void performAction(final VPAction action, final VPContext context, final ActionEvent event) {
-        Logger.log(Level.CONFIG, "Performing action: Add FrameWeb Constraint (Class Attribute) > {0}",
+        Logger.log(Level.CONFIG, "Performing action: Add FrameWeb Dependency (Class) > {0}",
                 event.getActionCommand());
 
         this.context = context;
