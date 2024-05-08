@@ -132,7 +132,7 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
         this.daoClassesMap = new HashMap<>();
 
         // Checks if the DAO Interface is already in the diagram, if it has association with the service class and
-        // if it's parent (persistence package) is in the diagram. If one of these conditions is false, adds the DAO
+        // if its parent (persistence package) is in the diagram. If one of these conditions is false, adds the DAO
         // Interface to the Map.
         for (IClass iclass : frameWebClasses) {
             int flagPut = 0;
