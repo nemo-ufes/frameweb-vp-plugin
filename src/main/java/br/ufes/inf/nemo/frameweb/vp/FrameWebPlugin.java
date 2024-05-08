@@ -96,11 +96,11 @@ public class FrameWebPlugin implements VPPlugin {
   }
 
   public boolean isSelectDAODialogOpen() {
-    return SelectDAODialogOpen;
+    return selectDAODialogOpen;
   }
 
-  public void setSelectDAODialogOpen(boolean SelectDAODialogOpen) {
-    this.SelectDAODialogOpen = SelectDAODialogOpen;
+  public void setSelectDAODialogOpen(boolean selectDAODialogOpen) {
+    this.selectDAODialogOpen = selectDAODialogOpen;
   }
 
 
