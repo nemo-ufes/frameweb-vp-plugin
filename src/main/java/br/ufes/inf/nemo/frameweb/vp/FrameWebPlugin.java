@@ -70,7 +70,7 @@ public class FrameWebPlugin implements VPPlugin {
   private boolean pluginSettingsDialogOpen = false;
 
   /** Indicates if the Select DAO Dialog is open. */
-  private boolean SelectDAODialogOpen = false;
+  private boolean selectDAODialogOpen = false;
 
   /* code generation properties. */
 
