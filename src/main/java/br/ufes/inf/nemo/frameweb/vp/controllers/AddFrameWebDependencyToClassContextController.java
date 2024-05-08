@@ -41,7 +41,7 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
     /** The contents of the Add FrameWeb Dependency dialog. */
     private SelectDAOPanel selectDAOPanel;
 
-    /** The Plug-in Settings dialog. */
+    /** The Add FrameWeb Dependency dialog. */
     private IDialog selectDAODialog;
 
     /** A map of the DAO Interfaces of the project. */
