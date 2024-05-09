@@ -168,11 +168,14 @@ public final class FrameWebUtils {
 
         // Looks for a FrameWeb package stereotype in the element, which must be a package.
         if (IModelElementFactory.MODEL_TYPE_PACKAGE.equals(modelElement.getModelType())) {
-            for (IStereotype stereotype : modelElement.toStereotypeModelArray()) {
-                FrameWebPackage pkg = FrameWebPackage.ofStereotype(stereotype.getName());
-                // If a FrameWeb package stereotype is found, stores it to be returned.
-                if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
-                    frameWebPackage = pkg;
+            IStereotype[] stereotypes = modelElement.toStereotypeModelArray();
+            if (stereotypes != null) {
+                for (IStereotype stereotype : stereotypes) {
+                    FrameWebPackage pkg = FrameWebPackage.ofStereotype(stereotype.getName());
+                    // If a FrameWeb package stereotype is found, stores it to be returned.
+                    if (pkg != FrameWebPackage.NOT_A_FRAMEWEB_PACKAGE) {
+                        frameWebPackage = pkg;
+                    }
                 }
             }
         }
