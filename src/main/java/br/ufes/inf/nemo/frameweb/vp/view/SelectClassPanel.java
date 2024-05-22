@@ -6,26 +6,25 @@ package br.ufes.inf.nemo.frameweb.vp.view;
 
 import br.ufes.inf.nemo.frameweb.vp.FrameWebPlugin;
 import br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebDependencyToClassContextController;
+import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
-import com.vp.plugin.model.IClass;
 import com.vp.plugin.view.IDialog;
 
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 /**
  *
  * @author gabriel
  */
-public class SelectDAOPanel extends javax.swing.JPanel {
+public class SelectClassPanel extends javax.swing.JPanel {
     /** The dialog to which this panel serves as contents. */
     private IDialog containerDialog;
     private AddFrameWebDependencyToClassContextController controller;
     /**
-     * Creates new form SelectDAOPanel
+     * Creates new form SelectClassPanel
      */
-    public SelectDAOPanel(AddFrameWebDependencyToClassContextController controller) {
+    public SelectClassPanel(AddFrameWebDependencyToClassContextController controller) {
         this.controller = controller;
         initComponents();
     }
@@ -43,21 +42,42 @@ public class SelectDAOPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        daoListScrollPane = new javax.swing.JScrollPane();
-        daoList = new javax.swing.JList<>();
-        daoListLabel = new javax.swing.JLabel();
+        classListScrollPane = new javax.swing.JScrollPane();
+        classList = new javax.swing.JList<>();
+        classListLabel = new javax.swing.JLabel();
         cancelButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
 
+        if(controller.getFrameWebClassSelected() == FrameWebClass.SERVICE_CLASS) {
+            classList.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] strings = controller.getDaoClassesMap().keySet().toArray(new String[0]);
 
-        daoList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = controller.getDaoClassesMap().keySet().toArray(new String[0]);
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        daoListScrollPane.setViewportView(daoList);
+                public int getSize() {
+                    return strings.length;
+                }
 
-        daoListLabel.setText("Select the DAO classes:");
+                public String getElementAt(int i) {
+                    return strings[i];
+                }
+            });
+            classListLabel.setText("Select the DAO classes:");
+        }
+        else if(controller.getFrameWebClassSelected() == FrameWebClass.SERVICE_INTERFACE) {
+            classList.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] strings = controller.getControllerClassesMap().keySet().toArray(new String[0]);
+
+                public int getSize() {
+                    return strings.length;
+                }
+
+                public String getElementAt(int i) {
+                    return strings[i];
+                }
+            });
+            classListLabel.setText("Select the Controller classes:");
+        }
+        classListScrollPane.setViewportView(classList);
+
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -80,9 +100,9 @@ public class SelectDAOPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(daoListScrollPane)
+                    .addComponent(classListScrollPane)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(daoListLabel)
+                        .addComponent(classListLabel)
                         .addGap(0, 123, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -95,9 +115,9 @@ public class SelectDAOPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(9, 9, 9)
-                .addComponent(daoListLabel)
+                .addComponent(classListLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(daoListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .addComponent(classListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
@@ -108,29 +128,30 @@ public class SelectDAOPanel extends javax.swing.JPanel {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         containerDialog.close();
-        FrameWebPlugin.instance().setSelectDAODialogOpen(false);
+        FrameWebPlugin.instance().setSelectClassDialogOpen(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        List<String> selectedDAONames = daoList.getSelectedValuesList();
-        if(selectedDAONames.isEmpty()){
-            Logger.log(Level.INFO, "No DAO class has been selected.");
+        List<String> selectedClassesNames = classList.getSelectedValuesList();
+        if(selectedClassesNames.isEmpty()){
+            Logger.log(Level.INFO, "No class was selected.");
             containerDialog.close();
-            FrameWebPlugin.instance().setSelectDAODialogOpen(false);
+            FrameWebPlugin.instance().setSelectClassDialogOpen(false);
             return;
         }
-        this.controller.addDependencyToSelectedDAO(selectedDAONames);
+
+        this.controller.addDependencyToSelectedDAO(selectedClassesNames);
 
         containerDialog.close();
-        FrameWebPlugin.instance().setSelectDAODialogOpen(false);
+        FrameWebPlugin.instance().setSelectClassDialogOpen(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
-    private javax.swing.JList<String> daoList;
-    private javax.swing.JLabel daoListLabel;
-    private javax.swing.JScrollPane daoListScrollPane;
+    private javax.swing.JList<String> classList;
+    private javax.swing.JLabel classListLabel;
+    private javax.swing.JScrollPane classListScrollPane;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 }
