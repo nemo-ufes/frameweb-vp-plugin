@@ -48,32 +48,22 @@ public class SelectClassPanel extends javax.swing.JPanel {
         cancelButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
 
+        classList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = controller.getDependencyClassesMap().keySet().toArray(new String[0]);
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public String getElementAt(int i) {
+                return strings[i];
+            }
+        });
+
         if(controller.getFrameWebClassSelected() == FrameWebClass.SERVICE_CLASS) {
-            classList.setModel(new javax.swing.AbstractListModel<String>() {
-                String[] strings = controller.getDaoClassesMap().keySet().toArray(new String[0]);
-
-                public int getSize() {
-                    return strings.length;
-                }
-
-                public String getElementAt(int i) {
-                    return strings[i];
-                }
-            });
             classListLabel.setText("Select the DAO classes:");
         }
         else if(controller.getFrameWebClassSelected() == FrameWebClass.SERVICE_INTERFACE) {
-            classList.setModel(new javax.swing.AbstractListModel<String>() {
-                String[] strings = controller.getControllerClassesMap().keySet().toArray(new String[0]);
-
-                public int getSize() {
-                    return strings.length;
-                }
-
-                public String getElementAt(int i) {
-                    return strings[i];
-                }
-            });
             classListLabel.setText("Select the Controller classes:");
         }
         classListScrollPane.setViewportView(classList);
@@ -140,7 +130,7 @@ public class SelectClassPanel extends javax.swing.JPanel {
             return;
         }
 
-        this.controller.addDependencyToSelectedDAO(selectedClassesNames);
+        this.controller.addDependencyToSelectedClasses(selectedClassesNames);
 
         containerDialog.close();
         FrameWebPlugin.instance().setSelectClassDialogOpen(false);

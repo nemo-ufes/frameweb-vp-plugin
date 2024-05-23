@@ -46,34 +46,23 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
     /** The Add FrameWeb Dependency dialog. */
     private IDialog selectClassDialog;
 
-    /** A map of the DAO Interfaces of the project. */
-    private Map<String, IClass> daoClassesMap;
+    /** A map of the Dependency Classes (controllers or DAO interfaces) of the project. */
+    private Map<String, IClass> dependencyClassesMap;
 
-    public Map<String, IClass> getDaoClassesMap(){
-        return this.daoClassesMap;
-    }
-
-    /** A map of the Controller Classes of the project. */
-    private Map<String, IClass> controllerClassesMap;
-
-    public Map<String, IClass> getControllerClassesMap(){
-        return this.controllerClassesMap;
+    public Map<String, IClass> getDependencyClassesMap(){
+        return this.dependencyClassesMap;
     }
 
     private VPContext context;
 
     /** List of all packages present in the current diagram */
     private List<IModelElement> currentDiagramPackages;
-    /** List of all DAO Interfaces present in the current diagram */
-    private List<IDiagramElement> currentDiagramDAOInterfaces;
-    /** List of all DAO Interfaces that have an association with the service class */
-    private List<IModelElement> associatedDAOInterfaces;
-    /** List of all Controller Classes present in the current diagram */
-    private List<IDiagramElement> currentDiagramControllerClasses;
-    /** List of all Controller Classes that have an association with the service interface */
-    private List<IModelElement> associatedControllerClasses;
     /** Application packages in the diagram*/
     private List<IDiagramElement> applicationPackages;
+    /** List of all Dependency Classes (controllers or DAO interfaces) present in the current diagram */
+    private List<IDiagramElement> currentDiagramDependencyClasses;
+    /** List of all Dependency Classes that have an association with a service interface or a service class */
+    private List<IModelElement> associatedDependencyClasses;
 
 
     /** Called when the button is pressed. Adds the dependency to the class and diagram. */
@@ -99,11 +88,13 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
         // Determines which FrameWeb Class Dependency to apply from the menu item.
         FrameWebClassDependency frameWebClassDependency = FrameWebClassDependency.ofPluginUIID(action.getActionId());
 
+        // Processes the class that was right-clicked. Can be a service class (add DAO Interface dependency) or a
+        // service interface (add Controller Class dependency)
+        this.processesSelectedClass(action, context);
+
         // If a service class was right-clicked -> Add FrameWebDependency -> DAO Interface
         if(modelElementFrameWebClass == FrameWebClass.SERVICE_CLASS) {
-            this.processesServiceClassSelected(action, context);
-
-            if (daoClassesMap.isEmpty()) {
+            if (dependencyClassesMap.isEmpty()) {
                 ViewManagerUtils.showMessageDialog("There are no DAO classes to be added.",
                         "Add FrameWeb Dependency - DAO Interface", ViewManagerUtils.INFORMATION_MESSAGE);
                 return;
@@ -112,9 +103,7 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
 
         // If a service interface was right-clicked -> Add FrameWebDependency -> Controller class
         else if(modelElementFrameWebClass == FrameWebClass.SERVICE_INTERFACE) {
-            this.processesServiceInterfaceSelected(action, context);
-
-            if (controllerClassesMap.isEmpty()) {
+            if (dependencyClassesMap.isEmpty()) {
                 ViewManagerUtils.showMessageDialog("There are no Controller Classes to be added.",
                         "Add FrameWeb Dependency - Controller Class", ViewManagerUtils.INFORMATION_MESSAGE);
                 return;
@@ -161,13 +150,13 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
         }
     }
 
-    private void processesServiceClassSelected(final VPAction action, final VPContext context){
+    private void processesSelectedClass(final VPAction action, final VPContext context){
         final IModelElement modelElement = context.getModelElement();
 
         // Fill in the lists
         currentDiagramPackages = new ArrayList<>();
-        currentDiagramDAOInterfaces = new ArrayList<>();
-        associatedDAOInterfaces = new ArrayList<>();
+        currentDiagramDependencyClasses = new ArrayList<>();
+        associatedDependencyClasses = new ArrayList<>();
         applicationPackages = new ArrayList<>();
 
         context.getDiagram().diagramElementIterator().forEachRemaining(element -> {
@@ -182,8 +171,15 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
             }
             else{
                 final FrameWebClass elementFrameWebClass = FrameWebUtils.getFrameWebClass(diagramElementModel);
-                if (elementFrameWebClass == FrameWebClass.DAO_INTERFACE) {
-                    currentDiagramDAOInterfaces.add(diagramElement);
+                if(this.frameWebClassSelected == FrameWebClass.SERVICE_CLASS) {
+                    if (elementFrameWebClass == FrameWebClass.DAO_INTERFACE) {
+                        currentDiagramDependencyClasses.add(diagramElement);
+                    }
+                }
+                else if(this.frameWebClassSelected == FrameWebClass.SERVICE_INTERFACE){
+                    if (elementFrameWebClass == FrameWebClass.CONTROLLER_CLASS) {
+                        currentDiagramDependencyClasses.add(diagramElement);
+                    }
                 }
 
                 if (diagramElementModel.getModelType().equals(IModelElementFactory.MODEL_TYPE_ASSOCIATION)){
@@ -193,11 +189,19 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                     final IModelElement fromElement = associationElement.getFrom();
 
                     if (toElement.getId().equals(modelElement.getId()) || fromElement.getId().equals(modelElement.getId())){
-                        if (FrameWebUtils.getFrameWebClass(toElement) == FrameWebClass.DAO_INTERFACE){
-                            associatedDAOInterfaces.add(toElement);
+                        if(this.frameWebClassSelected == FrameWebClass.SERVICE_CLASS) {
+                            if (FrameWebUtils.getFrameWebClass(toElement) == FrameWebClass.DAO_INTERFACE) {
+                                associatedDependencyClasses.add(toElement);
+                            } else if (FrameWebUtils.getFrameWebClass(fromElement) == FrameWebClass.DAO_INTERFACE) {
+                                associatedDependencyClasses.add(fromElement);
+                            }
                         }
-                        else if (FrameWebUtils.getFrameWebClass(fromElement) == FrameWebClass.DAO_INTERFACE){
-                            associatedDAOInterfaces.add(fromElement);
+                        else if(this.frameWebClassSelected == FrameWebClass.SERVICE_INTERFACE) {
+                            if (FrameWebUtils.getFrameWebClass(toElement) == FrameWebClass.CONTROLLER_CLASS) {
+                                associatedDependencyClasses.add(toElement);
+                            } else if (FrameWebUtils.getFrameWebClass(fromElement) == FrameWebClass.CONTROLLER_CLASS) {
+                                associatedDependencyClasses.add(fromElement);
+                            }
                         }
                     }
                 }
@@ -212,28 +216,38 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                 FrameWebClass.of(frameWebClassDependency.getName()));
 
         // Create a map that associates the name of the classes (key) to their corresponding IClasses (value)
-        this.daoClassesMap = new HashMap<>();
+        this.dependencyClassesMap = new HashMap<>();
 
-        // Checks if the DAO Interface is already in the diagram, if it has association with the service class and
-        // if its parent (persistence package) is in the diagram. If one of these conditions is false, adds the DAO
-        // Interface to the Map.
+        // Checks if the DAO Interface/Controller is already in the diagram, if it has association with the service
+        // class/interface and if its parent (persistence package/controller package) is in the diagram.
+        // If one of these conditions is false, adds the DAO Interface/Controller Class to the Map.
         for (IClass iclass : frameWebClasses) {
             int flagPut = 0;
 
-            if((iclass.getParent() == null) || (iclass.getParent().toStereotypeModelArray() == null) ||
-                    (FrameWebUtils.getFrameWebPackage(iclass.getParent()) != FrameWebPackage.PERSISTENCE_PACKAGE)){
-                Logger.log(Level.INFO, "Class {0} must belong to a FrameWeb Persistence Package to be selected.",
-                        new Object[]{iclass.getName()});
-                continue;
+            if(this.frameWebClassSelected == FrameWebClass.SERVICE_CLASS) {
+                if ((iclass.getParent() == null) || (iclass.getParent().toStereotypeModelArray() == null) ||
+                        (FrameWebUtils.getFrameWebPackage(iclass.getParent()) != FrameWebPackage.PERSISTENCE_PACKAGE)) {
+                    Logger.log(Level.INFO, "Class {0} must belong to a FrameWeb Persistence Package to be selected.",
+                            new Object[]{iclass.getName()});
+                    continue;
+                }
+            }
+            else if(this.frameWebClassSelected == FrameWebClass.SERVICE_INTERFACE) {
+                if ((iclass.getParent() == null) || (iclass.getParent().toStereotypeModelArray() == null) ||
+                        (FrameWebUtils.getFrameWebPackage(iclass.getParent()) != FrameWebPackage.CONTROLLER_PACKAGE)) {
+                    Logger.log(Level.INFO, "Class {0} must belong to a FrameWeb Controller Package to be selected.",
+                            new Object[]{iclass.getName()});
+                    continue;
+                }
             }
 
-            for(IModelElement modElem : associatedDAOInterfaces){
+            for(IModelElement modElem : associatedDependencyClasses){
                 if(iclass.getName().equals(modElem.getName())) {
                     flagPut++;
                     break;
                 }
             }
-            for(IDiagramElement diaElem : currentDiagramDAOInterfaces){
+            for(IDiagramElement diaElem : currentDiagramDependencyClasses){
                 if(iclass.getName().equals(diaElem.getModelElement().getName())) {
                     flagPut++;
                     break;
@@ -246,102 +260,11 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
                 }
             }
             if(!(flagPut == 3))
-                daoClassesMap.put(iclass.getName(), iclass);
+                dependencyClassesMap.put(iclass.getName(), iclass);
         }
     }
 
-
-    private void processesServiceInterfaceSelected(final VPAction action, final VPContext context){
-        final IModelElement modelElement = context.getModelElement();
-
-        // Fill in the lists
-        currentDiagramPackages = new ArrayList<>();
-        currentDiagramControllerClasses = new ArrayList<>();
-        associatedControllerClasses = new ArrayList<>();
-        applicationPackages = new ArrayList<>();
-
-        context.getDiagram().diagramElementIterator().forEachRemaining(element -> {
-            final IDiagramElement diagramElement = (IDiagramElement) element;
-            final IModelElement diagramElementModel = diagramElement.getModelElement();
-            if (diagramElementModel.getModelType().equals(IModelElementFactory.MODEL_TYPE_PACKAGE)){
-                currentDiagramPackages.add(diagramElementModel);
-                final FrameWebPackage elementFrameWebPackage = FrameWebUtils.getFrameWebPackage(diagramElementModel);
-                if (elementFrameWebPackage == FrameWebPackage.APPLICATION_PACKAGE) {
-                    applicationPackages.add(diagramElement);
-                }
-            }
-            else{
-                final FrameWebClass elementFrameWebClass = FrameWebUtils.getFrameWebClass(diagramElementModel);
-                if (elementFrameWebClass == FrameWebClass.CONTROLLER_CLASS) {
-                    currentDiagramControllerClasses.add(diagramElement);
-                }
-
-                if (diagramElementModel.getModelType().equals(IModelElementFactory.MODEL_TYPE_ASSOCIATION)){
-                    // Get the "from" and the "to" class if the element is an association
-                    final IAssociation associationElement = (IAssociation) diagramElementModel;
-                    final IModelElement toElement = associationElement.getTo();
-                    final IModelElement fromElement = associationElement.getFrom();
-
-                    if (toElement.getId().equals(modelElement.getId()) || fromElement.getId().equals(modelElement.getId())){
-                        if (FrameWebUtils.getFrameWebClass(toElement) == FrameWebClass.CONTROLLER_CLASS){
-                            associatedControllerClasses.add(toElement);
-                        }
-                        else if (FrameWebUtils.getFrameWebClass(fromElement) == FrameWebClass.CONTROLLER_CLASS){
-                            associatedControllerClasses.add(fromElement);
-                        }
-                    }
-                }
-            }
-        });
-
-
-        // Determines which FrameWeb Class Dependency to apply from the menu item.
-        FrameWebClassDependency frameWebClassDependency = FrameWebClassDependency.ofPluginUIID(action.getActionId());
-
-        final List<IClass> frameWebClasses = FrameWebUtils.getFrameWebClasses(ProjectManagerUtils.getCurrentProject(),
-                FrameWebClass.of(frameWebClassDependency.getName()));
-
-        // Create a map that associates the name of the classes (key) to their corresponding IClasses (value)
-        this.controllerClassesMap = new HashMap<>();
-
-        // Checks if the Controller Class is already in the diagram, if it has association with the service interface and
-        // if its parent (controller package) is in the diagram. If one of these conditions is false, adds the Controller
-        // Class to the Map.
-        for (IClass iclass : frameWebClasses) {
-            int flagPut = 0;
-
-            if((iclass.getParent() == null) || (iclass.getParent().toStereotypeModelArray() == null) ||
-                    (FrameWebUtils.getFrameWebPackage(iclass.getParent()) != FrameWebPackage.CONTROLLER_PACKAGE)){
-                Logger.log(Level.INFO, "Class {0} must belong to a FrameWeb Controller Package to be selected.",
-                        new Object[]{iclass.getName()});
-                continue;
-            }
-
-            for(IModelElement modElem : associatedControllerClasses){
-                if(iclass.getName().equals(modElem.getName())) {
-                    flagPut++;
-                    break;
-                }
-            }
-            for(IDiagramElement diaElem : currentDiagramControllerClasses){
-                if(iclass.getName().equals(diaElem.getModelElement().getName())) {
-                    flagPut++;
-                    break;
-                }
-            }
-            for(IModelElement pkgElem : currentDiagramPackages){
-                if(iclass.getParent().getName().equals(pkgElem.getName())) {
-                    flagPut++;
-                    break;
-                }
-            }
-            if(!(flagPut == 3))
-                controllerClassesMap.put(iclass.getName(), iclass);
-        }
-    }
-
-
-    public void addDependencyToSelectedDAO(List<String> selectedClassesNames){
+    public void addDependencyToSelectedClasses(List<String> selectedClassesNames){
         final IModelElement modelElement = this.context.getModelElement();
 
         // Get the position of the application package in the diagram (X and Y)
@@ -373,12 +296,7 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
 
         // logs the classes that will be added as dependencies
         for (final String className : selectedClassesNames){
-            IClass clazz = null;
-            if(frameWebClassSelected == FrameWebClass.SERVICE_CLASS)
-                clazz = this.daoClassesMap.get(className);
-            else if(frameWebClassSelected == FrameWebClass.SERVICE_INTERFACE)
-                clazz = this.controllerClassesMap.get(className);
-            assert clazz != null;
+            final IClass clazz = this.dependencyClassesMap.get(className);
             final IModelElement clazzPackage = clazz.getParent();
 
             if(!packagesAndChildrenNum.containsKey(clazzPackage)){
@@ -429,25 +347,13 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
             // Check if the current Class is already in the diagram
             IDiagramElement currentClassDiagElement = null;
             boolean ClassNotInTheDiagram = true;
-            if(frameWebClassSelected == FrameWebClass.SERVICE_CLASS) {
-                for (final IDiagramElement daoInterface : currentDiagramDAOInterfaces) {
-                    if (clazz.getId().equals(daoInterface.getModelElement().getId())) {
-                        ClassNotInTheDiagram = false;
-                        currentClassDiagElement = daoInterface;
-                        break;
-                    }
+            for (final IDiagramElement dependencyClass : currentDiagramDependencyClasses) {
+                if (clazz.getId().equals(dependencyClass.getModelElement().getId())) {
+                    ClassNotInTheDiagram = false;
+                    currentClassDiagElement = dependencyClass;
+                    break;
                 }
             }
-            else if(frameWebClassSelected == FrameWebClass.SERVICE_INTERFACE) {
-                for (final IDiagramElement controllerClass : currentDiagramControllerClasses) {
-                    if (clazz.getId().equals(controllerClass.getModelElement().getId())) {
-                        ClassNotInTheDiagram = false;
-                        currentClassDiagElement = controllerClass;
-                        break;
-                    }
-                }
-            }
-
 
             if (ClassNotInTheDiagram){
                 // Add the current Class to the diagram
@@ -488,20 +394,10 @@ public class AddFrameWebDependencyToClassContextController implements VPContextA
 
             // Check if the association to the Class exists
             boolean alreadyAssociated = false;
-            if(frameWebClassSelected == FrameWebClass.SERVICE_CLASS) {
-                for (final IModelElement daoInterface : associatedDAOInterfaces) {
-                    if (daoInterface.getId().equals(clazz.getId())) {
-                        alreadyAssociated = true;
-                        break;
-                    }
-                }
-            }
-            else if(frameWebClassSelected == FrameWebClass.SERVICE_INTERFACE) {
-                for (final IModelElement controllerClass : associatedControllerClasses) {
-                    if (controllerClass.getId().equals(clazz.getId())) {
-                        alreadyAssociated = true;
-                        break;
-                    }
+            for (final IModelElement dependencyClass : associatedDependencyClasses) {
+                if (dependencyClass.getId().equals(clazz.getId())) {
+                    alreadyAssociated = true;
+                    break;
                 }
             }
 
