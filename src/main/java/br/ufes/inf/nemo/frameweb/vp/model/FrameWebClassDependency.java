@@ -13,7 +13,7 @@ import java.util.logging.Level;
  */
 public enum FrameWebClassDependency {
 
-    SERVICE_DEPENDENCY("application.service.interface", "Service Interface", FrameWebClass.CONTROLLER_CLASS),
+    CONTROLLER_DEPENDENCY("application.controller.class", "Controller Class", FrameWebClass.SERVICE_INTERFACE),
     DAO_DEPENDENCY("persistent.dao.interface", "DAO Interface", FrameWebClass.SERVICE_CLASS),
     NOT_A_FRAMEWEB_DEPENDENCY("", "", FrameWebClass.NOT_A_FRAMEWEB_CLASS);
 

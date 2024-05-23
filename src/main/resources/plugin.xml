@@ -203,15 +203,15 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebDependencyToClassContextController" />
       </action>
 
-      <!-- Menu Item: Add FrameWeb Dependency > Service Interface -->
+      <!-- Menu Item: Add FrameWeb Dependency > Controller Class -->
       <!-- Icon source: https://www.flaticon.com/free-icon/letter-a_3097003# -->
       <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
       <action
-              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency.application.service.interface"
-              label="Service Interface"
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency.application.controller.class"
+              label="Controller Class"
               style="normal"
               menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.dependency/#"
-              icon="icons/letter-a-black-block.png">
+              icon="icons/letter-c-black-block.png">
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebDependencyToClassContextController" />
       </action>
 
