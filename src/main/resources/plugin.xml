@@ -308,8 +308,53 @@
         <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
       </action>
 
+      <!-- Menu Item: Set FrameWeb Stereotype > Web Page -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.view.page"
+              label="Web Page"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
+      </action>
 
+      <!-- Menu Item: Set FrameWeb Stereotype > Partial -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.view.partial"
+              label="Partial"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
+      </action>
 
+      <!-- Menu Item: Set FrameWeb Stereotype > Web Form -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.view.form"
+              label="Web Form"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
+      </action>
+
+      <!-- Menu Item: Set FrameWeb Stereotype > Binary -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype.view.binary"
+              label="Binary"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.class.menu.stereotype/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.SetFrameWebStereotypeToClassContextController" />
+      </action>
 
       <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
       <!-- Should be placed after the last menu in this action set. -->
