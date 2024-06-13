@@ -808,6 +808,77 @@
     </contextSensitiveActionSet>
     <!-- -->
 
+    <!-- ************************************************************* -->
+    <!-- Context-menus (right-click) for UML Dependency elements. -->
+    <!-- ************************************************************* -->
+    <contextSensitiveActionSet id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency">
+      <!-- Applies to classes. -->
+      <contextTypes all="false" />
+      <include type="Dependency" />
+
+      <!-- Menu: Add FrameWeb Constraint. -->
+      <menu
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint"
+              label="Add FrameWeb Constraint"
+              mnemonic="F"
+              menuPath="#"
+              icon="icons/frameweb-logo.png" />
+
+      <!-- Menu Item: Add FrameWeb Constraint > method=<value> -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint.navigation.method.value"
+              label="method = <value>"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToDependencyContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > result=<value> -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint.navigation.result.value"
+              label="result = <value>"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToDependencyContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > ajax -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint.navigation.ajax"
+              label="ajax"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToDependencyContextController" />
+      </action>
+
+      <!-- Menu Item: Add FrameWeb Constraint > redirect -->
+      <!-- Icon source: https://www.flaticon.com/free-icon/letter-v_3097105 -->
+      <!-- Icon author: https://www.flaticon.com/authors/md-tanvirul-haque -->
+      <action
+              id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint.navigation.redirect"
+              label="redirect"
+              style="normal"
+              menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint/#"
+              icon="icons/letter-v-black-block.png">
+        <actionController class="br.ufes.inf.nemo.frameweb.vp.controllers.AddFrameWebConstraintToDependencyContextController" />
+      </action>
+
+      <!-- Separates FrameWeb menus from other Visual Paradigm menus and items. -->
+      <!-- Should be placed after the last menu in this action set. -->
+      <separator id="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.separator"
+                 menuPath="br.ufes.inf.nemo.frameweb.vp.actionset.context.dependency.menu.constraint" />
+    </contextSensitiveActionSet>
+    <!-- -->
+
     <!-- ************************************************************ -->
     <!-- Context-menus (right-click) for UML Generalization elements. -->
     <!-- ************************************************************ -->
