@@ -32,8 +32,8 @@ import java.util.logging.Level;
  * Controller that handles the Add Dependency to Class action, activated by a context menu (right-click) for FrameWeb
  * Class elements.
  *
- * @author Igor Sunderhus e Silva <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
- * @version 0.0.1
+ * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
+ * @author <a href="https://github.com/gabrielgatti7">Gabriel Gatti da Silva </a>
  */
 public class AddFrameWebDependencyToClassContextController implements VPContextActionController {
     /** The FrameWebClass of the selected element */
