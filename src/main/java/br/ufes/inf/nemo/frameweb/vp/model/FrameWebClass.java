@@ -33,9 +33,13 @@ public enum FrameWebClass {
   CONTROLLER_CLASS("", "Controller Class", "controller", Color.TURQUOISE,
       FrameWebPackage.CONTROLLER_PACKAGE),
 
-  PAGE_COMPONENT("", "Web Page", "page", Color.SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
+  PAGE_COMPONENT("view.page", "Web Page", "page", Color.SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
 
-  FORM_COMPONENT("", "Web Form", "form", Color.DEEP_SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
+  FORM_COMPONENT("view.form", "Web Form", "form", Color.DEEP_SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
+
+  PARTIAL_COMPONENT("view.partial", "Partial", "partial", Color.LIGHT_SKY_BLUE, FrameWebPackage.VIEW_PACKAGE),
+
+  BINARY_COMPONENT("view.binary", "Binary", "binary", Color.LIGHT_BLUE, FrameWebPackage.VIEW_PACKAGE),
 
   /* Persistence Model classes: */
   DAO_CLASS("persistence.dao.class", "DAO Class", "dao", Color.TOMATO, FrameWebPackage.PERSISTENCE_PACKAGE),
