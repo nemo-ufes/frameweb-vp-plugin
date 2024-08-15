@@ -3,12 +3,7 @@ package br.ufes.inf.nemo.frameweb.vp.utils;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebPackage;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
-import com.vp.plugin.model.IAssociationEnd;
-import com.vp.plugin.model.IClass;
-import com.vp.plugin.model.IConstraintElement;
-import com.vp.plugin.model.IModelElement;
-import com.vp.plugin.model.IProject;
-import com.vp.plugin.model.IStereotype;
+import com.vp.plugin.model.*;
 import com.vp.plugin.model.factory.IModelElementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,52 +19,55 @@ public final class FrameWebUtils {
     }
 
     /**
-     * Checks if the given association end has constraints and, if so, append them to the association end name to be
-     * shown in the diagram, as Visual Paradigm doesn't show constraints that are added to association ends.
+     * Checks if the given dependency or association end has constraints and, if so, append them to the
+     * dependency name or to the association end role name to be shown in the diagram,
+     * as Visual Paradigm doesn't show constraints that are added to dependencies/association ends.
      *
-     * @param associationEnd The given association end.
+     * @param modelElement The given modelElement of a dependency/association end.
      */
-    public static void displayConstraintsWithRoleName(IAssociationEnd associationEnd) {
-        // Extracts the role name from the association (it may already have constraints).
-        String roleName = associationEnd.getName();
-        if (roleName == null) {
-            roleName = "";
-        } else {
-            int idx = roleName.indexOf('{');
-            if (idx == 0) {
-                roleName = "";
-            } else if (idx > 0) {
-                roleName = roleName.substring(0, idx - 1);
+    public static void displayConstraintsWithName(IModelElement modelElement) {
+        if(modelElement instanceof IDependency || modelElement instanceof IAssociationEnd) {
+            // Extracts the name/role name from the dependency/association end (it may already have constraints).
+            String elementName = modelElement.getName();
+            if (elementName == null) {
+                elementName = "";
+            } else {
+                int idx = elementName.indexOf('{');
+                if (idx == 0) {
+                    elementName = "";
+                } else if (idx > 0) {
+                    elementName = elementName.substring(0, idx - 1);
+                }
             }
-        }
-        roleName = roleName.trim();
+            elementName = elementName.trim();
 
-        // Builds a comma-separated list of constraints.
-        StringBuilder builder = new StringBuilder();
-        Iterator<?> iterator = associationEnd.constraintsIterator();
-        if (iterator != null) {
-            while (iterator.hasNext()) {
-                Object obj = iterator.next();
-                if (obj instanceof IConstraintElement) {
-                    IConstraintElement constraintElement = (IConstraintElement) obj;
-                    builder.append(constraintElement.getSpecification().getValue());
-                    builder.append(", ");
+            // Builds a comma-separated list of constraints.
+            StringBuilder builder = new StringBuilder();
+            Iterator<?> iterator = modelElement.constraintsIterator();
+            if (iterator != null) {
+                while (iterator.hasNext()) {
+                    Object obj = iterator.next();
+                    if (obj instanceof IConstraintElement) {
+                        IConstraintElement constraintElement = (IConstraintElement) obj;
+                        builder.append(constraintElement.getSpecification().getValue());
+                        builder.append(", ");
+                    }
+                }
+
+                // If there are constraints in the dependency/association end, complements its name/role name with them.
+                int length = builder.length();
+                if (length > 0) {
+                    builder.delete(length - 2, length);
+                    builder.append('}');
+                    builder.insert(0, " {");
+                    builder.insert(0, elementName);
+                    elementName = builder.toString();
                 }
             }
 
-            // If there are constraints in the association end, complements its role name with them.
-            int length = builder.length();
-            if (length > 0) {
-                builder.delete(length - 2, length);
-                builder.append('}');
-                builder.insert(0, " {");
-                builder.insert(0, roleName);
-                roleName = builder.toString();
-            }
+            // Finally, sets the name/role name to the dependency/association end.
+            modelElement.setName(elementName);
         }
-
-        // Finally, sets the role name to the association end.
-        associationEnd.setName(roleName);
     }
 
     /**

@@ -1,6 +1,8 @@
 package br.ufes.inf.nemo.frameweb.vp;
 
 import java.util.logging.Level;
+
+import br.ufes.inf.nemo.frameweb.vp.listeners.FrameWebDependencyListener;
 import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import com.vp.plugin.VPPlugin;
 import com.vp.plugin.VPPluginInfo;
@@ -114,6 +116,7 @@ public class FrameWebPlugin implements VPPlugin {
     listenersManager.addModelListener(new FrameWebPackageListener());
     listenersManager.addModelListener(new FrameWebClassListener());
     listenersManager.addModelListener(new FrameWebAssociationEndListener());
+    listenersManager.addModelListener(new FrameWebDependencyListener());
 
     // Loads the plug-in configuration.
     configManager = new ConfigurationManager(PLUGIN_NAME, CONFIG_FILE_NAME);
