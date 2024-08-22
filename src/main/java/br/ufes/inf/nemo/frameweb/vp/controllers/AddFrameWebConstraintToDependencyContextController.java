@@ -1,19 +1,14 @@
 package br.ufes.inf.nemo.frameweb.vp.controllers;
 
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebAssociationEndConstraint;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClass;
-import br.ufes.inf.nemo.frameweb.vp.model.FrameWebClassAttributeConstraint;
 import br.ufes.inf.nemo.frameweb.vp.model.FrameWebDependencyConstraint;
 import br.ufes.inf.nemo.frameweb.vp.utils.FrameWebUtils;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.ConstraintsManager;
-import br.ufes.inf.nemo.vpzy.utils.ModelElementUtils;
 import br.ufes.inf.nemo.vpzy.utils.ViewManagerUtils;
 import com.vp.plugin.action.VPAction;
 import com.vp.plugin.action.VPContext;
 import com.vp.plugin.action.VPContextActionController;
-import com.vp.plugin.diagram.IDiagramElement;
-import com.vp.plugin.model.IAssociationEnd;
 import com.vp.plugin.model.IConstraintElement;
 import com.vp.plugin.model.IDependency;
 import com.vp.plugin.model.IModelElement;
@@ -23,6 +18,12 @@ import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.logging.Level;
 
+/**
+ * Controller that handles the Add FrameWeb Constraint to Dependency action, activated by a
+ * context menu (right-click) for UML Dependency elements.
+ *
+ * @author <a href="https://github.com/gabrielgatti7">Gabriel Gatti da Silva</a>
+ */
 public class AddFrameWebConstraintToDependencyContextController implements VPContextActionController {
     /**
      * Called when the menu containing the button is accessed allowing for action manipulation, such

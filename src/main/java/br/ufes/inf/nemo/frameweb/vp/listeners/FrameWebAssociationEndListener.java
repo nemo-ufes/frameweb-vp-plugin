@@ -44,7 +44,7 @@ public class FrameWebAssociationEndListener extends ManagedModelListener {
           case ListenersManager.PROP_REFERENCED_BY_ADDED:
           case ListenersManager.PROP_REFERENCED_BY_REMOVED:
             // Visual Paradigm doesn't show association end constraints. Display them as role names.
-            FrameWebUtils.displayConstraintsWithRoleName((IAssociationEnd) modelElement);
+            FrameWebUtils.displayConstraintsWithName(modelElement);
             break;
         }
       }
