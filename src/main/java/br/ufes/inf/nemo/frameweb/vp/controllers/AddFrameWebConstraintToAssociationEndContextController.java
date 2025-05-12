@@ -126,7 +126,7 @@ public class AddFrameWebConstraintToAssociationEndContextController
         specification = specification.replaceAll("<[a-zA-Z]*>", value);
       }
 
-      // Adds the constraint to the selected association end.
+      // Adds the constraint to the selected association end..
       ConstraintsManager constraintsManager = ConstraintsManager.getInstance();
       IConstraintElement constraintElement = constraintsManager.getConstraint(
           frameWebAssociationEndConstraint.getPluginUIID(), specification, parameterized);
