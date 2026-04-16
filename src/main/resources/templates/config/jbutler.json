@@ -1,0 +1,57 @@
+{
+  "name": "jbutler",
+  "description": "Default Template for JButler",
+  "template_path": "templates/jbutler",
+  "mappings": [
+    {
+      "frameWebPart": "Entity",
+      "template": "EntityClassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+    "frameWebPart": "Enumeration",
+    "template": "EnumerationClassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "MappedSuperclass",
+      "template": "MappedSuperclassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "Transient",
+      "template": "PojoTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "Embeddable",
+      "template": "EmbeddableClassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "DAO",
+      "template": "DaoClassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "Controller",
+      "template": "ControllerClassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "Service",
+      "template": "ServiceClassTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "DAO Interface",
+      "template": "DaoInterfaceTemplate.ftl",
+      "extension": ".java"
+    },
+    {
+      "frameWebPart": "Service Interface",
+      "template": "ServiceInterfaceTemplate.ftl",
+      "extension": ".java"
+    }
+  ]
+}
