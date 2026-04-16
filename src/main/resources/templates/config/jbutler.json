@@ -53,5 +53,19 @@
       "template": "ServiceInterfaceTemplate.ftl",
       "extension": ".java"
     }
-  ]
+  ],
+  "coverage": {
+    "package":["Entity", "Enum", "Service", "IService", "DAO", "IDAO", "Controller"],
+    "class": ["Entity","Enum", "Service","DAO","Controller"],
+    "interface": ["IService","IDAO"],
+    "attributes":["Entity", "Enum", "Service","DAO","Controller"],
+    "methodes": ["Entity","Service","IService", "DAO", "IDAO", "Controller"],
+    "associations":["Entity","Service","Controller"],
+    "generalizations":["Entity","Service","DAO","Controller"],
+    "realizations": ["Service","DAO"],
+    "resultDependency":[],
+    "navigationAssociation": ["page"],
+    "page": ["page"],
+    "forms": ["page"]
+  }
 }
