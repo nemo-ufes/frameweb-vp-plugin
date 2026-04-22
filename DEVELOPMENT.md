@@ -16,12 +16,12 @@
    2. Click the + button and select **Application**.
    3. Fill in the fields according to the table:
 
-   | Campo | Valor |
+   | Property | Value |
    | :--- | :--- |
    | **Main class** | `RV` |
    | **VM options** | `-Xms256m -Xmx768m` |
    | **Program arguments** | `debug` |
-   | **Working directory** | *[Caminho para a pasta bin da instalação do VP]* |
+   | **Working directory** | *[Path to the bin folder inside VP's installation folder]* |
 
 4. Click on the ***Modify options*** link and check the options as shown in the image:\
 ![Modify options](screenshots/img.png)
