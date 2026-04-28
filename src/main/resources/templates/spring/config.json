@@ -1,10 +1,6 @@
 {
   "name": "spring",
-  "description": "Default Template for Spring projects",
   "template_path": "templates/jbutler",
-  "frameworks": [
-    "springboot"
-  ],
   "mappings": [
     {
       "frameWebPart": "Entity",

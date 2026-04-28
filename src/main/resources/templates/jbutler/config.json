@@ -1,6 +1,5 @@
 {
   "name": "jbutler",
-  "description": "Default Template for JButler",
   "template_path": "templates/jbutler",
   "mappings": [
     {
