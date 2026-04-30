@@ -134,13 +134,19 @@ public class GenerateCodePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     public static DefaultComboBoxModel<TemplateOption> getTemplateOptions() {
+        final br.ufes.inf.nemo.vpzy.managers.JsonConfigurationManager manager =
+                FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
-        final Map<String, TemplateOption> options = TemplateUtils.getTemplateOptions();
-        final Collection<TemplateOption> values = options.values();
+        final Collection<TemplateOption> values = manager.getOptions().values();
+
         final TemplateOption defaultItem = new TemplateOption();
         defaultItem.setDescription("Select a template");
-        final TemplateOption[] a = new TemplateOption[] { defaultItem };
-        return new DefaultComboBoxModel<>(values.toArray(a));
+
+        if (values.isEmpty()) {
+            return new DefaultComboBoxModel<>(new TemplateOption[] { defaultItem });
+        }
+
+        return new DefaultComboBoxModel<>(values.toArray(new TemplateOption[0]));
     }
 
     private void editButtonMouseClicked() {
@@ -192,9 +198,10 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         public TemplateOptionEditDialogHandler(final TemplateOption templateOption) {
             try {
-                templateOptionEdit = new TemplateOptionEdit(templateOption);
+                templateOptionEdit = new TemplateOptionEdit(templateOption.getName());
+
             } catch (Exception e) {
-                Logger.log(Level.SEVERE, "Error while creating Generate Code Template Settings dialog", e);
+                Logger.log(Level.SEVERE, "Erro ao abrir a tela de edição", e);
                 throw new RuntimeException(e);
             }
         }

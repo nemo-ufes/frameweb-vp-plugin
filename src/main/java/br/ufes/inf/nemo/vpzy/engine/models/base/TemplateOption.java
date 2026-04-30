@@ -36,7 +36,7 @@ public class TemplateOption implements Serializable {
      * <p>
      * e.g. ":C\output\spring"
      */
-    private String outputPath = "output";
+    private String outputPath = "output_path";
 
     /**
      * The file types for the entity class.

@@ -1,6 +1,8 @@
 {
   "name": "jbutler",
-  "template_path": "templates/jbutler",
+  "templatePath": "templates/jbutler",
+  "outputPath": "",
+  "description": "JButler is a code generation tool that generates Java classes based on templates. It supports various class types such as Entity, Enumeration",
   "mappings": [
     {
       "frameWebPart": "Entity",

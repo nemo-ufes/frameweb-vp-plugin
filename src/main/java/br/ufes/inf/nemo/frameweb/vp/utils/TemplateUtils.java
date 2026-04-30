@@ -9,6 +9,7 @@ import br.ufes.inf.nemo.frameweb.vp.utils.pack.PersistentPackageProcessor;
 import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
+import br.ufes.inf.nemo.vpzy.managers.JsonConfigurationManager;
 import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import com.vp.plugin.model.IClass;
@@ -62,7 +63,7 @@ public final class TemplateUtils {
      * @throws IllegalArgumentException if the template option is not found or is invalid.
      */
     public static TemplateOption getTemplateOption(final String templateName) {
-        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
+        final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
         final TemplateOption templateOption = configurationManager.getProperty(templateName);
 
@@ -130,7 +131,7 @@ public final class TemplateUtils {
      */
     public static void generateCode(final TemplateOption templateOption) {
         final IProject project = ProjectManagerUtils.getCurrentProject();
-        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
+        final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
         final Path templatePath = Paths.get(configurationManager.getTemplateFolder().getPath(),
                 templateOption.getName());
@@ -152,7 +153,7 @@ public final class TemplateUtils {
      * @throws IllegalArgumentException if the template options are not found or are invalid.
      */
     public static Map<String, TemplateOption> getTemplateOptions() {
-        final YamlConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
+        final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
         final Map<String, TemplateOption> templateOptions = configurationManager.getOptions();
 

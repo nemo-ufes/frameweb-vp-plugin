@@ -10,10 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.zip.ZipInputStream;
 
@@ -32,11 +29,20 @@ public class JsonConfigurationManager {
     public JsonConfigurationManager(String pluginName) {
         this.pluginName = pluginName;
 
-        // localize the templates folder on the workspace
-        final File workspace = ApplicationManagerUtils.getWorkspaceLocation();
-        this.templateFolder = new File(workspace, TEMPLATE_FOLDER);
+        com.vp.plugin.ApplicationManager app = com.vp.plugin.ApplicationManager.instance();
+        com.vp.plugin.VPPluginInfo info = app.getPluginInfo("br.ufes.inf.nemo.frameweb.vp");
+
+        if (info != null) {
+            this.templateFolder = new File(info.getPluginDir(), TEMPLATE_FOLDER);
+        } else {
+            this.templateFolder = new File(ApplicationManagerUtils.getWorkspaceLocation(), TEMPLATE_FOLDER);
+        }
 
         load();
+    }
+
+    public Set<String> getTemplateNames() {
+        return options.keySet();
     }
 
     /**

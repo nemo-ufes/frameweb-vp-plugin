@@ -1,6 +1,7 @@
 {
   "name": "spring",
-  "template_path": "templates/jbutler",
+  "templatePath": "templates/jbutler",
+  "outputPath": "",
   "mappings": [
     {
       "frameWebPart": "Entity",
