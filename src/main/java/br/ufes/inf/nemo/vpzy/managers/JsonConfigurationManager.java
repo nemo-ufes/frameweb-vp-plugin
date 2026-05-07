@@ -48,7 +48,7 @@ public class JsonConfigurationManager {
     /**
      * Loads the template options from the workspace. Each template option is stored in a separate folder with its name, and the configuration is stored in a config.json file inside that folder. If the templates folder does not exist, it will be created and populated with the default templates from the plugin resources.
      */
-    private void load() {
+    public void load() {
         Logger.log(Level.FINER, "Loading {0} configurations from {1}. Folder exists? {2}", new Object[]{pluginName, templateFolder.getAbsolutePath(),templateFolder.exists()});
         if (!templateFolder.exists()) {
             try{
@@ -167,10 +167,10 @@ public class JsonConfigurationManager {
 
         templateOption.validate();
 
-        final File sourceTemplates = new File(templateOption.getTemplatePath());
-        final String sourceTemplatesAbsolutePath = sourceTemplates.getAbsolutePath();
 
-        if (!sourceTemplates.exists()) {
+        final String sourceTemplatesAbsolutePath = templateFolder.getAbsolutePath();
+
+        if (!templateFolder.exists()) {
             validationErrors.add("Could not find templates folder at " + sourceTemplatesAbsolutePath);
         }
 
@@ -206,7 +206,7 @@ public class JsonConfigurationManager {
             validationErrors.add("Could not find controller template");
         }
 
-        if (!FreeMarkerEngine.validateTemplateStructures(sourceTemplates)) {
+        if (!FreeMarkerEngine.validateTemplateStructures(templateFolder)) {
             validationErrors.add("Invalid template syntax structure. Check the logs for details.");
         }
 
@@ -221,7 +221,7 @@ public class JsonConfigurationManager {
         final Path resolve = templateFolder.toPath().resolve(name);
 
         try {
-            FileUtils.copyFolder(sourceTemplates.toPath(), resolve, StandardCopyOption.REPLACE_EXISTING);
+            FileUtils.copyFolder(templateFolder.toPath(), resolve, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             Logger.log(Level.SEVERE, "Could not copy templates folder to " + resolve);
             throw new TemplateValidationException("Error while copying templates folder.", e);

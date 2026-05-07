@@ -10,12 +10,13 @@ import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.managers.JsonConfigurationManager;
-import br.ufes.inf.nemo.vpzy.managers.YamlConfigurationManager;
 import br.ufes.inf.nemo.vpzy.utils.ProjectManagerUtils;
 import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IPackage;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.factory.IModelElementFactory;
+
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
@@ -45,7 +46,7 @@ public final class TemplateUtils {
 
         final TemplateOption templateOption = getTemplateOption(templateName);
 
-        final FreeMarkerEngine engine = new FreeMarkerEngine(templateOption.getTemplatePath(), outputDir);
+        final FreeMarkerEngine engine = new FreeMarkerEngine(TemplateUtils.getTemplatePath(), outputDir);
 
         @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
                 IModelElementFactory.MODEL_TYPE_PACKAGE);
@@ -136,7 +137,7 @@ public final class TemplateUtils {
         final Path templatePath = Paths.get(configurationManager.getTemplateFolder().getPath(),
                 templateOption.getName());
 
-        final FreeMarkerEngine engine = new FreeMarkerEngine(templatePath.toString(), templateOption.getOutputPath());
+        final FreeMarkerEngine engine = new FreeMarkerEngine(templatePath.toString(), TemplateUtils.getTemplatePath());
 
         @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
                 IModelElementFactory.MODEL_TYPE_PACKAGE);
@@ -163,5 +164,14 @@ public final class TemplateUtils {
 
         return templateOptions;
 
+    }
+
+    /**
+     * Gets the path to the templates directory. The templates directory is located in the plugin's directory.
+     * @return path to directory where the templates are located. The templates directory is located in the plugin's directory.
+     */
+    public static String getTemplatePath() {
+        File templatesDir = new File(com.vp.plugin.ApplicationManager.instance().getPluginInfo("br.ufes.inf.nemo.frameweb.vp").getPluginDir(), "templates");
+        return templatesDir.getAbsolutePath();
     }
 }

@@ -1,57 +1,13 @@
 {
   "name": "spring",
-  "templatePath": "templates/jbutler",
-  "outputPath": "",
-  "mappings": [
-    {
-      "frameWebPart": "Entity",
-      "template": "EntityClassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "Enumeration",
-      "template": "EnumerationClassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "MappedSuperclass",
-      "template": "MappedSuperclassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "Transient",
-      "template": "PojoTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "Embeddable",
-      "template": "EmbeddableClassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "DAO",
-      "template": "DaoClassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "Controller",
-      "template": "ControllerClassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "Service",
-      "template": "ServiceClassTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "DAO Interface",
-      "template": "DaoInterfaceTemplate.ftl",
-      "extension": ".java"
-    },
-    {
-      "frameWebPart": "Service Interface",
-      "template": "ServiceInterfaceTemplate.ftl",
-      "extension": ".java"
-    }
-  ]
+  "entity": { "template": "EntityClassTemplate.ftl", "extension": ".java" },
+  "enumeration": { "template": "EnumerationClassTemplate.ftl", "extension": ".java" },
+  "mappedSuperclass": { "template": "MappedSuperclassTemplate.ftl", "extension": ".java" },
+  "transientClass": { "template": "PojoTemplate.ftl", "extension": ".java" },
+  "embeddable": { "template": "EmbeddableClassTemplate.ftl", "extension": ".java" },
+  "dao": { "template": "DaoClassTemplate.ftl", "extension": ".java" },
+  "daoInterface": { "template": "DaoInterfaceTemplate.ftl", "extension": ".java" },
+  "service": { "template": "ServiceClassTemplate.ftl", "extension": ".java" },
+  "serviceInterface": { "template": "ServiceInterfaceTemplate.ftl", "extension": ".java" },
+  "controller": { "template": "ControllerClassTemplate.ftl", "extension": ".java" }
 }
