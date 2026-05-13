@@ -32,6 +32,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Generate Code"));
+        setPreferredSize(new java.awt.Dimension(420, 210));
 
         addTemplateButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         addTemplateButton.setText("+");
@@ -42,7 +43,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         jTextField1.setText("jTextField1");
 
-        templateSelecter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Template" }));
+        templateSelecter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         generateCodeButton.setText("Generate");
 
@@ -63,7 +64,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(templateSelecter, 0, 288, Short.MAX_VALUE)
+                            .addComponent(templateSelecter, 0, 325, Short.MAX_VALUE)
                             .addComponent(jTextField1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,7 +78,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addTemplateButton)
                     .addComponent(templateSelecter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -87,7 +88,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(outputSelecter)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addComponent(generateCodeButton)
                 .addContainerGap())
         );
