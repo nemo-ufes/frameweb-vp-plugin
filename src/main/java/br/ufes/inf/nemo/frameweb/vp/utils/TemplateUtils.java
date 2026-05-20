@@ -130,14 +130,14 @@ public final class TemplateUtils {
      *
      * @param templateOption The template option used.
      */
-    public static void generateCode(final TemplateOption templateOption) {
+    public static void generateCode(final TemplateOption templateOption, String outputDir) {
         final IProject project = ProjectManagerUtils.getCurrentProject();
         final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
 
         final Path templatePath = Paths.get(configurationManager.getTemplateFolder().getPath(),
                 templateOption.getName());
 
-        final FreeMarkerEngine engine = new FreeMarkerEngine(templatePath.toString(), TemplateUtils.getTemplatePath());
+        final FreeMarkerEngine engine = new FreeMarkerEngine(templatePath.toString(), outputDir);
 
         @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
                 IModelElementFactory.MODEL_TYPE_PACKAGE);

@@ -49,13 +49,15 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         addTemplateButton = new javax.swing.JButton();
         outputSelecter = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        outputTextField = new javax.swing.JTextField();
         templateSelecter = new javax.swing.JComboBox<>();
         generateCodeButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Generate Code"));
+
+        templateSelecter.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
 
         addTemplateButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         addTemplateButton.setText("+");
@@ -68,15 +70,17 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         outputSelecter.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         outputSelecter.setText("...");
+        outputSelecter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         outputSelecter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 choosePathButtonActionPerformed(evt);
             }
         });
 
-        jTextField1.setText(defaultOutputPath);
+        outputTextField.setText(defaultOutputPath);
 
         generateCodeButton.setText("Generate");
+        generateCodeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         generateCodeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateCodeButtonActionPerformed(evt);
@@ -101,7 +105,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(templateSelecter, 0, 288, Short.MAX_VALUE)
-                                                        .addComponent(jTextField1))
+                                                        .addComponent(outputTextField))
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(addTemplateButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -121,7 +125,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
                                         .addComponent(jLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(outputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(outputSelecter)
                                         .addComponent(jLabel2))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
@@ -199,13 +203,16 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnValor = chooser.showOpenDialog(this);
-        if (returnValor == JFileChooser.APPROVE_OPTION)
-            outputSelecter.setText(chooser.getSelectedFile().getAbsolutePath());
+        if (returnValor == JFileChooser.APPROVE_OPTION) {
+            outputTextField.setText(chooser.getSelectedFile().getAbsolutePath());
+        }
     }
 
     private void generateCodeButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             final TemplateOption selectedItem = (TemplateOption) templateSelecter.getSelectedItem();
+            String project = com.vp.plugin.ApplicationManager.instance().getProjectManager().getProject().getName();
+            String outputDir = outputTextField.getText() + File.separator + project;
 
             if (selectedItem == null || selectedItem.getName() == null) {
                 ViewManagerUtils.showMessageDialog("Please select a template option", "Error",
@@ -213,11 +220,11 @@ public class GenerateCodePanel extends javax.swing.JPanel {
                 return;
             }
 
-            TemplateUtils.generateCode(selectedItem);
+            TemplateUtils.generateCode(selectedItem, outputDir);
             ViewManagerUtils.showMessageDialog("Code generated successfully", "Success",
                     ViewManagerUtils.INFORMATION_MESSAGE);
 
-            final File file = new File(defaultOutputPath);
+            final File file = new  File(outputDir);
             final Desktop desktop = Desktop.getDesktop();
             desktop.open(file);
 
@@ -286,7 +293,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
     private javax.swing.JButton generateCodeButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField outputTextField;
     private javax.swing.JButton outputSelecter;
     private javax.swing.JComboBox<TemplateOption> templateSelecter;
     // End of variables declaration//GEN-END:variables
