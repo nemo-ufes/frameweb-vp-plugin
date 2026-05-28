@@ -15,12 +15,9 @@ import com.vp.plugin.model.IClass;
 import com.vp.plugin.model.IPackage;
 import com.vp.plugin.model.IProject;
 import com.vp.plugin.model.factory.IModelElementFactory;
-
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -31,51 +28,6 @@ import java.util.logging.Level;
 public final class TemplateUtils {
     private TemplateUtils() {
         // Prevents instantiation.
-    }
-
-    /**
-     * Generates the code for the FrameWeb project.
-     *
-     * @param templateName The name of the template used.
-     * @param outputDir    The directory for the generated code.
-     * @deprecated Use {@link #generateCode(TemplateOption)} instead.
-     */
-    @Deprecated(since = "#24", forRemoval = true)
-    public static void generateCode(final String templateName, final String outputDir) {
-        final IProject project = ProjectManagerUtils.getCurrentProject();
-
-        final TemplateOption templateOption = getTemplateOption(templateName);
-
-        final FreeMarkerEngine engine = new FreeMarkerEngine(TemplateUtils.getTemplatePath(), outputDir);
-
-        @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(
-                IModelElementFactory.MODEL_TYPE_PACKAGE);
-
-        // process packages
-        iter.forEachRemaining(pack -> processPackage(pack, engine, templateOption));
-
-    }
-
-    /**
-     * Gets the template option for the given template name. The template should be defined in the configuration file.
-     *
-     * @param templateName The name of the template.
-     * @return The configurations for the template.
-     * @throws IllegalArgumentException if the template option is not found or is invalid.
-     */
-    public static TemplateOption getTemplateOption(final String templateName) {
-        final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
-
-        final TemplateOption templateOption = configurationManager.getProperty(templateName);
-
-        if (templateOption == null) {
-            throw new IllegalArgumentException("Template option not found: " + templateName);
-        }
-
-        templateOption.validate();
-
-        return templateOption;
-
     }
 
     /**
@@ -143,33 +95,5 @@ public final class TemplateUtils {
         // process packages
         iter.forEachRemaining(pack -> processPackage(pack, engine, templateOption));
 
-    }
-
-    /**
-     * Gets the template options defined in the configuration file.
-     *
-     * @return The configurations for the templates.
-     * @throws IllegalArgumentException if the template options are not found or are invalid.
-     */
-    public static Map<String, TemplateOption> getTemplateOptions() {
-        final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
-
-        final Map<String, TemplateOption> templateOptions = configurationManager.getOptions();
-
-        if (templateOptions == null) {
-            throw new IllegalArgumentException("Template options not found");
-        }
-
-        return templateOptions;
-
-    }
-
-    /**
-     * Gets the path to the templates directory. The templates directory is located in the plugin's directory.
-     * @return path to directory where the templates are located. The templates directory is located in the plugin's directory.
-     */
-    public static String getTemplatePath() {
-        File templatesDir = new File(com.vp.plugin.ApplicationManager.instance().getPluginInfo("br.ufes.inf.nemo.frameweb.vp").getPluginDir(), "templates");
-        return templatesDir.getAbsolutePath();
     }
 }
