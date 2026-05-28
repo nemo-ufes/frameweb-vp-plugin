@@ -133,10 +133,8 @@ public final class TemplateUtils {
     public static void generateCode(final TemplateOption templateOption, String outputDir) {
         final IProject project = ProjectManagerUtils.getCurrentProject();
         final JsonConfigurationManager configurationManager = FrameWebPlugin.instance().getGenerateCodeConfigManager();
-
         final Path templatePath = Paths.get(configurationManager.getTemplateFolder().getPath(),
                 templateOption.getName());
-
         final FreeMarkerEngine engine = new FreeMarkerEngine(templatePath.toString(), outputDir);
 
         @SuppressWarnings("unchecked") Iterator<IPackage> iter = project.allLevelModelElementIterator(

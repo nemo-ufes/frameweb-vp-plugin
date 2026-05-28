@@ -58,10 +58,12 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createTitledBorder("Generate Code"));
 
         templateSelecter.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+        templateSelecter.setToolTipText("Select a Template");
 
         addTemplateButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         addTemplateButton.setText("+");
         addTemplateButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addTemplateButton.setToolTipText("Add a new template from .zip File or directory");
         addTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addTemplateButtonActionPerformed(evt);
@@ -71,6 +73,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
         outputSelecter.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         outputSelecter.setText("...");
         outputSelecter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        outputSelecter.setToolTipText("Choose the output directory for generated code");
         outputSelecter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 choosePathButtonActionPerformed(evt);
@@ -81,6 +84,7 @@ public class GenerateCodePanel extends javax.swing.JPanel {
 
         generateCodeButton.setText("Generate");
         generateCodeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        generateCodeButton.setToolTipText("Generate code from the selected template");
         generateCodeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateCodeButtonActionPerformed(evt);
