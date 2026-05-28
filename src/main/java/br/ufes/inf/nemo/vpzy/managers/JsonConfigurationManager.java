@@ -1,15 +1,11 @@
 package br.ufes.inf.nemo.vpzy.managers;
 
-import br.ufes.inf.nemo.vpzy.TemplateValidationException;
-import br.ufes.inf.nemo.vpzy.engine.FreeMarkerEngine;
 import br.ufes.inf.nemo.vpzy.engine.models.base.TemplateOption;
 import br.ufes.inf.nemo.vpzy.logging.Logger;
 import br.ufes.inf.nemo.vpzy.utils.ApplicationManagerUtils;
 import br.ufes.inf.nemo.vpzy.utils.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.zip.ZipInputStream;
@@ -41,9 +37,7 @@ public class JsonConfigurationManager {
         load();
     }
 
-    public Set<String> getTemplateNames() {
-        return options.keySet();
-    }
+
 
     /**
      * Loads the template options from the workspace. Each template option is stored in a separate folder with its name, and the configuration is stored in a config.json file inside that folder. If the templates folder does not exist, it will be created and populated with the default templates from the plugin resources.
@@ -60,7 +54,7 @@ public class JsonConfigurationManager {
 
         }
         File [] directories = templateFolder.listFiles(File::isDirectory);
-        for (File dir : directories) {
+        for (File dir : Objects.requireNonNull(directories)) {
             File configFile = new File(dir, CONFIG_FILE_NAME);
 
             if (configFile.exists()) {
@@ -105,29 +99,6 @@ public class JsonConfigurationManager {
     }
 
     /**
-     * Saves the template options to the workspace. Each template option is saved in a separate folder with its name, and the configuration is saved in a config.json file inside that folder.
-     */
-    public void save() {
-        Logger.log(Level.FINER, "Saving {0} configurations from {1}", new Object[]{pluginName, templateFolder.getAbsolutePath()});
-
-        File dir = null;
-        for (TemplateOption option : options.values()) {
-            dir = new File(templateFolder, option.getName());
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            File configFile = new File(dir, CONFIG_FILE_NAME);
-
-            try (final Writer outputStream = new FileWriter(configFile)){
-                mapper.writerWithDefaultPrettyPrinter().writeValue(outputStream, option);
-                Logger.log(Level.FINEST, "Saved config for {0}.", option.getName());
-            }catch (IOException e){
-                Logger.log(Level.SEVERE, "Cannot save config.json for {0}.", option.getName());
-            }
-        }
-    }
-
-    /**
      * Gets the template option by its name.
      * @return the template option for the given key, or null if the key does not exist.
      */
@@ -136,96 +107,11 @@ public class JsonConfigurationManager {
     }
 
     /**
-     * Sets the template option for a given key. If the key already exists, it will be overwritten.
-     * @param key
-     * @param option
-     */
-    public void setProperty(String key, TemplateOption option) {
-        options.put(key, option);
-    }
-
-    /**
      * Gets all the template options. The key of the map is the name of the template, and the value is the template option.
      * @return a map containing all the template options, where the key is the name of the template and the value is the template option.
      */
     public Map<String, TemplateOption> getOptions() {
         return options;
-    }
-
-    /**
-     * Imports a template folder from the given template option. The template option must be valid and contain all the necessary information to locate the templates. The templates will be copied to the workspace templates folder, and the configuration will be saved in a config.json file inside a folder with the name of the template option.
-     * @param templateOption
-     * @throws IOException
-     * @throws TemplateValidationException
-     */
-    public void importTemplateFolder(final TemplateOption templateOption) throws IOException, TemplateValidationException {
-        List<String> validationErrors = new ArrayList<>();
-
-        if (templateOption == null) {
-            throw new TemplateValidationException("Template option cannot be null.", null);
-        }
-
-        templateOption.validate();
-
-
-        final String sourceTemplatesAbsolutePath = templateFolder.getAbsolutePath();
-
-        if (!templateFolder.exists()) {
-            validationErrors.add("Could not find templates folder at " + sourceTemplatesAbsolutePath);
-        }
-
-        if (templateOption.getEntity().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find entity template");
-        }
-
-        if (templateOption.getEnumeration().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find enumeration template");
-        }
-
-        if (templateOption.getMappedSuperclass().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find mapped superclass template");
-        }
-
-        if (templateOption.getTransientClass().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find transient class template");
-        }
-
-        if (templateOption.getEmbeddable().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find embeddable template");
-        }
-
-        if (templateOption.getDao().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find dao template");
-        }
-
-        if (templateOption.getService().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find service template");
-        }
-
-        if (templateOption.getController().invalidTemplate(sourceTemplatesAbsolutePath)) {
-            validationErrors.add("Could not find controller template");
-        }
-
-        if (!FreeMarkerEngine.validateTemplateStructures(templateFolder)) {
-            validationErrors.add("Invalid template syntax structure. Check the logs for details.");
-        }
-
-        if (!validationErrors.isEmpty()) {
-            for (String error : validationErrors) {
-                Logger.log(Level.SEVERE, error);
-            }
-            throw new TemplateValidationException("One or more template validation errors occurred.", null);
-        }
-
-        final String name = templateOption.getName();
-        final Path resolve = templateFolder.toPath().resolve(name);
-
-        try {
-            FileUtils.copyFolder(templateFolder.toPath(), resolve, StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception e) {
-            Logger.log(Level.SEVERE, "Could not copy templates folder to " + resolve);
-            throw new TemplateValidationException("Error while copying templates folder.", e);
-        }
     }
 
     /**

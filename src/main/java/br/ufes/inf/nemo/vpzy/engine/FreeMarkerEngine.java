@@ -8,9 +8,7 @@ import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,50 +50,6 @@ public class FreeMarkerEngine {
 
     }
 
-    public static boolean validateTemplateStructures(final File rootTemplateFolder) {
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-        // Set the root template folder
-        if (rootTemplateFolder.exists() && rootTemplateFolder.isDirectory()) {
-            return validateTemplatesInFolder(rootTemplateFolder, cfg);
-        } else {
-            Logger.log(Level.SEVERE, "Root template folder does not exist or is not a directory." );
-            return false;
-        }
-    }
-
-    private static boolean validateTemplatesInFolder(File folder, Configuration cfg) {
-        File[] files = folder.listFiles();
-        boolean validStructure = true;
-
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    // Recursively process subfolders
-                    if (!validateTemplatesInFolder(file, cfg)) {
-                        validStructure = false;
-                    }
-                } else if (file.isFile() && isTemplateFile(file)) {
-                    try (FileReader reader = new FileReader(file)) {
-                        new Template(file.getName(), reader, cfg);
-                        // No need to process, just parsing is enough to check for syntax errors
-                    } catch (IOException e) {
-                        // Handle template loading error
-                        Logger.log(Level.SEVERE, "Error loading template: " + file.getAbsolutePath(), e);
-                        validStructure = false;
-                    }
-                }
-            }
-        }
-
-        return validStructure;
-    }
-
-    private static boolean isTemplateFile(File file) {
-        // You can define the criteria for identifying template files, e.g., file extension
-        return file.getName().endsWith(".ftl" );
-    }
 
     /**
      * Generates code given a template option and a data model.
