@@ -27,7 +27,6 @@ public class GenerateCodePanel extends javax.swing.JPanel {
     public GenerateCodePanel() {
         initComponents();
         templateSelecter.setModel(getTemplateOptions());
-        this.outputSelecter.setText(defaultOutputPath);
     }
 
     /**
