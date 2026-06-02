@@ -18,9 +18,9 @@ import java.util.logging.Level;
  * @version 1.0
  */
 public class GenerateCodeController implements VPActionController {
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 500;
 
-    public static final int HEIGHT = 200;
+    public static final int HEIGHT = 281;
 
     /**
      * Called when the button is pressed. Performs code generation.

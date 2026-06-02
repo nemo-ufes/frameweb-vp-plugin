@@ -1,0 +1,13 @@
+{
+  "name": "jbutler",
+  "entity": { "template": "EntityClassTemplate.ftl", "extension": ".java" },
+  "enumeration": { "template": "EnumerationClassTemplate.ftl", "extension": ".java" },
+  "mappedSuperclass": { "template": "MappedSuperclassTemplate.ftl", "extension": ".java" },
+  "transientClass": { "template": "PojoTemplate.ftl", "extension": ".java" },
+  "embeddable": { "template": "EmbeddableClassTemplate.ftl", "extension": ".java" },
+  "dao": { "template": "DaoClassTemplate.ftl", "extension": ".java" },
+  "daoInterface": { "template": "DaoInterfaceTemplate.ftl", "extension": ".java" },
+  "service": { "template": "ServiceClassTemplate.ftl", "extension": ".java" },
+  "serviceInterface": { "template": "ServiceInterfaceTemplate.ftl", "extension": ".java" },
+  "controller": { "template": "ControllerClassTemplate.ftl", "extension": ".java" }
+}

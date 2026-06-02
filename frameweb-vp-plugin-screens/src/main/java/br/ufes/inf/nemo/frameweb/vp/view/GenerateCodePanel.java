@@ -4,10 +4,7 @@
  */
 package br.ufes.inf.nemo.frameweb.vp.view;
 
-/**
- *
- * @author <a href="https://github.com/igorssilva">Igor Sunderhus e Silva</a>
- */
+
 public class GenerateCodePanel extends javax.swing.JPanel {
 
     /**
@@ -25,90 +22,86 @@ public class GenerateCodePanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        templateLabel = new javax.swing.JLabel();
-        templateComboBox = new javax.swing.JComboBox<>();
-        editButton = new javax.swing.JButton();
-        newButton = new javax.swing.JButton();
+        addTemplateButton = new javax.swing.JButton();
+        outputSelecter = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        templateSelecter = new javax.swing.JComboBox<>();
         generateCodeButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Generate Code"));
-        java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        layout.rowHeights = new int[] {0, 5, 0, 5, 0};
-        setLayout(layout);
+        setPreferredSize(new java.awt.Dimension(420, 210));
 
-        templateLabel.setText("Template");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        add(templateLabel, gridBagConstraints);
+        addTemplateButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        addTemplateButton.setText("+");
+        addTemplateButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        templateComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 128;
-        add(templateComboBox, gridBagConstraints);
+        outputSelecter.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        outputSelecter.setText("...");
 
-        editButton.setText("Edit");
-        editButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                editButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        add(editButton, gridBagConstraints);
+        jTextField1.setText("jTextField1");
 
-        newButton.setText("New");
-        newButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                newButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        add(newButton, gridBagConstraints);
+        templateSelecter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         generateCodeButton.setText("Generate");
-        generateCodeButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                generateCodeButtonMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        add(generateCodeButton, gridBagConstraints);
+
+        jLabel1.setText("Template :");
+
+        jLabel2.setText("OutPut :");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(templateSelecter, 0, 325, Short.MAX_VALUE)
+                            .addComponent(jTextField1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addTemplateButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(outputSelecter, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(generateCodeButton)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addTemplateButton)
+                    .addComponent(templateSelecter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(outputSelecter)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addComponent(generateCodeButton)
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void editButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editButtonMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editButtonMouseClicked
-
-    private void newButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newButtonMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newButtonMouseClicked
-
-    private void generateCodeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_generateCodeButtonMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_generateCodeButtonMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton editButton;
+    private javax.swing.JButton addTemplateButton;
     private javax.swing.JButton generateCodeButton;
-    private javax.swing.JButton newButton;
-    private javax.swing.JComboBox<String> templateComboBox;
-    private javax.swing.JLabel templateLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton outputSelecter;
+    private javax.swing.JComboBox<String> templateSelecter;
     // End of variables declaration//GEN-END:variables
 }

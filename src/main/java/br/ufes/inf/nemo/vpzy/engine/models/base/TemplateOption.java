@@ -18,27 +18,6 @@ public class TemplateOption implements Serializable {
     private String name = "Template Name";
 
     /**
-     * The description of the template option.
-     * <p>
-     * e.g. "Generates a Spring Boot project"
-     */
-    private String description = "Template Description";
-
-    /**
-     * The path to the template files. Should be an absolute path for the importing to work.
-     * <p>
-     * e.g. "C:\templates\spring"
-     */
-    private String templatePath = "templates";
-
-    /**
-     * The path to the output files. Should be an absolute path for the export to work.
-     * <p>
-     * e.g. ":C\output\spring"
-     */
-    private String outputPath = "output";
-
-    /**
      * The file types for the entity class.
      */
     private FileTypes entity = new FileTypes("EntityClassTemplate.ftl", EXTENSION);
@@ -96,9 +75,6 @@ public class TemplateOption implements Serializable {
      * Creates a new template option.
      *
      * @param name             The name of the template option.
-     * @param description      The description of the template option.
-     * @param templatePath     The path to the template files.
-     * @param outputPath       The path to the output files.
      * @param entity           The file types for the entity class.
      * @param enumeration      Template information for the enumeration class.
      * @param mappedSuperclass Template information for the mapped superclass.
@@ -110,15 +86,11 @@ public class TemplateOption implements Serializable {
      * @param serviceInterface Template information for the Service interface.
      * @param controller       Template information for the Controller class.
      */
-    public TemplateOption(final String name, final String description, final String templatePath,
-            final String outputPath, final FileTypes entity, final FileTypes enumeration,
+    public TemplateOption(final String name, final FileTypes entity, final FileTypes enumeration,
             final FileTypes mappedSuperclass, final FileTypes transientClass, final FileTypes embeddable,
             final FileTypes dao, final FileTypes daoInterface, final FileTypes service,
             final FileTypes serviceInterface, final FileTypes controller) {
         this.name = name;
-        this.description = description;
-        this.templatePath = templatePath;
-        this.outputPath = outputPath;
         this.entity = entity;
         this.enumeration = enumeration;
         this.mappedSuperclass = mappedSuperclass;
@@ -136,11 +108,17 @@ public class TemplateOption implements Serializable {
      * {@link IllegalArgumentException}.
      */
     public void validate() {
-        if (name == null || name.trim().isEmpty() || outputPath == null || outputPath.trim().isEmpty()
-            || description == null || description.trim().isEmpty() || templatePath == null || templatePath.trim()
-                    .isEmpty() || entity == null || enumeration == null || mappedSuperclass == null
-            || transientClass == null || embeddable == null || dao == null || daoInterface == null || service == null
-            || serviceInterface == null || controller == null) {
+        if (name == null || name.trim().isEmpty()
+            || entity == null
+            || enumeration == null
+            || mappedSuperclass == null
+            || transientClass == null
+            || embeddable == null
+            || dao == null
+            || daoInterface == null
+            || service == null
+            || serviceInterface == null
+            || controller == null) {
             throw new IllegalArgumentException("Missing required properties for template");
         }
 
@@ -173,60 +151,6 @@ public class TemplateOption implements Serializable {
      */
     public void setName(final String name) {
         this.name = name;
-    }
-
-    /**
-     * Get the description of the template option.
-     *
-     * @return The description of the template option.
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Set the description of the template option.
-     *
-     * @param description The description of the template option.
-     */
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
-     * Get the path to the template files. Should be an absolute path for the importing to work.
-     *
-     * @return The path to the template files.
-     */
-    public String getTemplatePath() {
-        return templatePath;
-    }
-
-    /**
-     * Set the path to the template files. Should be an absolute path for the importing to work.
-     *
-     * @param templatePath The path to the template files.
-     */
-    public void setTemplatePath(final String templatePath) {
-        this.templatePath = templatePath;
-    }
-
-    /**
-     * Get the path to the output files. Should be an absolute path for the export to work.
-     *
-     * @return The path to the output files.
-     */
-    public String getOutputPath() {
-        return outputPath;
-    }
-
-    /**
-     * Set the path to the output files. Should be an absolute path for the export to work.
-     *
-     * @param outputPath The path to the output files.
-     */
-    public void setOutputPath(final String outputPath) {
-        this.outputPath = outputPath;
     }
 
     /**
@@ -411,6 +335,8 @@ public class TemplateOption implements Serializable {
 
     @Override
     public String toString() {
-        return this.description;
+        return this.name;
     }
+
+
 }
